@@ -53,14 +53,12 @@
   .lb-hull{color:#94a3b8;text-align:right;font-size:10px;}
   .lb-new{animation:lbFlash 1.4s ease;}
   @keyframes lbFlash{0%{background:rgba(74,222,128,0.3);}100%{background:transparent;}}
-</style>
-    <!-- Privacy-friendly analytics by Plausible -->
-    <script async src="https://plausible.io/js/pa-4WxE5EvqD12lffi1vcMhl.js"></script>
-    <script>
-        window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
-        plausible.init()
-    </script>
 
+  #joystickWrap{position:absolute;bottom:22px;left:22px;width:110px;height:110px;display:none;pointer-events:all;touch-action:none;user-select:none;}
+  #joystickBase{position:absolute;inset:0;border-radius:50%;background:rgba(255,255,255,0.08);border:2px solid rgba(255,255,255,0.18);}
+  #joystickThumb{position:absolute;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.28);border:2px solid rgba(255,255,255,0.5);top:50%;left:50%;transform:translate(-50%,-50%);transition:background .1s;}
+  #joystickThumb.active{background:rgba(56,189,248,0.5);border-color:#38bdf8;}
+</style>
 </head>
 <body>
 <div id="wrap">
@@ -180,6 +178,11 @@
     <div id="btnRow" style="display:none;justify-content:center;">
       <button class="gbtn green" id="startBtn">BEGIN TRANSIT</button>
     </div>
+  </div>
+
+  <div id="joystickWrap">
+    <div id="joystickBase"></div>
+    <div id="joystickThumb"></div>
   </div>
 
   <div id="tollBox">
@@ -503,6 +506,7 @@ function updateMissionBadge(){
 async function endGame(won){
   wonOrLost=true;gameRunning=false;
   hud.style.display='none';tollBox.style.display='none';
+  document.getElementById('joystickWrap').style.display='none';
   overlay.style.display='flex';
 
   if(won){
@@ -606,6 +610,7 @@ function resetGame(fresh){
   immuneTimer=0;tollPending=false;phase='go_east';
   updateMissionBadge();scene.remove(tankerGroup);buildTanker();
   overlay.style.display='none';hud.style.display='block';gameRunning=true;
+  if('ontouchstart' in window||navigator.maxTouchPoints>0){document.getElementById('joystickWrap').style.display='block';}
 }
 document.getElementById('startBtn').addEventListener('click',()=>resetGame(true));
 
@@ -617,16 +622,25 @@ const MAX_SPD=0.22,ACCEL=0.0035,FRIC=0.977,TURN=0.018;
 function update(dt){
   if(!gameRunning)return;
   waveT+=dt;
-  const up=keys['ArrowUp']||keys['w']||keys['W'];
-  const dn=keys['ArrowDown']||keys['s']||keys['S'];
-  const lt=keys['ArrowLeft']||keys['a']||keys['A'];
-  const rt=keys['ArrowRight']||keys['d']||keys['D'];
-  if(up)speed=Math.min(speed+ACCEL,MAX_SPD);
-  if(dn)speed=Math.max(speed-ACCEL,-MAX_SPD*.3);
+  const joy = window._joystick;
+  const joyFwd  = joy && joy.y < -0.2;
+  const joyBack = joy && joy.y >  0.2;
+  const joyLeft = joy && joy.x < -0.2;
+  const joyRight= joy && joy.x >  0.2;
+  const up=keys['ArrowUp']||keys['w']||keys['W']||joyFwd;
+  const dn=keys['ArrowDown']||keys['s']||keys['S']||joyBack;
+  const lt=keys['ArrowLeft']||keys['a']||keys['A']||joyLeft;
+  const rt=keys['ArrowRight']||keys['d']||keys['D']||joyRight;
+  if(up){
+    const mag = joyFwd ? Math.min(1, Math.abs(joy.y)) : 1;
+    speed=Math.min(speed+ACCEL*mag, MAX_SPD);
+  }
+  if(dn) speed=Math.max(speed-ACCEL, -MAX_SPD*.3);
   speed*=FRIC;
   if(Math.abs(speed)>.004){
-    if(lt)heading+=TURN*(speed>0?1:-1);
-    if(rt)heading-=TURN*(speed>0?1:-1);
+    const steerMag = (joyLeft||joyRight) ? Math.min(1, Math.abs(joy.x)) : 1;
+    if(lt) heading+=TURN*steerMag*(speed>0?1:-1);
+    if(rt) heading-=TURN*steerMag*(speed>0?1:-1);
   }
   tPos.x+=Math.cos(heading)*speed*60*dt;
   tPos.z-=Math.sin(heading)*speed*60*dt;
@@ -795,6 +809,73 @@ async function boot(){
   requestAnimationFrame(t=>{lastT=t;animate(t);});
 }
 boot();
+
+// ── VIRTUAL JOYSTICK ─────────────────────────────────────────────────────────
+(function(){
+  const wrap  = document.getElementById('joystickWrap');
+  const thumb = document.getElementById('joystickThumb');
+  const RADIUS = 33;
+  let active = false, touchId = null, jx = 0, jy = 0;
+
+  function centre(el){
+    const r = el.getBoundingClientRect();
+    return { x: r.left + r.width/2, y: r.top + r.height/2 };
+  }
+  function onStart(e){
+    e.preventDefault();
+    if(active) return;
+    const t = e.changedTouches[0];
+    touchId = t.identifier; active = true;
+    thumb.classList.add('active');
+    move(t);
+  }
+  function onMove(e){
+    e.preventDefault();
+    if(!active) return;
+    for(const t of e.changedTouches){
+      if(t.identifier === touchId){ move(t); break; }
+    }
+  }
+  function onEnd(e){
+    for(const t of e.changedTouches){
+      if(t.identifier === touchId){
+        active = false; touchId = null; jx = 0; jy = 0;
+        thumb.style.transform = 'translate(-50%,-50%)';
+        thumb.classList.remove('active');
+        break;
+      }
+    }
+  }
+  function move(t){
+    const c = centre(wrap);
+    const dx = t.clientX - c.x, dy = t.clientY - c.y;
+    const d = Math.sqrt(dx*dx + dy*dy);
+    const clamped = Math.min(d, RADIUS);
+    const angle = Math.atan2(dy, dx);
+    const ox = Math.cos(angle)*clamped, oy = Math.sin(angle)*clamped;
+    thumb.style.transform = 'translate(calc(-50% + '+ox+'px), calc(-50% + '+oy+'px))';
+    jx = ox/RADIUS;
+    jy = oy/RADIUS;
+  }
+  wrap.addEventListener('touchstart',  onStart, {passive:false});
+  wrap.addEventListener('touchmove',   onMove,  {passive:false});
+  wrap.addEventListener('touchend',    onEnd,   {passive:false});
+  wrap.addEventListener('touchcancel', onEnd,   {passive:false});
+
+  // Show joystick on first touch (device detection)
+  function checkTouch(){
+    document.getElementById('joystickWrap').style.setProperty('--touch-ready','1');
+    window.removeEventListener('touchstart', checkTouch);
+  }
+  window.addEventListener('touchstart', checkTouch, {passive:true});
+
+  window._joystick = {
+    get x(){ return jx; },
+    get y(){ return jy; },
+    get active(){ return active; }
+  };
+})();
+
 })();
 </script>
 </body>
