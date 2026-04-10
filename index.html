@@ -598,6 +598,7 @@ function clearAll(){
 }
 function resetGame(fresh){
   clearAll();
+  Object.keys(keys).forEach(k => delete keys[k]); // flush any stuck keypresses
   if(fresh){hull=100;profit=0;runCount=0;}
   speed=0;heading=0;invTimer=0;waveT=0;coastDmgTimer=0; // heading always reset to east
   tPos={x:-238,z:chanZ(-238)};
