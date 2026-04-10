@@ -199,6 +199,8 @@ const LB_MAX=10;
 let straitClosed=true,oilPricePerBarrel=94.86;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
+const SESSION_TOKEN = Math.random().toString(36).slice(2) + Date.now().toString(36);
+
 
 async function lbLoad() {
   try {
