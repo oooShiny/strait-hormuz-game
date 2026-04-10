@@ -653,7 +653,7 @@ function update(dt){
   }else coastDmgTimer=0;
 
   if(phase==='go_east'&&tPos.x>248){
-    phase='go_west';profit=oilPricePerBarrel*BARRELS_PER_LOAD;
+    phase='go_west';profit+=oilPricePerBarrel*BARRELS_PER_LOAD;
     clearAll();fastBoatTimer=10;dhowTimer=14;droneTimer=7;missileTimer=20;tollTimer=30;
     updateMissionBadge();
     setMsg(`⛽ OIL LOADED — $${oilPricePerBarrel.toFixed(2)}/bbl. Head WEST!`,5);
