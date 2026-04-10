@@ -248,17 +248,16 @@ function renderLbRows(entries,highlightName){
 
 // ── LIVE DATA ────────────────────────────────────────────────────────────────
 async function fetchLiveData(){
+  // Both fetched through our own Worker — no CORS issues, 5-min server-side cache
   try{
-    const r=await fetch('https://api.allorigins.win/get?url='+encodeURIComponent('https://hormuzstraitmonitor.com/'));
-    const d=await r.json(),txt=(d.contents||'').toLowerCase();
-    if(txt.includes('currently open')||txt.includes('status: open'))straitClosed=false;
-    else if(txt.includes('currently closed')||txt.includes('closed'))straitClosed=true;
+    const r=await fetch(WORKER_URL+'/strait');
+    const d=await r.json();
+    if(typeof d.closed==='boolean') straitClosed=d.closed;
   }catch(e){}
   try{
-    const r=await fetch('https://api.allorigins.win/get?url='+encodeURIComponent('https://query1.finance.yahoo.com/v8/finance/chart/BZ%3DF?interval=1d&range=1d'));
-    const d=await r.json(),parsed=JSON.parse(d.contents);
-    const price=parsed?.chart?.result?.[0]?.meta?.regularMarketPrice;
-    if(price&&price>10)oilPricePerBarrel=price;
+    const r=await fetch(WORKER_URL+'/oil-price');
+    const d=await r.json();
+    if(d.price&&d.price>10) oilPricePerBarrel=d.price;
   }catch(e){}
 }
 
