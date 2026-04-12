@@ -4,12 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Strait Run — Navigate the Strait of Hormuz</title>
-<link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
-<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-<link rel="shortcut icon" href="/favicon.ico" />
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-<meta name="apple-mobile-web-app-title" content="Hormuz" />
-<link rel="manifest" href="/site.webmanifest" />
+
 <!-- Primary meta -->
 <meta name="description" content="A real-world oil tanker simulation. Navigate the Strait of Hormuz using live data — real oil prices, real strait status. Can you deliver your cargo before Iran's drones, mines, and missiles sink you?">
 <meta name="author" content="Strait Run">
@@ -18,16 +13,16 @@
 <meta property="og:type"        content="website">
 <meta property="og:title"       content="Strait Run — Navigate the Strait of Hormuz">
 <meta property="og:description" content="A real-world oil tanker simulation using live Brent crude prices and live strait status. Survive IRGC fast boats, sea mines, kamikaze drones, and anti-ship missiles to deliver your cargo.">
-<meta property="og:image"       content="https://hormuzgame.cc/screenshot.png">
-<meta property="og:image:width"  content="1136">
-<meta property="og:image:height" content="1136">
+<meta property="og:image"       content="https://og-image-generator.vercel.app/api/image?title=⚓%20STRAIT%20RUN&description=Navigate%20the%20Strait%20of%20Hormuz%20with%20live%20oil%20prices%20%26%20real-world%20threat%20data&theme=dark&md=1">
+<meta property="og:image:width"  content="1200">
+<meta property="og:image:height" content="630">
 <meta property="og:locale"      content="en_US">
 
 <!-- Twitter / X Card -->
 <meta name="twitter:card"        content="summary_large_image">
 <meta name="twitter:title"       content="Strait Run — Navigate the Strait of Hormuz">
 <meta name="twitter:description" content="A real-world oil tanker simulation using live Brent crude prices and live strait status. Survive IRGC fast boats, sea mines, kamikaze drones, and anti-ship missiles to deliver your cargo.">
-<meta name="twitter:image"       content="https://hormuzgame.cc/screenshot.png">
+<meta name="twitter:image"       content="https://og-image-generator.vercel.app/api/image?title=⚓%20STRAIT%20RUN&description=Navigate%20the%20Strait%20of%20Hormuz%20with%20live%20oil%20prices%20%26%20real-world%20threat%20data&theme=dark&md=1">
 <style>
   *{box-sizing:border-box;margin:0;padding:0;}
   body{background:#06192a;display:flex;align-items:center;justify-content:center;min-height:100vh;font-family:'Courier New',monospace;}
@@ -197,7 +192,7 @@
 <script>
 (function(){
 const DMG=0.75;
-const RANGE_BOAT_FIRE=14,RANGE_RAM=4.5,RANGE_MINE=3.0,RANGE_MISSILE_AOE=7,RANGE_DRONE_AOE=4.5;
+const RANGE_BOAT_FIRE=14,RANGE_RAM=4.5,RANGE_MINE=3.0,RANGE_MISSILE_AOE=7,RANGE_DRONE_AOE=4.5,RANGE_WARSHIP=20;
 const COAST_DMG_INTERVAL=0.55;
 const BARRELS_PER_LOAD=2000000;
 const REPAIR_COST_PER_PCT=800000;
@@ -205,10 +200,12 @@ const LB_KEY='hormuz-leaderboard-v1';
 const LB_MAX=10;
 
 let straitClosed=true,oilPricePerBarrel=94.86;
-    
-const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
-const SESSION_TOKEN = Math.random().toString(36).slice(2) + Date.now().toString(36);
 
+// ── LEADERBOARD (Cloudflare Worker) ─────────────────────────────────────────
+// 👇 Replace this with your deployed worker URL after running: npm run deploy
+const WORKER_URL = "https://YOUR-WORKER-URL.workers.dev";
+// Unique token for this browser session — lets us replace rather than duplicate on name update
+const SESSION_TOKEN = Math.random().toString(36).slice(2) + Date.now().toString(36);
 
 async function lbLoad() {
   try {
@@ -292,7 +289,8 @@ let gameRunning=false,wonOrLost=false,lastT=0,msgTimer=0;
 let droneTimer,fastBoatTimer,dhowTimer,missileTimer,tollTimer;
 let immuneTimer=0,tollPending=false,profit=0,phase='go_east',runCount=0;
 let coastDmgTimer=0;
-let fastBoats=[],dhows=[],mines=[],missiles=[],drones=[],particles=[],explosions=[];
+let fastBoats=[],dhows=[],mines=[],missiles=[],drones=[],particles=[],explosions=[],warships=[];
+let tollsPaid=0;
 let playerName='CAPTAIN';
 
 const H=620;let W=canvas.clientWidth||900;
@@ -401,6 +399,38 @@ function spawnFastBoat(){
   fastBoats.push({g,ring,angle:Math.atan2(-(tPos.z-g.position.z),tPos.x-ex),
     spd:0.040+Math.random()*0.020,fireTimer:5+Math.random()*4,tollCooldown:0});
 }
+
+function spawnWarship(){
+  const g=new THREE.Group();
+  const body=new THREE.Mesh(new THREE.BoxGeometry(2.8,1.0,11),new THREE.MeshLambertMaterial({color:0x6e7a7a}));
+  body.position.y=0.4;g.add(body);
+  const bow=new THREE.Mesh(new THREE.ConeGeometry(1.4,4,4),new THREE.MeshLambertMaterial({color:0x6e7a7a}));
+  bow.rotation.x=Math.PI/2;bow.scale.set(0.7,0.38,0.7);bow.position.set(0,0.35,7.5);g.add(bow);
+  const sup=new THREE.Mesh(new THREE.BoxGeometry(2.0,1.4,4),new THREE.MeshLambertMaterial({color:0x8a9494}));
+  sup.position.set(0,1.3,0.5);g.add(sup);
+  const mast=new THREE.Mesh(new THREE.CylinderGeometry(0.08,0.08,3.5,5),new THREE.MeshLambertMaterial({color:0x555}));
+  mast.position.set(0,2.8,0.5);g.add(mast);
+  const radar=new THREE.Mesh(new THREE.BoxGeometry(1.5,0.15,0.8),new THREE.MeshLambertMaterial({color:0x444}));
+  radar.position.set(0,4.6,0.5);g.add(radar);
+  const turret=new THREE.Mesh(new THREE.CylinderGeometry(0.5,0.6,0.5,8),new THREE.MeshLambertMaterial({color:0x778080}));
+  turret.position.set(0,1.1,3.5);g.add(turret);
+  const barrel=new THREE.Mesh(new THREE.CylinderGeometry(0.08,0.08,2.5,6),new THREE.MeshLambertMaterial({color:0x444}));
+  barrel.rotation.x=Math.PI/2;barrel.position.set(0,1.4,4.8);g.add(barrel);
+  // Blue intercept range ring
+  const ring=new THREE.Mesh(new THREE.RingGeometry(RANGE_WARSHIP-0.4,RANGE_WARSHIP,32),
+    new THREE.MeshBasicMaterial({color:0x2255ff,transparent:true,opacity:0,side:THREE.DoubleSide}));
+  ring.rotation.x=-Math.PI/2;ring.position.y=0.2;g.add(ring);
+  const dir=(phase==='go_east')?1:-1;
+  const ex=tPos.x+dir*(80+Math.random()*130);
+  const cz=chanZ(ex);
+  g.position.set(ex,0,cz+(Math.random()-.5)*chanHW(ex)*0.7);
+  scene.add(g);
+  const names=['USS MICHAEL MURPHY','USS FRANK E. PETERSON','USS GRAVELY','USS COLE'];
+  warships.push({g,ring,angle:Math.PI,spd:0.055+Math.random()*0.02,
+    patrolOffset:(Math.random()-.5)*18,interceptTimer:0,warned:false,
+    shipName:names[Math.floor(Math.random()*names.length)]});
+}
+
 function spawnDhow(){
   const g=new THREE.Group();
   const h=new THREE.Mesh(new THREE.BoxGeometry(1.7,0.75,4.5),new THREE.MeshLambertMaterial({color:0x8B6914}));
@@ -483,7 +513,7 @@ function setMsg(t,d=2.2){msgBox.textContent=t;msgTimer=d;}
 
 let currentTollAmt=500000;
 document.getElementById('payBtn').addEventListener('click',()=>{
-  if(profit>=currentTollAmt){profit-=currentTollAmt;immuneTimer=18;tollPending=false;tollBox.style.display='none';setMsg('✅ TOLL PAID — Patrol standing down',3);}
+  if(profit>=currentTollAmt){profit-=currentTollAmt;immuneTimer=18;tollsPaid++;tollPending=false;tollBox.style.display='none';setMsg('✅ TOLL PAID — Patrol standing down. ⚠ US Navy may interdict.',3);}
   else setMsg('❌ INSUFFICIENT FUNDS',2);
 });
 document.getElementById('refuseBtn').addEventListener('click',()=>{
@@ -599,11 +629,12 @@ function clearAll(){
   explosions.forEach(e=>scene.remove(e.m));
   particles.forEach(p=>scene.remove(p.m));
   fastBoats=[];dhows=[];mines=[];missiles=[];drones=[];explosions=[];particles=[];
+  warships.forEach(w=>scene.remove(w.g));warships=[];
 }
 function resetGame(fresh){
   clearAll();
   Object.keys(keys).forEach(k => delete keys[k]); // flush any stuck keypresses
-  if(fresh){hull=100;profit=0;runCount=0;}
+  if(fresh){hull=100;profit=0;runCount=0;tollsPaid=0;}
   speed=0;heading=0;invTimer=0;waveT=0;coastDmgTimer=0; // heading always reset to east
   tPos={x:-238,z:chanZ(-238)};
   droneTimer=7;fastBoatTimer=10;dhowTimer=14;missileTimer=20;tollTimer=30;
@@ -667,7 +698,7 @@ function update(dt){
   }else coastDmgTimer=0;
 
   if(phase==='go_east'&&tPos.x>248){
-    phase='go_west';profit+=oilPricePerBarrel*BARRELS_PER_LOAD;
+    phase='go_west';profit+=oilPricePerBarrel*BARRELS_PER_LOAD;tollsPaid=0;
     clearAll();fastBoatTimer=10;dhowTimer=14;droneTimer=7;missileTimer=20;tollTimer=30;
     updateMissionBadge();
     setMsg(`⛽ OIL LOADED — $${oilPricePerBarrel.toFixed(2)}/bbl. Head WEST!`,5);
@@ -691,6 +722,10 @@ function update(dt){
   }
   fastBoatTimer-=dt;
   if(fastBoatTimer<0&&fastBoats.length<(straitClosed?4:2)){spawnFastBoat();fastBoatTimer=(straitClosed?8:16)+Math.random()*6;}
+  if(straitClosed){
+    const maxWarships=tollsPaid>0?3:1;
+    if(warships.length<maxWarships){spawnWarship();}
+  }
   tollTimer-=dt;
   if(tollTimer<0&&!tollPending&&immuneTimer<=0){showToll(straitClosed?2000000:250000);tollTimer=38+Math.random()*20;}
 
@@ -713,6 +748,52 @@ function update(dt){
     }
     if((phase==='go_east'?tPos.x-bp.x:bp.x-tPos.x)>140){scene.remove(b.g);fastBoats.splice(i,1);}
   }
+  // ── US NAVY WARSHIPS ──────────────────────────────────────────────────────
+  for(let i=warships.length-1;i>=0;i--){
+    const w=warships[i],wp=w.g.position;
+    const dx=tPos.x-wp.x,dz=tPos.z-wp.z,dist=Math.sqrt(dx*dx+dz*dz);
+    if(tollsPaid>0&&dist<90){
+      // Aggressively intercept toll-payers
+      const ta=Math.atan2(-dz,dx);
+      let da=ta-w.angle;while(da>Math.PI)da-=Math.PI*2;while(da<-Math.PI)da+=Math.PI*2;
+      w.angle+=da*0.04;
+    } else {
+      // Slow patrol across channel
+      const targetZ=chanZ(wp.x)+w.patrolOffset*Math.sin(waveT*0.3+i);
+      const driftZ=targetZ-wp.z;
+      w.angle=Math.atan2(-driftZ,(phase==='go_east'?1:-1)*10);
+    }
+    w.g.rotation.y=-Math.PI/2+w.angle;
+    wp.x+=Math.cos(w.angle)*w.spd*60*dt;
+    wp.z-=Math.sin(w.angle)*w.spd*60*dt;
+    wp.y=Math.sin(waveT*0.8+i)*0.06;
+    // Spin radar dish (child index 4)
+    if(w.g.children[4]) w.g.children[4].rotation.y+=dt*1.4;
+    // Range ring opacity
+    w.ring.material.opacity=dist<RANGE_WARSHIP
+      ?(0.3+0.12*Math.sin(waveT*3))
+      :Math.max(0,(1-(dist-RANGE_WARSHIP)/(RANGE_WARSHIP*.6)))*0.12;
+    // Intercept — only if you paid Iranian toll
+    if(tollsPaid>0&&dist<=RANGE_WARSHIP){
+      w.interceptTimer-=dt;
+      if(!w.warned){
+        w.warned=true;
+        setMsg('🇺🇸 '+w.shipName+': You paid Iran\'s illegal toll. Heave to!',4.5);
+      }
+      if(w.interceptTimer<=0){
+        const seized=profit*0.30;
+        profit=Math.max(0,profit-seized);
+        takeDamage(4,'🇺🇸 CARGO SEIZED by US Navy');
+        w.interceptTimer=8+Math.random()*4;
+      }
+    } else if(dist<=RANGE_WARSHIP&&!w.warned){
+      w.warned=true;
+      setMsg('🇺🇸 '+w.shipName+': Maintain course. Freedom of navigation in effect.',3);
+    }
+    const behind=(phase==='go_east')?tPos.x-wp.x:wp.x-tPos.x;
+    if(behind>160){scene.remove(w.g);warships.splice(i,1);}
+  }
+
   for(let i=dhows.length-1;i>=0;i--){
     const d=dhows[i],dp=d.g.position;
     dp.x+=Math.cos(d.angle)*d.spd*60*dt;dp.z-=Math.sin(d.angle)*d.spd*60*dt;
