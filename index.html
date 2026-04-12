@@ -4,7 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Strait Run — Navigate the Strait of Hormuz</title>
-
+<link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="shortcut icon" href="/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-title" content="Hormuz" />
+<link rel="manifest" href="/site.webmanifest" />
 <!-- Primary meta -->
 <meta name="description" content="A real-world oil tanker simulation. Navigate the Strait of Hormuz using live data — real oil prices, real strait status. Can you deliver your cargo before Iran's drones, mines, and missiles sink you?">
 <meta name="author" content="Strait Run">
@@ -13,16 +18,16 @@
 <meta property="og:type"        content="website">
 <meta property="og:title"       content="Strait Run — Navigate the Strait of Hormuz">
 <meta property="og:description" content="A real-world oil tanker simulation using live Brent crude prices and live strait status. Survive IRGC fast boats, sea mines, kamikaze drones, and anti-ship missiles to deliver your cargo.">
-<meta property="og:image"       content="https://og-image-generator.vercel.app/api/image?title=⚓%20STRAIT%20RUN&description=Navigate%20the%20Strait%20of%20Hormuz%20with%20live%20oil%20prices%20%26%20real-world%20threat%20data&theme=dark&md=1">
-<meta property="og:image:width"  content="1200">
-<meta property="og:image:height" content="630">
+<meta property="og:image"       content="https://hormuzgame.cc/screenshot.png">
+<meta property="og:image:width"  content="1136">
+<meta property="og:image:height" content="1136">
 <meta property="og:locale"      content="en_US">
 
 <!-- Twitter / X Card -->
 <meta name="twitter:card"        content="summary_large_image">
 <meta name="twitter:title"       content="Strait Run — Navigate the Strait of Hormuz">
 <meta name="twitter:description" content="A real-world oil tanker simulation using live Brent crude prices and live strait status. Survive IRGC fast boats, sea mines, kamikaze drones, and anti-ship missiles to deliver your cargo.">
-<meta name="twitter:image"       content="https://og-image-generator.vercel.app/api/image?title=⚓%20STRAIT%20RUN&description=Navigate%20the%20Strait%20of%20Hormuz%20with%20live%20oil%20prices%20%26%20real-world%20threat%20data&theme=dark&md=1">
+<meta name="twitter:image"       content="https://hormuzgame.cc/screenshot.png">
 <style>
   *{box-sizing:border-box;margin:0;padding:0;}
   body{background:#06192a;display:flex;align-items:center;justify-content:center;min-height:100vh;font-family:'Courier New',monospace;}
@@ -200,12 +205,10 @@ const LB_KEY='hormuz-leaderboard-v1';
 const LB_MAX=10;
 
 let straitClosed=true,oilPricePerBarrel=94.86;
-
-// ── LEADERBOARD (Cloudflare Worker) ─────────────────────────────────────────
-// 👇 Replace this with your deployed worker URL after running: npm run deploy
-const WORKER_URL = "https://YOUR-WORKER-URL.workers.dev";
-// Unique token for this browser session — lets us replace rather than duplicate on name update
+    
+const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
 const SESSION_TOKEN = Math.random().toString(36).slice(2) + Date.now().toString(36);
+
 
 async function lbLoad() {
   try {
