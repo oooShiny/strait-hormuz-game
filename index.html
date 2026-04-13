@@ -218,6 +218,7 @@
   <div id="tollBox">
     <div>⚠ IRANIAN PATROL — TOLL DEMAND</div>
     <div style="color:#f59e0b;margin:4px 0;">Passage fee: <span id="tollAmt">$500,000</span></div>
+    <div style="font-size:10px;color:#64748b;margin-bottom:4px;">Auto-declines in <span id="tollCountdown" style="color:#ef4444;">12s</span></div>
     <div><button style="background:#16a34a;color:white;" id="payBtn">PAY</button>
     <button style="background:#7f1d1d;color:white;" id="refuseBtn">REFUSE</button></div>
   </div>
@@ -336,7 +337,7 @@ let hull=100,speed=0,heading=0,invTimer=0,waveT=0;
 let tPos={x:-250,z:0};
 let gameRunning=false,wonOrLost=false,lastT=0,msgTimer=0;
 let droneTimer,fastBoatTimer,dhowTimer,missileTimer,tollTimer;
-let immuneTimer=0,tollPending=false,profit=0,phase='go_east',runCount=0;
+let immuneTimer=0,tollPending=false,tollCountdown=0,profit=0,phase='go_east',runCount=0;
 let coastDmgTimer=0;
 let fastBoats=[],dhows=[],mines=[],missiles=[],drones=[],particles=[],explosions=[],warships=[];
 let tollsPaid=0;
@@ -384,9 +385,12 @@ for(let i=0;i<NSEGS;i++){
   const oe=new THREE.Mesh(new THREE.BoxGeometry(SEG*.95,1.6,4),new THREE.MeshLambertMaterial({color:0xb8945a}));
   oe.position.set(x,0.7,cz+hw+2);scene.add(oe);
 }
+const ISLANDS=[];
 [{x:5,dz:-6,r:7,h:2},{x:25,dz:7,r:5,h:1.5},{x:-15,dz:12,r:4,h:1.2},{x:50,dz:-10,r:5,h:1.8},{x:-40,dz:18,r:3,h:1.1}].forEach(d=>{
+  const iz=chanZ(d.x)+d.dz;
   const m=new THREE.Mesh(new THREE.CylinderGeometry(d.r*.7,d.r,d.h,8),new THREE.MeshLambertMaterial({color:0xc4a06a}));
-  m.position.set(d.x,d.h/2,chanZ(d.x)+d.dz);scene.add(m);
+  m.position.set(d.x,d.h/2,iz);scene.add(m);
+  ISLANDS.push({x:d.x,z:iz,r:d.r}); // r = collision radius
 });
 
 let batteries=[];
@@ -512,17 +516,29 @@ function spawnMine(x,z){
   mines.push({g,x,z,bobT:Math.random()*6.28,driftX,driftZ});
 }
 function spawnMissile(bx,bz){
+  // Lead the target: estimate travel time then predict tanker position
+  const distToTarget=Math.sqrt((tPos.x-bx)**2+(tPos.z-bz)**2);
+  const travelTime=distToTarget/120; // ~2s at typical range, matches life*dt math
+  // Project tanker forward by travelTime + 2s warning phase
+  const leadTime=travelTime+2.0;
+  const leadX=tPos.x+Math.cos(heading)*speed*60*leadTime;
+  const leadZ=tPos.z-Math.sin(heading)*speed*60*leadTime;
+  // Clamp lead target inside channel so missile doesn't aim into the coast
+  const cz=chanZ(leadX),hw=chanHW(leadX);
+  const clampedZ=Math.max(cz-hw+4,Math.min(cz+hw-4,leadZ));
+  const tx=leadX, tz=clampedZ;
+
   const ring=new THREE.Mesh(new THREE.RingGeometry(RANGE_MISSILE_AOE-1,RANGE_MISSILE_AOE+1,24),
     new THREE.MeshBasicMaterial({color:0xff2200,transparent:true,opacity:0.5,side:THREE.DoubleSide}));
-  ring.rotation.x=-Math.PI/2;ring.position.set(tPos.x,0.3,tPos.z);scene.add(ring);
+  ring.rotation.x=-Math.PI/2;ring.position.set(tx,0.3,tz);scene.add(ring);
   const mg=new THREE.Group();
   const body=new THREE.Mesh(new THREE.CylinderGeometry(0.14,0.2,2,6),new THREE.MeshBasicMaterial({color:0xff3300}));mg.add(body);
   const nose=new THREE.Mesh(new THREE.ConeGeometry(0.14,0.5,6),new THREE.MeshBasicMaterial({color:0xff3300}));nose.position.y=1.25;mg.add(nose);
   const ex=new THREE.Mesh(new THREE.SphereGeometry(0.25,6,6),new THREE.MeshBasicMaterial({color:0xff8800}));ex.position.y=-1.1;mg.add(ex);
   mg.position.set(bx,5,bz);
-  mg.rotation.y=Math.atan2(tPos.x-bx,tPos.z-bz);mg.rotation.x=0.3;
+  mg.rotation.y=Math.atan2(tx-bx,tz-bz);mg.rotation.x=0.3;
   scene.add(mg);
-  missiles.push({g:mg,ring,tx:tPos.x,tz:tPos.z,bx,bz,life:1.0,warning:2.0});
+  missiles.push({g:mg,ring,tx,tz,bx,bz,life:1.0,warning:2.0});
 }
 function spawnDrone(){
   const g=new THREE.Group();
@@ -574,9 +590,16 @@ document.getElementById('refuseBtn').addEventListener('click',()=>{
     setTimeout(()=>{if(batteries.length)spawnMissile(batteries[0].x,batteries[0].z);},1200);}
 });
 function showToll(amt){
-  if(tollPending)return;tollPending=true;currentTollAmt=amt;
+  if(tollPending)return;tollPending=true;tollCountdown=12;currentTollAmt=amt;
   document.getElementById('tollAmt').textContent='$'+amt.toLocaleString();
-  tollBox.style.display='block';setMsg('📡 IRANIAN PATROL: Heave to.',3.5);
+  tollBox.style.display='block';setMsg('📡 IRANIAN PATROL: Heave to. (12s)',3.5);
+}
+function autoDeclineToll(){
+  tollPending=false;tollBox.style.display='none';tollCountdown=0;
+  setMsg('⚠ PATROL IGNORED — They opened fire!',2.5);
+  // Same consequence as refusing
+  if(straitClosed){spawnFastBoat();spawnFastBoat();
+    setTimeout(()=>{if(batteries.length)spawnMissile(batteries[0].x,batteries[0].z);},1500);}
 }
 
 function repairCostFor(f,t){return Math.round(Math.max(0,t-f)*REPAIR_COST_PER_PCT);}
@@ -694,7 +717,7 @@ function resetGame(fresh){
   speed=0;heading=0;invTimer=0;waveT=0;coastDmgTimer=0; // heading always reset to east
   tPos={x:-238,z:chanZ(-238)};
   droneTimer=7;fastBoatTimer=10;dhowTimer=14;missileTimer=20;tollTimer=30;
-  immuneTimer=0;tollPending=false;phase='go_east';
+  immuneTimer=0;tollPending=false;tollCountdown=0;phase='go_east';
   updateMissionBadge();scene.remove(tankerGroup);buildTanker();
   // Seed 6 "lost" drifting mines — Iran can't find or remove them
   if(straitClosed){
@@ -738,6 +761,15 @@ function resetGame(fresh){
   if('ontouchstart' in window||navigator.maxTouchPoints>0){document.getElementById('joystickWrap').style.display='block';}
 }
 document.getElementById('startBtn').addEventListener('click',()=>resetGame(true));
+
+// ── ISLAND COLLISION HELPER ──────────────────────────────────────────────────
+function islandCollision(px,pz,radius=2){
+  for(const isl of ISLANDS){
+    const dx=px-isl.x,dz=pz-isl.z;
+    if(Math.sqrt(dx*dx+dz*dz)<isl.r+radius) return isl;
+  }
+  return null;
+}
 
 const keys={};
 document.addEventListener('keydown',e=>{keys[e.key]=true;if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key))e.preventDefault();});
@@ -790,6 +822,16 @@ function update(dt){
     }
     speed*=0.90;
   }else coastDmgTimer=0;
+  // Tanker vs islands
+  const hitIsland=islandCollision(tPos.x,tPos.z,4);
+  if(hitIsland){
+    takeDamage(1.2,'🪨 ISLAND COLLISION!');
+    speed*=0.7;
+    // Push tanker away from island centre
+    const iDx=tPos.x-hitIsland.x,iDz=tPos.z-hitIsland.z;
+    const iD=Math.sqrt(iDx*iDx+iDz*iDz)||1;
+    tPos.x+=iDx/iD*1.5;tPos.z+=iDz/iD*1.5;
+  }
 
   if(phase==='go_east'&&tPos.x>248){
     phase='go_west';profit+=oilPricePerBarrel*BARRELS_PER_LOAD;tollsPaid=0;
@@ -822,6 +864,14 @@ function update(dt){
   }
   tollTimer-=dt;
   if(tollTimer<0&&!tollPending&&immuneTimer<=0){showToll(straitClosed?2000000:250000);tollTimer=38+Math.random()*20;}
+  // Auto-decline if player ignores the toll demand
+  if(tollPending&&tollCountdown>0){
+    tollCountdown-=dt;
+    // Update countdown display on the toll box
+    const cdEl=document.getElementById('tollCountdown');
+    if(cdEl)cdEl.textContent=Math.ceil(tollCountdown)+'s';
+    if(tollCountdown<=0)autoDeclineToll();
+  }
 
   for(let i=fastBoats.length-1;i>=0;i--){
     const b=fastBoats[i],bp=b.g.position;
@@ -830,6 +880,10 @@ function update(dt){
     let da=ta-b.angle;while(da>Math.PI)da-=Math.PI*2;while(da<-Math.PI)da+=Math.PI*2;
     b.angle+=da*0.055;b.g.rotation.y=-Math.PI/2+b.angle;
     bp.x+=Math.cos(b.angle)*b.spd*60*dt;bp.z-=Math.sin(b.angle)*b.spd*60*dt;
+    // Deflect off islands
+    const fbIsl=islandCollision(bp.x,bp.z,2);
+    if(fbIsl){const dx=bp.x-fbIsl.x,dz=bp.z-fbIsl.z,d=Math.sqrt(dx*dx+dz*dz)||1;
+      bp.x+=dx/d*2;bp.z+=dz/d*2;b.angle=Math.atan2(-(bp.z-fbIsl.z),bp.x-fbIsl.x);}
     bp.y=Math.sin(waveT*2.5+i)*.08;
     if(b.tollCooldown>0)b.tollCooldown-=dt;
     b.ring.material.opacity=dist<RANGE_BOAT_FIRE?(0.4+0.15*Math.sin(waveT*6)):Math.max(0,1-(dist-RANGE_BOAT_FIRE)/(RANGE_BOAT_FIRE*.5))*0.2;
@@ -914,7 +968,9 @@ function update(dt){
     m.life-=dt*0.50;const t2=1-m.life;
     m.g.position.x=m.bx+dx*t2;m.g.position.z=m.bz+dz*t2;m.g.position.y=8-t2*8+Math.sin(t2*Math.PI)*10;
     if(m.ring){m.ring.material.opacity=0.25+m.life*0.4+0.1*Math.sin(waveT*12);m.ring.rotation.z+=dt*2;}
-    if(m.life<0.06){
+    // Missile detonates on island contact
+    const mIsl=islandCollision(m.g.position.x,m.g.position.z,2);
+    if(m.life<0.06||mIsl){
       const px=m.bx+dx,pz=m.bz+dz;spawnExplosion(px,pz,RANGE_MISSILE_AOE,0xff3300);
       if(Math.sqrt((tPos.x-px)**2+(tPos.z-pz)**2)<RANGE_MISSILE_AOE)takeDamage(18.75,'🚀 ANTI-SHIP MISSILE HIT!');
       scene.remove(m.g);scene.remove(m.ring);missiles.splice(i,1);
@@ -987,7 +1043,7 @@ async function boot(){
   hull=100;profit=0;runCount=0;speed=0;heading=0;invTimer=0;waveT=0;coastDmgTimer=0;
   tPos={x:-238,z:chanZ(-238)};
   droneTimer=7;fastBoatTimer=10;dhowTimer=14;missileTimer=20;tollTimer=30;
-  immuneTimer=0;tollPending=false;phase='go_east';updateMissionBadge();buildTanker();
+  immuneTimer=0;tollPending=false;tollCountdown=0;phase='go_east';updateMissionBadge();buildTanker();
   requestAnimationFrame(t=>{lastT=t;animate(t);});
 }
 boot();
