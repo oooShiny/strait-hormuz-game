@@ -390,7 +390,7 @@ const ISLANDS=[];
   const iz=chanZ(d.x)+d.dz;
   const m=new THREE.Mesh(new THREE.CylinderGeometry(d.r*.7,d.r,d.h,8),new THREE.MeshLambertMaterial({color:0xc4a06a}));
   m.position.set(d.x,d.h/2,iz);scene.add(m);
-  ISLANDS.push({x:d.x,z:iz,r:d.r}); // r = collision radius
+  ISLANDS.push({x:d.x,z:iz,r:d.r});
 });
 
 let batteries=[];
@@ -478,10 +478,17 @@ function spawnWarship(){
   const cz=chanZ(ex);
   g.position.set(ex,0,cz+(Math.random()-.5)*chanHW(ex)*0.7);
   scene.add(g);
-  const names=['USS MICHAEL MURPHY','USS FRANK E. PETERSON','USS GRAVELY','USS COLE'];
-  warships.push({g,ring,angle:Math.PI,spd:0.055+Math.random()*0.02,
-    patrolOffset:(Math.random()-.5)*18,interceptTimer:0,warned:false,
-    shipName:names[Math.floor(Math.random()*names.length)]});
+  const names=[
+    'USS MICHAEL MURPHY','USS FRANK E. PETERSON','USS GRAVELY','USS COLE',
+    'USS LABOON','USS CARNEY','USS MASON','USS THOMAS HUDNER',
+    'USS FORREST SHERMAN','USS BAINBRIDGE','USS PORTER','USS DONALD COOK'
+  ];
+  const usedNames=warships.map(w=>w.shipName);
+  const available=names.filter(n=>!usedNames.includes(n));
+  const shipName=available.length?available[Math.floor(Math.random()*available.length)]:names[Math.floor(Math.random()*names.length)];
+  warships.push({g,ring,angle:Math.PI,spd:0.07+Math.random()*0.03,
+    patrolOffset:(Math.random()-.5)*20,interceptTimer:0,fireTimer:3+Math.random()*3,
+    warned:false,aggressive:true,shipName});
 }
 
 function spawnDhow(){
@@ -516,17 +523,15 @@ function spawnMine(x,z){
   mines.push({g,x,z,bobT:Math.random()*6.28,driftX,driftZ});
 }
 function spawnMissile(bx,bz){
-  // Lead the target: estimate travel time then predict tanker position
+  // Lead the target: predict tanker position when missile arrives
   const distToTarget=Math.sqrt((tPos.x-bx)**2+(tPos.z-bz)**2);
-  const travelTime=distToTarget/120; // ~2s at typical range, matches life*dt math
-  // Project tanker forward by travelTime + 2s warning phase
-  const leadTime=travelTime+2.0;
+  const travelTime=distToTarget/120;
+  const leadTime=travelTime+2.0; // +2s for warning phase
   const leadX=tPos.x+Math.cos(heading)*speed*60*leadTime;
   const leadZ=tPos.z-Math.sin(heading)*speed*60*leadTime;
-  // Clamp lead target inside channel so missile doesn't aim into the coast
-  const cz=chanZ(leadX),hw=chanHW(leadX);
-  const clampedZ=Math.max(cz-hw+4,Math.min(cz+hw-4,leadZ));
-  const tx=leadX, tz=clampedZ;
+  // Clamp inside channel
+  const lcz=chanZ(leadX),lhw=chanHW(leadX);
+  const tx=leadX, tz=Math.max(lcz-lhw+4,Math.min(lcz+lhw-4,leadZ));
 
   const ring=new THREE.Mesh(new THREE.RingGeometry(RANGE_MISSILE_AOE-1,RANGE_MISSILE_AOE+1,24),
     new THREE.MeshBasicMaterial({color:0xff2200,transparent:true,opacity:0.5,side:THREE.DoubleSide}));
@@ -597,7 +602,6 @@ function showToll(amt){
 function autoDeclineToll(){
   tollPending=false;tollBox.style.display='none';tollCountdown=0;
   setMsg('⚠ PATROL IGNORED — They opened fire!',2.5);
-  // Same consequence as refusing
   if(straitClosed){spawnFastBoat();spawnFastBoat();
     setTimeout(()=>{if(batteries.length)spawnMissile(batteries[0].x,batteries[0].z);},1500);}
 }
@@ -623,10 +627,15 @@ async function endGame(won){
       <p style="color:#f59e0b;font-size:20px;margin:5px 0;">Net profit: $${Math.round(profit).toLocaleString()}</p>
       <p style="color:#94a3b8;font-size:11px;">${(BARRELS_PER_LOAD/1e6).toFixed(0)}M bbl @ $${oilPricePerBarrel.toFixed(2)}/bbl &nbsp;·&nbsp; Hull: ${Math.round(hull)}%</p>
       <div style="margin:8px 0;">
-        <div style="font-size:11px;color:#64748b;margin-bottom:4px;">Your captain name:</div>
-        <input id="nameInputEnd" type="text" maxlength="16" placeholder="CAPTAIN" value="${playerName}"
-          style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);border-radius:6px;color:white;font-family:'Courier New',monospace;font-size:14px;padding:8px 12px;width:160px;text-align:center;outline:none;">
-        <button class="gbtn amber" id="submitLbBtn" style="margin-left:8px;margin-top:0;padding:8px 14px;">📋 Update</button>
+        <div style="font-size:11px;color:#64748b;margin-bottom:6px;">Captain name &amp; flag:</div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center;">
+          <select id="flagSelect" style="background:rgba(30,40,60,0.95);border:1px solid rgba(255,255,255,0.2);border-radius:6px;color:white;font-family:'Courier New',monospace;font-size:14px;padding:7px 8px;outline:none;cursor:pointer;max-width:200px;">
+            ${NATIONS.map(([f,n])=>'<option value="'+f+'"'+(f===playerFlag?' selected':'')+'>'+f+' '+n+'</option>').join('')}
+          </select>
+          <input id="nameInputEnd" type="text" maxlength="16" placeholder="CAPTAIN" value="${playerName}"
+            style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);border-radius:6px;color:white;font-family:'Courier New',monospace;font-size:14px;padding:8px 10px;width:140px;text-align:center;outline:none;">
+          <button class="gbtn amber" id="submitLbBtn" style="margin-top:0;padding:8px 14px;">📋 Update</button>
+        </div>
       </div>
       <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:12px 16px;margin:4px 0;max-width:380px;width:100%;">
         <div style="font-size:11px;color:#94a3b8;margin-bottom:6px;">🔧 SHIPYARD</div>
@@ -762,7 +771,6 @@ function resetGame(fresh){
 }
 document.getElementById('startBtn').addEventListener('click',()=>resetGame(true));
 
-// ── ISLAND COLLISION HELPER ──────────────────────────────────────────────────
 function islandCollision(px,pz,radius=2){
   for(const isl of ISLANDS){
     const dx=px-isl.x,dz=pz-isl.z;
@@ -827,7 +835,6 @@ function update(dt){
   if(hitIsland){
     takeDamage(1.2,'🪨 ISLAND COLLISION!');
     speed*=0.7;
-    // Push tanker away from island centre
     const iDx=tPos.x-hitIsland.x,iDz=tPos.z-hitIsland.z;
     const iD=Math.sqrt(iDx*iDx+iDz*iDz)||1;
     tPos.x+=iDx/iD*1.5;tPos.z+=iDz/iD*1.5;
@@ -858,16 +865,22 @@ function update(dt){
   }
   fastBoatTimer-=dt;
   if(fastBoatTimer<0&&fastBoats.length<(straitClosed?4:2)){spawnFastBoat();fastBoatTimer=(straitClosed?8:16)+Math.random()*6;}
-  if(straitClosed){
-    const maxWarships=tollsPaid>0?3:1;
-    if(warships.length<maxWarships){spawnWarship();}
+  // US Navy blockade — warships present in both open and closed modes now
+  // Full blockade declared: pack the channel
+  const maxWarships = straitClosed ? 6 : 3;
+  if(warships.length<maxWarships){
+    // Stagger spawns so they don't all appear at once
+    if(!window._warshipSpawnCooldown) window._warshipSpawnCooldown=0;
+    window._warshipSpawnCooldown-=dt;
+    if(window._warshipSpawnCooldown<=0){
+      spawnWarship();
+      window._warshipSpawnCooldown=4+Math.random()*3;
+    }
   }
   tollTimer-=dt;
   if(tollTimer<0&&!tollPending&&immuneTimer<=0){showToll(straitClosed?2000000:250000);tollTimer=38+Math.random()*20;}
-  // Auto-decline if player ignores the toll demand
   if(tollPending&&tollCountdown>0){
     tollCountdown-=dt;
-    // Update countdown display on the toll box
     const cdEl=document.getElementById('tollCountdown');
     if(cdEl)cdEl.textContent=Math.ceil(tollCountdown)+'s';
     if(tollCountdown<=0)autoDeclineToll();
@@ -880,11 +893,10 @@ function update(dt){
     let da=ta-b.angle;while(da>Math.PI)da-=Math.PI*2;while(da<-Math.PI)da+=Math.PI*2;
     b.angle+=da*0.055;b.g.rotation.y=-Math.PI/2+b.angle;
     bp.x+=Math.cos(b.angle)*b.spd*60*dt;bp.z-=Math.sin(b.angle)*b.spd*60*dt;
-    // Deflect off islands
-    const fbIsl=islandCollision(bp.x,bp.z,2);
-    if(fbIsl){const dx=bp.x-fbIsl.x,dz=bp.z-fbIsl.z,d=Math.sqrt(dx*dx+dz*dz)||1;
-      bp.x+=dx/d*2;bp.z+=dz/d*2;b.angle=Math.atan2(-(bp.z-fbIsl.z),bp.x-fbIsl.x);}
     bp.y=Math.sin(waveT*2.5+i)*.08;
+    const fbIsl=islandCollision(bp.x,bp.z,2);
+    if(fbIsl){const fdx=bp.x-fbIsl.x,fdz=bp.z-fbIsl.z,fd=Math.sqrt(fdx*fdx+fdz*fdz)||1;
+      bp.x+=fdx/fd*2;bp.z+=fdz/fd*2;b.angle=Math.atan2(-fdz,fdx);}
     if(b.tollCooldown>0)b.tollCooldown-=dt;
     b.ring.material.opacity=dist<RANGE_BOAT_FIRE?(0.4+0.15*Math.sin(waveT*6)):Math.max(0,1-(dist-RANGE_BOAT_FIRE)/(RANGE_BOAT_FIRE*.5))*0.2;
     if(straitClosed){
@@ -896,18 +908,19 @@ function update(dt){
     }
     if((phase==='go_east'?tPos.x-bp.x:bp.x-tPos.x)>140){scene.remove(b.g);fastBoats.splice(i,1);}
   }
-  // ── US NAVY WARSHIPS ──────────────────────────────────────────────────────
+  // ── US NAVY WARSHIPS — FULL BLOCKADE ────────────────────────────────────
   for(let i=warships.length-1;i>=0;i--){
     const w=warships[i],wp=w.g.position;
     const dx=tPos.x-wp.x,dz=tPos.z-wp.z,dist=Math.sqrt(dx*dx+dz*dz);
-    if(tollsPaid>0&&dist<90){
-      // Aggressively intercept toll-payers
+
+    // Full blockade: all warships aggressively intercept ALL vessels
+    if(dist<120){
       const ta=Math.atan2(-dz,dx);
       let da=ta-w.angle;while(da>Math.PI)da-=Math.PI*2;while(da<-Math.PI)da+=Math.PI*2;
-      w.angle+=da*0.04;
+      w.angle+=da*0.07; // faster turning than before
     } else {
-      // Slow patrol across channel
-      const targetZ=chanZ(wp.x)+w.patrolOffset*Math.sin(waveT*0.3+i);
+      // Spread across channel when tanker is far
+      const targetZ=chanZ(wp.x)+w.patrolOffset*Math.sin(waveT*0.25+i);
       const driftZ=targetZ-wp.z;
       w.angle=Math.atan2(-driftZ,(phase==='go_east'?1:-1)*10);
     }
@@ -915,31 +928,62 @@ function update(dt){
     wp.x+=Math.cos(w.angle)*w.spd*60*dt;
     wp.z-=Math.sin(w.angle)*w.spd*60*dt;
     wp.y=Math.sin(waveT*0.8+i)*0.06;
-    // Spin radar dish (child index 4)
     if(w.g.children[4]) w.g.children[4].rotation.y+=dt*1.4;
-    // Range ring opacity
+
+    // Island deflection
+    const wIsl=islandCollision(wp.x,wp.z,3);
+    if(wIsl){const idx=wp.x-wIsl.x,idz=wp.z-wIsl.z,id=Math.sqrt(idx*idx+idz*idz)||1;
+      wp.x+=idx/id*2;wp.z+=idz/id*2;}
+
+    // Blue range ring — bright when in attack range
     w.ring.material.opacity=dist<RANGE_WARSHIP
-      ?(0.3+0.12*Math.sin(waveT*3))
-      :Math.max(0,(1-(dist-RANGE_WARSHIP)/(RANGE_WARSHIP*.6)))*0.12;
-    // Intercept — only if you paid Iranian toll
-    if(tollsPaid>0&&dist<=RANGE_WARSHIP){
-      w.interceptTimer-=dt;
-      if(!w.warned){
-        w.warned=true;
-        setMsg('🇺🇸 '+w.shipName+': You paid Iran\'s illegal toll. Heave to!',4.5);
-      }
-      if(w.interceptTimer<=0){
-        const seized=profit*0.30;
-        profit=Math.max(0,profit-seized);
-        takeDamage(4,'🇺🇸 CARGO SEIZED by US Navy');
-        w.interceptTimer=8+Math.random()*4;
-      }
-    } else if(dist<=RANGE_WARSHIP&&!w.warned){
+      ?(0.45+0.15*Math.sin(waveT*4))
+      :Math.max(0,(1-(dist-RANGE_WARSHIP)/(RANGE_WARSHIP*.5)))*0.15;
+
+    // First contact warning
+    if(dist<=RANGE_WARSHIP*1.5&&!w.warned){
       w.warned=true;
-      setMsg('🇺🇸 '+w.shipName+': Maintain course. Freedom of navigation in effect.',3);
+      setMsg('🇺🇸 '+w.shipName+': ALL VESSELS HALT. US NAVY BLOCKADE IN EFFECT.',4);
     }
+
+    // Attack — fire on the tanker within range
+    if(dist<=RANGE_WARSHIP&&immuneTimer<=0){
+      w.fireTimer-=dt;
+      if(w.fireTimer<=0){
+        // Naval gun barrage
+        takeDamage(7,'🇺🇸 NAVAL GUNFIRE — '+w.shipName+'!');
+        spawnExplosion(tPos.x+(Math.random()-.5)*4,tPos.z+(Math.random()-.5)*4,3,0x4488ff);
+        w.fireTimer=3+Math.random()*2;
+      }
+      // Boarding/seizure at very close range
+      if(dist<=RANGE_RAM*1.5){
+        w.interceptTimer-=dt;
+        if(w.interceptTimer<=0){
+          const seized=Math.min(profit,profit*0.25);
+          profit=Math.max(0,profit-seized);
+          takeDamage(8,'🇺🇸 BOARDED — US Navy seized 25% of cargo!');
+          speed*=0.5;
+          w.interceptTimer=10+Math.random()*5;
+        }
+      }
+    }
+
+    // Warships also attack IRGC fast boats within range — block them too
+    for(let j=fastBoats.length-1;j>=0;j--){
+      const fb=fastBoats[j];
+      const fdx=fb.g.position.x-wp.x,fdz=fb.g.position.z-wp.z;
+      if(Math.sqrt(fdx*fdx+fdz*fdz)<RANGE_WARSHIP*0.7){
+        // US warships sink IRGC boats on sight
+        if(Math.random()<0.005){
+          spawnExplosion(fb.g.position.x,fb.g.position.z,3,0x4488ff);
+          scene.remove(fb.g);fastBoats.splice(j,1);
+          setMsg('🇺🇸 US Navy sank an IRGC fast boat',2);
+        }
+      }
+    }
+
     const behind=(phase==='go_east')?tPos.x-wp.x:wp.x-tPos.x;
-    if(behind>160){scene.remove(w.g);warships.splice(i,1);}
+    if(behind>180){scene.remove(w.g);warships.splice(i,1);}
   }
 
   for(let i=dhows.length-1;i>=0;i--){
@@ -968,7 +1012,6 @@ function update(dt){
     m.life-=dt*0.50;const t2=1-m.life;
     m.g.position.x=m.bx+dx*t2;m.g.position.z=m.bz+dz*t2;m.g.position.y=8-t2*8+Math.sin(t2*Math.PI)*10;
     if(m.ring){m.ring.material.opacity=0.25+m.life*0.4+0.1*Math.sin(waveT*12);m.ring.rotation.z+=dt*2;}
-    // Missile detonates on island contact
     const mIsl=islandCollision(m.g.position.x,m.g.position.z,2);
     if(m.life<0.06||mIsl){
       const px=m.bx+dx,pz=m.bz+dz;spawnExplosion(px,pz,RANGE_MISSILE_AOE,0xff3300);
@@ -1028,8 +1071,8 @@ async function boot(){
   straitBadge.style.background=straitClosed?'#7f1d1d':'#14532d';
   straitBadge.style.color=straitClosed?'#fca5a5':'#86efac';
   document.getElementById('threatDesc').textContent=straitClosed
-    ?'⚠ CLOSED: Drones · Mines · Missiles · IRGC boats · $2M tolls'
-    :'✅ OPEN: Patrol boats only — $250k passage fees';
+    ?'⚠ CLOSED: Drones · Mines · Missiles · IRGC boats · US Navy blockade'
+    :'⚠ OPEN: US Navy blockade active — warships will fire on all vessels';
   lbPanel.innerHTML=renderLbRows(await lbLoad(),null);
   document.getElementById('loadingStatus').style.display='none';
   document.getElementById('liveDataBox').style.display='block';
@@ -1051,6 +1094,7 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"FULL BLOCKADE: US Navy now attacking all vessels attempting to transit the Strait of Hormuz", src:"CENTCOM · Apr 13", color:"red"},
   {text:"Trump declares US Navy blockade on Strait of Hormuz after Iran peace talks collapse in Pakistan", src:"Axios · Apr 12", color:"red"},
   {text:"Iran lost track of mines it planted in the Strait — unable to fully reopen the waterway", src:"NYT · Apr 11", color:"red"},
   {text:"USS Michael Murphy and USS Frank E. Peterson transit Strait of Hormuz in first such crossing since war began", src:"WSJ · Apr 11", color:"blue"},
