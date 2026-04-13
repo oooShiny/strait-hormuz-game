@@ -58,6 +58,16 @@
   #joystickBase{position:absolute;inset:0;border-radius:50%;background:rgba(255,255,255,0.08);border:2px solid rgba(255,255,255,0.18);}
   #joystickThumb{position:absolute;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.28);border:2px solid rgba(255,255,255,0.5);top:50%;left:50%;transform:translate(-50%,-50%);transition:background .1s;}
   #joystickThumb.active{background:rgba(56,189,248,0.5);border-color:#38bdf8;}
+
+  #newsFeed{max-width:420px;width:100%;margin:6px 0;overflow:hidden;position:relative;}
+  #newsInner{display:flex;flex-direction:column;gap:5px;}
+  .news-item{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-left:2px solid #ef4444;border-radius:0 6px 6px 0;padding:6px 10px;text-align:left;animation:newsSlide .4s ease;}
+  .news-item.amber{border-left-color:#f59e0b;}
+  .news-item.blue{border-left-color:#38bdf8;}
+  .news-item.green{border-left-color:#4ade80;}
+  @keyframes newsSlide{from{opacity:0;transform:translateX(-8px);}to{opacity:1;transform:translateX(0);}}
+  .news-hed{font-size:10px;color:#e2e8f0;line-height:1.4;}
+  .news-src{font-size:9px;color:#475569;margin-top:2px;}
 </style>
 </head>
 <body>
@@ -131,6 +141,15 @@
     </div>
 
     <!-- Mission summary -->
+    <!-- Live news feed -->
+    <div id="newsFeed" style="display:none;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;">
+        <span style="font-size:11px;color:#64748b;letter-spacing:1px;">📡 LATEST HEADLINES</span>
+        <span style="font-size:9px;color:#374151;">live from the strait</span>
+      </div>
+      <div id="newsInner"><div style="color:#475569;font-size:11px;padding:4px;">Loading headlines…</div></div>
+    </div>
+
     <div id="missionDesc" style="display:none;max-width:420px;width:100%;">
       <div style="background:rgba(255,255,255,0.03);border-radius:7px;padding:8px 12px;margin:5px 0;text-align:left;">
         <div style="font-size:10px;color:#64748b;margin-bottom:4px;text-transform:uppercase;letter-spacing:0.07em;">Mission</div>
@@ -460,7 +479,10 @@ function spawnMine(x,z){
     new THREE.MeshBasicMaterial({color:0xff3300,transparent:true,opacity:0.35,side:THREE.DoubleSide}));
   halo.rotation.x=-Math.PI/2;halo.position.y=0.1;g.add(halo);
   g.position.set(x,0.38,z);scene.add(g);
-  mines.push({g,x,z,bobT:Math.random()*6.28});
+  // Real mechanic: Iran deployed mines haphazardly; many drift with the current
+  const driftX=(Math.random()-0.5)*0.008; // slow east-west drift
+  const driftZ=(Math.random()-0.5)*0.006; // slow north-south drift
+  mines.push({g,x,z,bobT:Math.random()*6.28,driftX,driftZ});
 }
 function spawnMissile(bx,bz){
   const ring=new THREE.Mesh(new THREE.RingGeometry(RANGE_MISSILE_AOE-1,RANGE_MISSILE_AOE+1,24),
@@ -643,6 +665,44 @@ function resetGame(fresh){
   droneTimer=7;fastBoatTimer=10;dhowTimer=14;missileTimer=20;tollTimer=30;
   immuneTimer=0;tollPending=false;phase='go_east';
   updateMissionBadge();scene.remove(tankerGroup);buildTanker();
+  // Seed 6 "lost" drifting mines — Iran can't find or remove them
+  if(straitClosed){
+    for(let s=0;s<6;s++){
+      const sx=-200+s*80+Math.random()*50;
+      const scz=chanZ(sx),hw=chanHW(sx);
+      const side=Math.random()>.5?1:-1;
+      const sz=scz+side*(hw*0.85+Math.random()*4);
+      setTimeout(()=>{
+        if(!gameRunning) return;
+        spawnMine(sx,sz);
+        if(mines.length){
+          const lm=mines[mines.length-1];
+          lm.driftX=(Math.random()-0.4)*0.006;
+          lm.driftZ=-side*0.005+Math.random()*0.003;
+        }
+      }, 8000+s*6000);
+    }
+  }
+  // Seed "lost" mines that drift into the channel unpredictably (Iran can't find them)
+  if(straitClosed){
+    for(let s=0;s<6;s++){
+      const sx=-200+s*80+Math.random()*60;
+      const scz=chanZ(sx);
+      const hw=chanHW(sx);
+      // Start near channel edge, drift inward
+      const side=Math.random()>.5?1:-1;
+      const sz=scz+side*(hw-2+Math.random()*6);
+      setTimeout(()=>{
+        if(gameRunning) spawnMine(sx,sz);
+        // Override drift to push toward channel centre
+        if(mines.length){
+          const lm=mines[mines.length-1];
+          lm.driftX=(Math.random()-0.4)*0.006;
+          lm.driftZ=-side*0.005+Math.random()*0.003;
+        }
+      }, 8000+s*7000); // stagger: first appears 8s in, then every 7s
+    }
+  }
   overlay.style.display='none';hud.style.display='block';gameRunning=true;
   if('ontouchstart' in window||navigator.maxTouchPoints>0){document.getElementById('joystickWrap').style.display='block';}
 }
@@ -805,7 +865,11 @@ function update(dt){
     if((phase==='go_east'?tPos.x-dp.x:dp.x-tPos.x)>100||d.dropped>=3){scene.remove(d.g);dhows.splice(i,1);}
   }
   for(let i=mines.length-1;i>=0;i--){
-    const m=mines[i];m.g.position.y=0.35+Math.sin(waveT+m.bobT)*.11;
+    const m=mines[i];
+    // Drift — mines move with current unpredictably
+    m.x+=(m.driftX||0)*60*dt; m.z+=(m.driftZ||0)*60*dt;
+    m.g.position.x=m.x; m.g.position.z=m.z;
+    m.g.position.y=0.35+Math.sin(waveT+m.bobT)*.11;
     const halo=m.g.children[m.g.children.length-1];
     if(halo)halo.material.opacity=0.25+0.15*Math.sin(waveT*2+m.bobT);
     const dx=tPos.x-m.x,dz=tPos.z-m.z;
@@ -885,6 +949,8 @@ async function boot(){
   document.getElementById('lbSection').style.display='block';
   document.getElementById('missionDesc').style.display='block';
   document.getElementById('btnRow').style.display='flex';
+  document.getElementById('newsFeed').style.display='block';
+  renderNewsFeed();
   document.getElementById('explainerSection').style.display='block';
   hull=100;profit=0;runCount=0;speed=0;heading=0;invTimer=0;waveT=0;coastDmgTimer=0;
   tPos={x:-238,z:chanZ(-238)};
@@ -893,6 +959,42 @@ async function boot(){
   requestAnimationFrame(t=>{lastT=t;animate(t);});
 }
 boot();
+
+
+// ── NEWS FEED ─────────────────────────────────────────────────────────────────
+const HEADLINES = [
+  {text:"Trump declares US Navy blockade on Strait of Hormuz after Iran peace talks collapse in Pakistan", src:"Axios · Apr 12", color:"red"},
+  {text:"Iran lost track of mines it planted in the Strait — unable to fully reopen the waterway", src:"NYT · Apr 11", color:"red"},
+  {text:"USS Michael Murphy and USS Frank E. Peterson transit Strait of Hormuz in first such crossing since war began", src:"WSJ · Apr 11", color:"blue"},
+  {text:"US officials: Iran mined the strait haphazardly with small boats, no systematic record of placements kept", src:"NYT · Apr 11", color:"amber"},
+  {text:"Some Iranian mines believed to have drifted from original positions due to sea currents", src:"Euronews · Apr 11", color:"amber"},
+  {text:"Brent crude surging above $100/barrel as strait remains effectively closed to commercial traffic", src:"Reuters · Apr 10", color:"amber"},
+  {text:"Iran charges $2M toll per vessel — at least 16 ships have paid, including one 'zombie tanker'", src:"Lloyd's List · Mar 23", color:"red"},
+  {text:"Nearly 2,000 vessels trapped in the Persian Gulf with no clear timeline for reopening", src:"IMO · Apr 9", color:"red"},
+  {text:"US estimates Iran possesses 2,000–6,000 naval mines; warheads exceeding 1,100 lbs capable of sinking large tankers", src:"CBS News · Apr 10", color:"amber"},
+  {text:"JD Vance departs Pakistan after 21-hour talks with Iran end without agreement", src:"AP · Apr 12", color:"blue"},
+  {text:"Ceasefire partially agreed — Iran to reopen strait temporarily if all attacks halted", src:"Reuters · Apr 8", color:"green"},
+  {text:"Trump: 'No one who pays an illegal toll will have safe passage on the high seas'", src:"Truth Social · Apr 12", color:"red"},
+];
+
+function renderNewsFeed(){
+  const inner = document.getElementById('newsInner');
+  if(!inner) return;
+  inner.innerHTML = HEADLINES.slice(0,5).map(h =>
+    '<div class="news-item '+h.color+'"><div class="news-hed">'+h.text+'</div><div class="news-src">'+h.src+'</div></div>'
+  ).join('');
+  // Cycle through headlines every 4s
+  let idx = 5;
+  setInterval(()=>{
+    if(idx>=HEADLINES.length) idx=0;
+    const h=HEADLINES[idx++];
+    const el=document.createElement('div');
+    el.className='news-item '+h.color;
+    el.innerHTML='<div class="news-hed">'+h.text+'</div><div class="news-src">'+h.src+'</div>';
+    inner.insertBefore(el, inner.firstChild);
+    if(inner.children.length>5) inner.removeChild(inner.lastChild);
+  }, 4000);
+}
 
 // ── VIRTUAL JOYSTICK ─────────────────────────────────────────────────────────
 (function(){
