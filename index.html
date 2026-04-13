@@ -256,28 +256,44 @@ async function lbSubmit(name, profit, hull, runs) {
     const r = await fetch(WORKER_URL + "/scores", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, profit, hull, runs, token: SESSION_TOKEN }),
+      body: JSON.stringify({ name, profit, hull, runs, flag: playerFlag, token: SESSION_TOKEN }),
     });
     if (!r.ok) throw new Error();
     return await r.json(); // worker returns updated top 10
   } catch(e) {
     // Fallback: submit to localStorage and return local scores
     const entries = JSON.parse(localStorage.getItem(LB_KEY)||'[]').filter(e => e.token !== SESSION_TOKEN);
-    entries.push({ name: name.trim().substring(0,16)||'CAPTAIN', profit: Math.round(profit), hull: Math.round(hull), runs, date: new Date().toISOString().slice(0,10), token: SESSION_TOKEN });
+    entries.push({ name: name.trim().substring(0,16)||'CAPTAIN', profit: Math.round(profit), hull: Math.round(hull), runs, flag: playerFlag, date: new Date().toISOString().slice(0,10), token: SESSION_TOKEN });
     entries.sort((a,b) => b.profit - a.profit);
     const trimmed = entries.slice(0, LB_MAX);
     localStorage.setItem(LB_KEY, JSON.stringify(trimmed));
     return trimmed;
   }
 }
+
+const NATIONS = [
+  ['🏴','No flag'],
+  ['🇺🇸','United States'],['🇬🇧','United Kingdom'],['🇨🇦','Canada'],
+  ['🇦🇺','Australia'],['🇩🇪','Germany'],['🇫🇷','France'],['🇯🇵','Japan'],
+  ['🇰🇷','South Korea'],['🇸🇬','Singapore'],['🇨🇳','China'],['🇮🇳','India'],
+  ['🇧🇷','Brazil'],['🇳🇱','Netherlands'],['🇮🇹','Italy'],['🇪🇸','Spain'],
+  ['🇳🇴','Norway'],['🇬🇷','Greece'],['🇵🇱','Poland'],['🇸🇪','Sweden'],
+  ['🇨🇭','Switzerland'],['🇦🇹','Austria'],['🇵🇹','Portugal'],['🇩🇰','Denmark'],
+  ['🇫🇮','Finland'],['🇧🇪','Belgium'],['🇿🇦','South Africa'],['🇲🇽','Mexico'],
+  ['🇦🇷','Argentina'],['🇳🇿','New Zealand'],['🇮🇷','Iran'],['🇴🇲','Oman'],
+  ['🇸🇦','Saudi Arabia'],['🇦🇪','UAE'],['🇶🇦','Qatar'],['🇰🇼','Kuwait'],
+  ['🇵🇰','Pakistan'],['🇹🇷','Turkey'],['🇮🇱','Israel'],['🇺🇦','Ukraine'],
+  ['🏴‍☠️','Pirate'],
+];
 function rankEmoji(i){return i===0?'🥇':i===1?'🥈':i===2?'🥉':'#'+(i+1);}
 function renderLbRows(entries,highlightName){
   if(!entries.length)return '<div style="color:#475569;font-size:11px;padding:8px 0;">No scores yet — be the first!</div>';
   return entries.map((e,i)=>{
     const isNew=highlightName&&e.name===highlightName&&i===entries.findIndex(x=>x.name===highlightName&&x.profit===e.profit);
+    const flag=e.flag&&e.flag!=='🏴'?'<span style="font-size:13px;margin-right:4px;">'+e.flag+'</span>':'';
     return `<div class="lb-row${isNew?' lb-new':''}">
       <span class="lb-rank">${rankEmoji(i)}</span>
-      <span class="lb-name">${e.name}</span>
+      <span class="lb-name">${flag}${e.name}</span>
       <span class="lb-profit">$${(e.profit/1e6).toFixed(1)}M</span>
       <span class="lb-hull">${e.hull}% hull</span>
     </div>`;
@@ -324,7 +340,7 @@ let immuneTimer=0,tollPending=false,profit=0,phase='go_east',runCount=0;
 let coastDmgTimer=0;
 let fastBoats=[],dhows=[],mines=[],missiles=[],drones=[],particles=[],explosions=[],warships=[];
 let tollsPaid=0;
-let playerName='CAPTAIN';
+let playerName='CAPTAIN', playerFlag='🏴';
 
 const H=620;let W=canvas.clientWidth||900;
 
@@ -629,7 +645,9 @@ async function endGame(won){
     });
     document.getElementById('submitLbBtn').addEventListener('click',async ()=>{
       const nameEl=document.getElementById('nameInputEnd');
+      const flagEl=document.getElementById('flagSelect');
       if(nameEl)playerName=nameEl.value.trim()||'CAPTAIN';
+      if(flagEl)playerFlag=flagEl.value;
       const entries=await lbSubmit(playerName,profit,hull,runCount);
       const lbEnd=document.getElementById('lbPanelEnd');
       if(lbEnd)lbEnd.innerHTML=renderLbRows(entries,playerName);
@@ -637,7 +655,9 @@ async function endGame(won){
     });
     document.getElementById('nextBtn').addEventListener('click',()=>{
       const nameEl=document.getElementById('nameInputEnd');
+      const flagEl=document.getElementById('flagSelect');
       if(nameEl)playerName=nameEl.value.trim()||playerName;
+      if(flagEl)playerFlag=flagEl.value;
       resetGame(false);
     });
 
