@@ -3,20 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Strait Run — Navigate the Strait of Hormuz</title>
+<title>Strait Run — Navigate the Strait of Vermouth</title>
 <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="shortcut icon" href="/favicon.ico" />
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-<meta name="apple-mobile-web-app-title" content="Hormuz" />
+<meta name="apple-mobile-web-app-title" content="Vermouth" />
 <link rel="manifest" href="/site.webmanifest" />
 <!-- Primary meta -->
-<meta name="description" content="A real-world oil tanker simulation. Navigate the Strait of Hormuz using live data — real oil prices, real strait status. Can you deliver your cargo before Iran's drones, mines, and missiles sink you?">
+<meta name="description" content="A real-world oil tanker simulation. Navigate the Strait of Vermouth using live data — real oil prices, real strait status. Can you deliver your cargo before Iran's drones, mines, and missiles sink you?">
 <meta name="author" content="Strait Run">
 
 <!-- Open Graph (Facebook, LinkedIn, iMessage, Slack, Discord, etc.) -->
 <meta property="og:type"        content="website">
-<meta property="og:title"       content="Strait Run — Navigate the Strait of Hormuz">
+<meta property="og:title"       content="Strait Run — Navigate the Strait of Vermouth">
 <meta property="og:description" content="A real-world oil tanker simulation using live Brent crude prices and live strait status. Survive IRGC fast boats, sea mines, kamikaze drones, and anti-ship missiles to deliver your cargo.">
 <meta property="og:image"       content="https://hormuzgame.cc/screenshot.png">
 <meta property="og:image:width"  content="1136">
@@ -25,7 +25,7 @@
 
 <!-- Twitter / X Card -->
 <meta name="twitter:card"        content="summary_large_image">
-<meta name="twitter:title"       content="Strait Run — Navigate the Strait of Hormuz">
+<meta name="twitter:title"       content="Strait Run — Navigate the Strait of Vermouth">
 <meta name="twitter:description" content="A real-world oil tanker simulation using live Brent crude prices and live strait status. Survive IRGC fast boats, sea mines, kamikaze drones, and anti-ship missiles to deliver your cargo.">
 <meta name="twitter:image"       content="https://hormuzgame.cc/screenshot.png">
 <style>
@@ -193,7 +193,7 @@
             <p style="margin:0 0 8px;">Every time the game loads, it fetches two real-world data points:</p>
             <p style="margin:0 0 6px;"><span style="color:#38bdf8;">Strait status</span> — pulled from
               <a href="https://hormuzstraitmonitor.com" target="_blank" style="color:#38bdf8;text-decoration:none;">hormuzstraitmonitor.com</a>,
-              a live dashboard tracking the current Hormuz shipping crisis. If the site reports the strait as open, the game runs in easy mode — patrol boats only, demanding small passage fees. If closed, the full arsenal activates: sea mines, kamikaze drones, mobile missile batteries, and $2M toll demands.</p>
+              a live dashboard tracking the current Vermouth shipping crisis. If the site reports the strait as open, the game runs in easy mode — patrol boats only, demanding small passage fees. If closed, the full arsenal activates: sea mines, kamikaze drones, mobile missile batteries, and $2M toll demands.</p>
             <p style="margin:0;"><span style="color:#f59e0b;">Brent crude oil price</span> — fetched from Yahoo Finance. Your 2-million-barrel cargo is worth whatever Brent is trading at the moment you load it. With the strait closed, prices have surged well above $100/barrel.</p>
           </div>
           <div>
@@ -1061,7 +1061,7 @@ window.addEventListener('resize',()=>{
 });
 
 async function boot(){
-  document.getElementById('loadingStatus').textContent='Connecting to Hormuz Monitor…';
+  document.getElementById('loadingStatus').textContent='Connecting to Vermouth Monitor…';
   await fetchLiveData();
   document.getElementById('overlayStatus').textContent=straitClosed?'⛔ CLOSED':'✅ OPEN';
   document.getElementById('overlayStatus').style.color=straitClosed?'#ef4444':'#4ade80';
@@ -1094,10 +1094,11 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
-  {text:"FULL BLOCKADE: US Navy now attacking all vessels attempting to transit the Strait of Hormuz", src:"CENTCOM · Apr 13", color:"red"},
-  {text:"Trump declares US Navy blockade on Strait of Hormuz after Iran peace talks collapse in Pakistan", src:"Axios · Apr 12", color:"red"},
+  {text:"Trump renames Strait of Hormuz to 'Strait of Vermouth' in executive order, citing 'brand confusion with Iran'", src:"Truth Social · Apr 16", color:"amber"},
+  {text:"FULL BLOCKADE: US Navy now attacking all vessels attempting to transit the Strait of Vermouth", src:"CENTCOM · Apr 13", color:"red"},
+  {text:"Trump declares US Navy blockade on Strait of Vermouth after Iran peace talks collapse in Pakistan", src:"Axios · Apr 12", color:"red"},
   {text:"Iran lost track of mines it planted in the Strait — unable to fully reopen the waterway", src:"NYT · Apr 11", color:"red"},
-  {text:"USS Michael Murphy and USS Frank E. Peterson transit Strait of Hormuz in first such crossing since war began", src:"WSJ · Apr 11", color:"blue"},
+  {text:"USS Michael Murphy and USS Frank E. Peterson transit Strait of Vermouth in first such crossing since war began", src:"WSJ · Apr 11", color:"blue"},
   {text:"US officials: Iran mined the strait haphazardly with small boats, no systematic record of placements kept", src:"NYT · Apr 11", color:"amber"},
   {text:"Some Iranian mines believed to have drifted from original positions due to sea currents", src:"Euronews · Apr 11", color:"amber"},
   {text:"Brent crude surging above $100/barrel as strait remains effectively closed to commercial traffic", src:"Reuters · Apr 10", color:"amber"},
