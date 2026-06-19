@@ -193,17 +193,18 @@
             <p style="margin:0 0 8px;">Every time the game loads, it fetches two real-world data points:</p>
             <p style="margin:0 0 6px;"><span style="color:#38bdf8;">Strait status</span> — pulled from
               <a href="https://hormuzstraitmonitor.com" target="_blank" style="color:#38bdf8;text-decoration:none;">hormuzstraitmonitor.com</a>,
-              a live dashboard tracking the current Vermouth shipping crisis. If the site reports the strait as open, the game runs in easy mode — patrol boats only, demanding small passage fees. If closed, the full arsenal activates: sea mines, kamikaze drones, mobile missile batteries, and $2M toll demands.</p>
-            <p style="margin:0;"><span style="color:#f59e0b;">Brent crude oil price</span> — fetched from Yahoo Finance. Your 2-million-barrel cargo is worth whatever Brent is trading at the moment you load it. With the strait closed, prices have surged well above $100/barrel.</p>
+              a live dashboard tracking the Vermouth shipping crisis. The ceasefire MOU reopened the strait, so the game now boots in post-ceasefire mode by default — toll-free transit, no naval blockade, but minefields aren't fully swept yet. If the monitor ever reports the strait closed again, the full arsenal reactivates: sea mines, kamikaze drones, mobile missile batteries, and $2M toll demands.</p>
+            <p style="margin:0;"><span style="color:#f59e0b;">Brent crude oil price</span> — fetched from Yahoo Finance. Your 2-million-barrel cargo is worth whatever Brent is trading at the moment you load it. Brent has eased back toward $80/barrel as shipping conditions improve, well off the $100+ wartime peak.</p>
           </div>
           <div>
             <div style="color:#e2e8f0;font-size:11px;font-weight:bold;margin-bottom:6px;letter-spacing:0.05em;">GAMEPLAY MECHANICS</div>
             <p style="margin:0 0 5px;"><span style="color:#4ade80;">Goal:</span> Maximize net profit across multiple runs. Cargo value is locked in when you reach the Gulf of Oman — survive the return trip to collect it.</p>
-            <p style="margin:0 0 5px;"><span style="color:#fbbf24;">Threats (closed mode):</span> IRGC fast-attack boats · Sea mines (some drifting — Iran can't find them) · Kamikaze drones · Anti-ship missiles from the Iranian coast.</p>
-            <p style="margin:0 0 5px;"><span style="color:#f59e0b;">Tolls:</span> $250k open / $2M closed. Paying buys immunity — but flags you for US Navy interdiction.</p>
+            <p style="margin:0 0 5px;"><span style="color:#fbbf24;">Threats (closed mode):</span> IRGC fast-attack boats · Sea mines (some drifting — Iran can't find them) · Kamikaze drones · Anti-ship missiles from the Iranian coast · a hostile US Navy blockade.</p>
+            <p style="margin:0 0 5px;"><span style="color:#38bdf8;">Post-ceasefire (open mode):</span> The US Navy blockade stood down and tolls are suspended under the MOU's 60-day window — but a handful of uncleared mines remain. Coalition minesweepers are working the channel and will disarm any mine they pass near; staying close to one is the safer (slower) route.</p>
+            <p style="margin:0 0 5px;"><span style="color:#f59e0b;">Tolls:</span> Suspended while the strait is open (MOU terms). $2M if the strait closes again — paying buys immunity but flags you for US Navy interdiction.</p>
             <p style="margin:0 0 8px;"><span style="color:#a78bfa;">Repairs:</span> $800k per hull % restored after each delivery.</p>
             <div style="color:#e2e8f0;font-size:11px;font-weight:bold;margin-bottom:6px;letter-spacing:0.05em;">THE REAL CONTEXT</div>
-            <p style="margin:0;color:#64748b;">The strait is 24 miles wide at its narrowest. Iran controls the northern coast with mobile missile batteries hidden in the hills. Nearly 2,000 vessels are stranded in the Persian Gulf. <a href="https://www.cnn.com/2026/03/26/middleeast/how-iran-controls-strait-of-hormuz-explained-intl-vis" target="_blank" style="color:#38bdf8;text-decoration:none;">Read the CNN report →</a></p>
+            <p style="margin:0;color:#64748b;">The US and Iran signed a 14-point agreement on June 17, 2026 reopening the strait and suspending tolls for 60 days; the US lifted its naval blockade the next day. Iran has 30 days to clear the military obstacles and mines it laid, though full demining could take up to six months. <a href="https://www.cnn.com/world/strait-of-hormuz-tracker-vis" target="_blank" style="color:#38bdf8;text-decoration:none;">Read the CNN tracker →</a></p>
           </div>
         </div>
       </div>
@@ -235,7 +236,7 @@ const REPAIR_COST_PER_PCT=800000;
 const LB_KEY='hormuz-leaderboard-v1';
 const LB_MAX=10;
 
-let straitClosed=true,oilPricePerBarrel=94.86;
+let straitClosed=false,oilPricePerBarrel=79.95;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
 const SESSION_TOKEN = Math.random().toString(36).slice(2) + Date.now().toString(36);
@@ -339,7 +340,7 @@ let gameRunning=false,wonOrLost=false,lastT=0,msgTimer=0;
 let droneTimer,fastBoatTimer,dhowTimer,missileTimer,tollTimer;
 let immuneTimer=0,tollPending=false,tollCountdown=0,profit=0,phase='go_east',runCount=0;
 let coastDmgTimer=0;
-let fastBoats=[],dhows=[],mines=[],missiles=[],drones=[],particles=[],explosions=[],warships=[];
+let fastBoats=[],dhows=[],mines=[],missiles=[],drones=[],particles=[],explosions=[],warships=[],minesweepers=[];
 let tollsPaid=0;
 let playerName='CAPTAIN', playerFlag='🏴';
 
@@ -486,9 +487,11 @@ function spawnWarship(){
   const usedNames=warships.map(w=>w.shipName);
   const available=names.filter(n=>!usedNames.includes(n));
   const shipName=available.length?available[Math.floor(Math.random()*available.length)]:names[Math.floor(Math.random()*names.length)];
+  // Aggressive (blockade) posture only applies while the strait is closed — the US Navy
+  // blockade was lifted June 18, 2026 once the ceasefire MOU took effect.
   warships.push({g,ring,angle:Math.PI,spd:0.07+Math.random()*0.03,
     patrolOffset:(Math.random()-.5)*20,interceptTimer:0,fireTimer:3+Math.random()*3,
-    warned:false,aggressive:true,shipName});
+    warned:false,aggressive:straitClosed,shipName});
 }
 
 function spawnDhow(){
@@ -521,6 +524,22 @@ function spawnMine(x,z){
   const driftX=(Math.random()-0.5)*0.008; // slow east-west drift
   const driftZ=(Math.random()-0.5)*0.006; // slow north-south drift
   mines.push({g,x,z,bobT:Math.random()*6.28,driftX,driftZ});
+}
+// Coalition minesweeper — non-hostile, part of the post-ceasefire demining mission.
+// Patrols a fixed stretch of channel and disarms any mine it passes near.
+const SWEEP_RADIUS=7;
+function spawnMinesweeper(baseX){
+  const g=new THREE.Group();
+  const body=new THREE.Mesh(new THREE.BoxGeometry(1.8,0.8,7),new THREE.MeshLambertMaterial({color:0xb0b8b8}));
+  body.position.y=0.35;g.add(body);
+  const sup=new THREE.Mesh(new THREE.BoxGeometry(1.3,1.1,2.2),new THREE.MeshLambertMaterial({color:0xd5dadb}));
+  sup.position.set(0,1.1,-1.5);g.add(sup);
+  const gear=new THREE.Mesh(new THREE.CylinderGeometry(0.05,0.05,5,4),new THREE.MeshLambertMaterial({color:0x333}));
+  gear.rotation.x=Math.PI/2;gear.position.set(0,0.15,-5);g.add(gear);
+  const cz=chanZ(baseX);
+  g.position.set(baseX,0,cz);
+  scene.add(g);
+  minesweepers.push({g,baseX,t:Math.random()*6.28,sweepCooldown:0});
 }
 function spawnMissile(bx,bz){
   // Lead the target: predict tanker position when missile arrives
@@ -718,6 +737,7 @@ function clearAll(){
   particles.forEach(p=>scene.remove(p.m));
   fastBoats=[];dhows=[];mines=[];missiles=[];drones=[];explosions=[];particles=[];
   warships.forEach(w=>scene.remove(w.g));warships=[];
+  minesweepers.forEach(m=>scene.remove(m.g));minesweepers=[];
 }
 function resetGame(fresh){
   clearAll();
@@ -745,26 +765,25 @@ function resetGame(fresh){
         }
       }, 8000+s*6000);
     }
-  }
-  // Seed "lost" mines that drift into the channel unpredictably (Iran can't find them)
-  if(straitClosed){
-    for(let s=0;s<6;s++){
-      const sx=-200+s*80+Math.random()*60;
-      const scz=chanZ(sx);
-      const hw=chanHW(sx);
-      // Start near channel edge, drift inward
+  }else{
+    // Post-ceasefire: most mines have been swept, but a few residual ones remain
+    // while the international demining mission works the channel.
+    for(let s=0;s<3;s++){
+      const sx=-180+s*150+Math.random()*60;
+      const scz=chanZ(sx),hw=chanHW(sx);
       const side=Math.random()>.5?1:-1;
-      const sz=scz+side*(hw-2+Math.random()*6);
+      const sz=scz+side*(hw*0.85+Math.random()*4);
       setTimeout(()=>{
-        if(gameRunning) spawnMine(sx,sz);
-        // Override drift to push toward channel centre
+        if(!gameRunning) return;
+        spawnMine(sx,sz);
         if(mines.length){
           const lm=mines[mines.length-1];
-          lm.driftX=(Math.random()-0.4)*0.006;
-          lm.driftZ=-side*0.005+Math.random()*0.003;
+          lm.driftX=(Math.random()-0.4)*0.004;
+          lm.driftZ=-side*0.003+Math.random()*0.002;
         }
-      }, 8000+s*7000); // stagger: first appears 8s in, then every 7s
+      }, 8000+s*9000);
     }
+    spawnMinesweeper(-140);spawnMinesweeper(60);
   }
   overlay.style.display='none';hud.style.display='block';gameRunning=true;
   if('ontouchstart' in window||navigator.maxTouchPoints>0){document.getElementById('joystickWrap').style.display='block';}
@@ -865,9 +884,9 @@ function update(dt){
   }
   fastBoatTimer-=dt;
   if(fastBoatTimer<0&&fastBoats.length<(straitClosed?4:2)){spawnFastBoat();fastBoatTimer=(straitClosed?8:16)+Math.random()*6;}
-  // US Navy blockade — warships present in both open and closed modes now
-  // Full blockade declared: pack the channel
-  const maxWarships = straitClosed ? 6 : 3;
+  // Closed mode: active US Navy blockade. Open mode (post-ceasefire): a smaller,
+  // non-hostile coalition naval presence supporting the demining mission.
+  const maxWarships = straitClosed ? 6 : 2;
   if(warships.length<maxWarships){
     // Stagger spawns so they don't all appear at once
     if(!window._warshipSpawnCooldown) window._warshipSpawnCooldown=0;
@@ -878,7 +897,8 @@ function update(dt){
     }
   }
   tollTimer-=dt;
-  if(tollTimer<0&&!tollPending&&immuneTimer<=0){showToll(straitClosed?2000000:250000);tollTimer=38+Math.random()*20;}
+  // Tolls are suspended while the strait is open under the ceasefire MOU
+  if(straitClosed&&tollTimer<0&&!tollPending&&immuneTimer<=0){showToll(2000000);tollTimer=38+Math.random()*20;}
   if(tollPending&&tollCountdown>0){
     tollCountdown-=dt;
     const cdEl=document.getElementById('tollCountdown');
@@ -904,16 +924,16 @@ function update(dt){
       if(b.fireTimer<0&&dist<=RANGE_BOAT_FIRE){takeDamage(3.75,'🔫 IRGC FAST BOAT FIRE!');b.fireTimer=4+Math.random()*3;spawnExplosion(bp.x+Math.cos(b.angle)*2,bp.z-Math.sin(b.angle)*2,1,0xffcc00);}
       if(dist<=RANGE_RAM){takeDamage(6.75,'⛵ IRGC RAM!');speed*=0.72;bp.x-=Math.cos(b.angle)*5;bp.z+=Math.sin(b.angle)*5;}
     }else{
-      if(dist<=RANGE_BOAT_FIRE&&!tollPending&&b.tollCooldown<=0&&immuneTimer<=0){showToll(250000);b.tollCooldown=45;}
+      if(dist<=RANGE_BOAT_FIRE&&b.tollCooldown<=0){setMsg('🇮🇷 IRGC patrol waves you through — tolls suspended under ceasefire MOU',3);b.tollCooldown=45;}
     }
     if((phase==='go_east'?tPos.x-bp.x:bp.x-tPos.x)>140){scene.remove(b.g);fastBoats.splice(i,1);}
   }
-  // ── US NAVY WARSHIPS — FULL BLOCKADE ────────────────────────────────────
+  // ── US NAVY WARSHIPS — BLOCKADE (closed) OR COALITION ESCORT (open) ─────
   for(let i=warships.length-1;i>=0;i--){
     const w=warships[i],wp=w.g.position;
     const dx=tPos.x-wp.x,dz=tPos.z-wp.z,dist=Math.sqrt(dx*dx+dz*dz);
 
-    // Full blockade: all warships aggressively intercept ALL vessels
+    // Close on the tanker's heading — aggressively if blockading, otherwise just escorting
     if(dist<120){
       const ta=Math.atan2(-dz,dx);
       let da=ta-w.angle;while(da>Math.PI)da-=Math.PI*2;while(da<-Math.PI)da+=Math.PI*2;
@@ -943,41 +963,45 @@ function update(dt){
     // First contact warning
     if(dist<=RANGE_WARSHIP*1.5&&!w.warned){
       w.warned=true;
-      setMsg('🇺🇸 '+w.shipName+': ALL VESSELS HALT. US NAVY BLOCKADE IN EFFECT.',4);
+      setMsg(w.aggressive
+        ?'🇺🇸 '+w.shipName+': ALL VESSELS HALT. US NAVY BLOCKADE IN EFFECT.'
+        :'🇺🇸 '+w.shipName+': Coalition mine-clearing operation underway — maintain safe distance.',4);
     }
 
-    // Attack — fire on the tanker within range
-    if(dist<=RANGE_WARSHIP&&immuneTimer<=0){
-      w.fireTimer-=dt;
-      if(w.fireTimer<=0){
-        // Naval gun barrage
-        takeDamage(7,'🇺🇸 NAVAL GUNFIRE — '+w.shipName+'!');
-        spawnExplosion(tPos.x+(Math.random()-.5)*4,tPos.z+(Math.random()-.5)*4,3,0x4488ff);
-        w.fireTimer=3+Math.random()*2;
-      }
-      // Boarding/seizure at very close range
-      if(dist<=RANGE_RAM*1.5){
-        w.interceptTimer-=dt;
-        if(w.interceptTimer<=0){
-          const seized=Math.min(profit,profit*0.25);
-          profit=Math.max(0,profit-seized);
-          takeDamage(8,'🇺🇸 BOARDED — US Navy seized 25% of cargo!');
-          speed*=0.5;
-          w.interceptTimer=10+Math.random()*5;
+    if(w.aggressive){
+      // Attack — fire on the tanker within range (active blockade only)
+      if(dist<=RANGE_WARSHIP&&immuneTimer<=0){
+        w.fireTimer-=dt;
+        if(w.fireTimer<=0){
+          // Naval gun barrage
+          takeDamage(7,'🇺🇸 NAVAL GUNFIRE — '+w.shipName+'!');
+          spawnExplosion(tPos.x+(Math.random()-.5)*4,tPos.z+(Math.random()-.5)*4,3,0x4488ff);
+          w.fireTimer=3+Math.random()*2;
+        }
+        // Boarding/seizure at very close range
+        if(dist<=RANGE_RAM*1.5){
+          w.interceptTimer-=dt;
+          if(w.interceptTimer<=0){
+            const seized=Math.min(profit,profit*0.25);
+            profit=Math.max(0,profit-seized);
+            takeDamage(8,'🇺🇸 BOARDED — US Navy seized 25% of cargo!');
+            speed*=0.5;
+            w.interceptTimer=10+Math.random()*5;
+          }
         }
       }
-    }
 
-    // Warships also attack IRGC fast boats within range — block them too
-    for(let j=fastBoats.length-1;j>=0;j--){
-      const fb=fastBoats[j];
-      const fdx=fb.g.position.x-wp.x,fdz=fb.g.position.z-wp.z;
-      if(Math.sqrt(fdx*fdx+fdz*fdz)<RANGE_WARSHIP*0.7){
-        // US warships sink IRGC boats on sight
-        if(Math.random()<0.005){
-          spawnExplosion(fb.g.position.x,fb.g.position.z,3,0x4488ff);
-          scene.remove(fb.g);fastBoats.splice(j,1);
-          setMsg('🇺🇸 US Navy sank an IRGC fast boat',2);
+      // Warships also attack IRGC fast boats within range — block them too
+      for(let j=fastBoats.length-1;j>=0;j--){
+        const fb=fastBoats[j];
+        const fdx=fb.g.position.x-wp.x,fdz=fb.g.position.z-wp.z;
+        if(Math.sqrt(fdx*fdx+fdz*fdz)<RANGE_WARSHIP*0.7){
+          // US warships sink IRGC boats on sight
+          if(Math.random()<0.005){
+            spawnExplosion(fb.g.position.x,fb.g.position.z,3,0x4488ff);
+            scene.remove(fb.g);fastBoats.splice(j,1);
+            setMsg('🇺🇸 US Navy sank an IRGC fast boat',2);
+          }
         }
       }
     }
@@ -1004,6 +1028,27 @@ function update(dt){
     const dx=tPos.x-m.x,dz=tPos.z-m.z;
     if(Math.sqrt(dx*dx+dz*dz)<RANGE_MINE){takeDamage(21,'💣 MINE DETONATION!');spawnExplosion(m.x,m.z,5,0xff4400);scene.remove(m.g);mines.splice(i,1);}
     else if((phase==='go_east'?tPos.x-m.x:m.x-tPos.x)>90){scene.remove(m.g);mines.splice(i,1);}
+  }
+  for(let i=minesweepers.length-1;i>=0;i--){
+    const ms=minesweepers[i],mp=ms.g.position;
+    ms.t+=dt*0.06;
+    mp.x=ms.baseX+Math.sin(ms.t)*70;
+    mp.z=chanZ(mp.x);
+    mp.y=Math.sin(waveT*0.7+i)*0.05;
+    ms.g.rotation.y=-Math.PI/2+(Math.cos(ms.t)>=0?0:Math.PI);
+    if(ms.sweepCooldown>0)ms.sweepCooldown-=dt;
+    if(ms.sweepCooldown<=0){
+      for(let j=mines.length-1;j>=0;j--){
+        const m=mines[j],sdx=mp.x-m.x,sdz=mp.z-m.z;
+        if(Math.sqrt(sdx*sdx+sdz*sdz)<SWEEP_RADIUS){
+          spawnExplosion(m.x,m.z,1.5,0x88ccff);
+          scene.remove(m.g);mines.splice(j,1);
+          setMsg('🛟 Coalition minesweeper cleared a mine',2);
+          ms.sweepCooldown=1.5;
+          break;
+        }
+      }
+    }
   }
   for(let i=missiles.length-1;i>=0;i--){
     const m=missiles[i],dx=m.tx-m.bx,dz=m.tz-m.bz;
@@ -1072,7 +1117,7 @@ async function boot(){
   straitBadge.style.color=straitClosed?'#fca5a5':'#86efac';
   document.getElementById('threatDesc').textContent=straitClosed
     ?'⚠ CLOSED: Drones · Mines · Missiles · IRGC boats · US Navy blockade'
-    :'⚠ OPEN: US Navy blockade active — warships will fire on all vessels';
+    :'✅ CEASEFIRE: Tolls suspended, blockade lifted — but uncleared mines remain';
   lbPanel.innerHTML=renderLbRows(await lbLoad(),null);
   document.getElementById('loadingStatus').style.display='none';
   document.getElementById('liveDataBox').style.display='block';
@@ -1094,20 +1139,20 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
-  {text:"Trump renames Strait of Hormuz to 'Strait of Vermouth' in executive order, citing 'brand confusion with Iran'", src:"Truth Social · Apr 16", color:"amber"},
-  {text:"FULL BLOCKADE: US Navy now attacking all vessels attempting to transit the Strait of Vermouth", src:"CENTCOM · Apr 13", color:"red"},
-  {text:"Trump declares US Navy blockade on Strait of Vermouth after Iran peace talks collapse in Pakistan", src:"Axios · Apr 12", color:"red"},
-  {text:"Iran lost track of mines it planted in the Strait — unable to fully reopen the waterway", src:"NYT · Apr 11", color:"red"},
-  {text:"USS Michael Murphy and USS Frank E. Peterson transit Strait of Vermouth in first such crossing since war began", src:"WSJ · Apr 11", color:"blue"},
-  {text:"US officials: Iran mined the strait haphazardly with small boats, no systematic record of placements kept", src:"NYT · Apr 11", color:"amber"},
-  {text:"Some Iranian mines believed to have drifted from original positions due to sea currents", src:"Euronews · Apr 11", color:"amber"},
-  {text:"Brent crude surging above $100/barrel as strait remains effectively closed to commercial traffic", src:"Reuters · Apr 10", color:"amber"},
-  {text:"Iran charges $2M toll per vessel — at least 16 ships have paid, including one 'zombie tanker'", src:"Lloyd's List · Mar 23", color:"red"},
-  {text:"Nearly 2,000 vessels trapped in the Persian Gulf with no clear timeline for reopening", src:"IMO · Apr 9", color:"red"},
-  {text:"US estimates Iran possesses 2,000–6,000 naval mines; warheads exceeding 1,100 lbs capable of sinking large tankers", src:"CBS News · Apr 10", color:"amber"},
-  {text:"JD Vance departs Pakistan after 21-hour talks with Iran end without agreement", src:"AP · Apr 12", color:"blue"},
-  {text:"Ceasefire partially agreed — Iran to reopen strait temporarily if all attacks halted", src:"Reuters · Apr 8", color:"green"},
-  {text:"Trump: 'No one who pays an illegal toll will have safe passage on the high seas'", src:"Truth Social · Apr 12", color:"red"},
+  {text:"US and Iran sign 14-point agreement ending the war and reopening the Strait of Vermouth", src:"NBC News · Jun 17", color:"green"},
+  {text:"US Navy lifts its naval blockade of the Strait of Vermouth and Iranian ports", src:"The Hill · Jun 18", color:"blue"},
+  {text:"MOU guarantees toll-free transit through the Strait for 60 days — Iran says fees return after that", src:"CNBC · Jun 17", color:"amber"},
+  {text:"First commercial vessels transit the Strait since the blockade lifted, but traffic stays far below pre-war levels", src:"CNN Tracker · Jun 17", color:"blue"},
+  {text:"International mine-clearing mission — US, UK, France, Germany — begins sweeping the Strait; full clearance could take 6 months", src:"Washington Post · Jun 2026", color:"amber"},
+  {text:"Brent crude falls toward $80/barrel, down roughly 10% on the week as shipping conditions improve", src:"Reuters · Jun 19", color:"green"},
+  {text:"Iran to negotiate the Strait's future administration and service fees with Oman and Gulf states", src:"CNBC · Jun 17", color:"amber"},
+  {text:"Three Iranian-owned vessels exit the former blockade zone as restrictions ease", src:"Reuters · Jun 16", color:"blue"},
+  {text:"During the 47-day blockade, US forces redirected 142 commercial ships and disabled nine that didn't comply", src:"CENTCOM", color:"red"},
+  {text:"Trump renamed the Strait of Hormuz to 'Strait of Vermouth' in an executive order, citing 'brand confusion with Iran'", src:"Truth Social · Apr 16", color:"amber"},
+  {text:"Iran lost track of mines it planted in the Strait during the war — many still unaccounted for", src:"NYT · Apr 11", color:"red"},
+  {text:"Some Iranian mines believed to have drifted from their original positions due to sea currents", src:"Euronews · Apr 11", color:"amber"},
+  {text:"Iran charged a $2M toll per vessel during the closure — at least 16 ships paid, including one 'zombie tanker'", src:"Lloyd's List · Mar 23", color:"red"},
+  {text:"US estimated Iran had laid 2,000–6,000 naval mines, some with warheads over 1,100 lbs", src:"CBS News · Apr 10", color:"amber"},
 ];
 
 function renderNewsFeed(){
