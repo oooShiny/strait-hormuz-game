@@ -193,17 +193,18 @@
             <p style="margin:0 0 8px;">Every time the game loads, it fetches two real-world data points:</p>
             <p style="margin:0 0 6px;"><span style="color:#38bdf8;">Strait status</span> — pulled from
               <a href="https://hormuzstraitmonitor.com" target="_blank" style="color:#38bdf8;text-decoration:none;">hormuzstraitmonitor.com</a>,
-              a live dashboard tracking the current Vermouth shipping crisis. If the site reports the strait as open, the Islamabad MOU is holding — toll-free passage, IRGC patrols doing registration checks only, no naval blockade. If closed or contested, the full arsenal activates: sea mines, kamikaze drones, mobile missile batteries, IRGC fast boats, a US Navy blockade, and $2M toll demands.</p>
-            <p style="margin:0;"><span style="color:#f59e0b;">Brent crude oil price</span> — fetched from Yahoo Finance. Your 2-million-barrel cargo is worth whatever Brent is trading at the moment you load it. Prices spiked well above $100/barrel during the closure and have eased into the $80s since the ceasefire — but remain hostage to the next headline.</p>
+              a live dashboard tracking the Vermouth shipping crisis. If the site reports the strait as open, the game runs in ceasefire mode — Navy ships escort rather than attack, passage is toll-free, and only a few residual mines remain from the unfinished demining effort. If closed, the full wartime arsenal activates: sea mines, kamikaze drones, mobile missile batteries, a hostile US Navy blockade, and $2M toll demands.</p>
+            <p style="margin:0;"><span style="color:#f59e0b;">Brent crude oil price</span> — fetched from Yahoo Finance. Your 2-million-barrel cargo is worth whatever Brent is trading at the moment you load it. Prices spiked above $100/barrel while the strait was closed and have been easing as the ceasefire holds.</p>
           </div>
           <div>
             <div style="color:#e2e8f0;font-size:11px;font-weight:bold;margin-bottom:6px;letter-spacing:0.05em;">GAMEPLAY MECHANICS</div>
             <p style="margin:0 0 5px;"><span style="color:#4ade80;">Goal:</span> Maximize net profit across multiple runs. Cargo value is locked in when you reach the Gulf of Oman — survive the return trip to collect it.</p>
-            <p style="margin:0 0 5px;"><span style="color:#fbbf24;">Threats (closed/contested mode):</span> IRGC fast-attack boats · Sea mines (some drifting — Iran can't find them) · Kamikaze drones · Anti-ship missiles from the Iranian coast · US Navy blockade.</p>
-            <p style="margin:0 0 5px;"><span style="color:#f59e0b;">Tolls:</span> Toll-free while open, under the Islamabad MOU (Iran's government covers the fee) · $2M IRGC demand if the strait is closed or contested. Paying buys immunity.</p>
+            <p style="margin:0 0 5px;"><span style="color:#fbbf24;">Threats (closed/war mode):</span> IRGC fast-attack boats · Sea mines (some drifting — Iran can't find them) · Kamikaze drones · Anti-ship missiles from the Iranian coast · a hostile US Navy blockade.</p>
+            <p style="margin:0 0 5px;"><span style="color:#fbbf24;">Threats (open/ceasefire mode):</span> Just a handful of leftover mines from the incomplete demining effort — everything else stands down.</p>
+            <p style="margin:0 0 5px;"><span style="color:#f59e0b;">Tolls:</span> Toll-free under the ceasefire (open) · $2M if the strait closes again. Paying a wartime toll buys immunity — but flags you for US Navy interdiction.</p>
             <p style="margin:0 0 8px;"><span style="color:#a78bfa;">Repairs:</span> $800k per hull % restored after each delivery.</p>
             <div style="color:#e2e8f0;font-size:11px;font-weight:bold;margin-bottom:6px;letter-spacing:0.05em;">THE REAL CONTEXT</div>
-            <p style="margin:0;color:#64748b;">The strait is 24 miles wide at its narrowest. Iran controls the northern coast with mobile missile batteries hidden in the hills. Nearly 2,000 vessels were stranded in the Persian Gulf at the peak of the closure. A June 17 ceasefire memorandum (signed in Versailles) reopened the strait toll-free for 60 days and lifted the US naval blockade — but Iran re-declared it closed days later, and roughly 80 mines are still reported in the shipping lane. <a href="https://www.cnn.com/2026/03/26/middleeast/how-iran-controls-strait-of-hormuz-explained-intl-vis" target="_blank" style="color:#38bdf8;text-decoration:none;">Read the CNN report →</a></p>
+            <p style="margin:0;color:#64748b;">The strait is 24 miles wide at its narrowest. A US-Iran deal signed in June 2026 ended the naval blockade and reopened the strait after nearly 4 months of war, but a UK/France-led coalition's demining mission could take 6 more months, and Iran has said it will start charging "maritime service fees" once the 60-day toll-free window closes. <a href="https://www.cnn.com/world/strait-of-hormuz-tracker-vis" target="_blank" style="color:#38bdf8;text-decoration:none;">Track the reopening on CNN →</a></p>
           </div>
         </div>
       </div>
@@ -488,7 +489,7 @@ function spawnWarship(){
   const shipName=available.length?available[Math.floor(Math.random()*available.length)]:names[Math.floor(Math.random()*names.length)];
   warships.push({g,ring,angle:Math.PI,spd:0.07+Math.random()*0.03,
     patrolOffset:(Math.random()-.5)*20,interceptTimer:0,fireTimer:3+Math.random()*3,
-    warned:false,aggressive:true,shipName});
+    warned:false,aggressive:straitClosed,shipName});
 }
 
 function spawnDhow(){
@@ -521,6 +522,25 @@ function spawnMine(x,z){
   const driftX=(Math.random()-0.5)*0.008; // slow east-west drift
   const driftZ=(Math.random()-0.5)*0.006; // slow north-south drift
   mines.push({g,x,z,bobT:Math.random()*6.28,driftX,driftZ});
+}
+// Seeds mines Iran can't find or remove, staggered in over time and drifting
+// toward the channel centre. `count` reflects how much of the strait is still
+// mined: the full wartime field while closed, or a handful of leftovers during
+// the post-ceasefire reopening (the UK/France-led demining effort is ongoing).
+function seedDriftingMines(count,firstDelay,interval){
+  for(let s=0;s<count;s++){
+    const sx=-200+s*(480/count)+Math.random()*50;
+    const scz=chanZ(sx),hw=chanHW(sx);
+    const side=Math.random()>.5?1:-1;
+    const sz=scz+side*(hw-2+Math.random()*6);
+    setTimeout(()=>{
+      if(!gameRunning) return;
+      spawnMine(sx,sz);
+      const lm=mines[mines.length-1];
+      lm.driftX=(Math.random()-0.4)*0.006;
+      lm.driftZ=-side*0.005+Math.random()*0.003;
+    }, firstDelay+s*interval);
+  }
 }
 function spawnMissile(bx,bz){
   // Lead the target: predict tanker position when missile arrives
@@ -604,6 +624,12 @@ function autoDeclineToll(){
   setMsg('⚠ PATROL IGNORED — They opened fire!',2.5);
   if(straitClosed){spawnFastBoat();spawnFastBoat();
     setTimeout(()=>{if(batteries.length)spawnMissile(batteries[0].x,batteries[0].z);},1500);}
+}
+// Under the Jun 2026 ceasefire, Iran waived tolls for 60 days — patrols still
+// hail passing vessels but no payment is demanded, so this just grants brief immunity.
+function showInspectionHail(){
+  setMsg('📡 IRANIAN PATROL: Routine inspection — toll-free under ceasefire.',3);
+  immuneTimer=Math.max(immuneTimer,10);
 }
 
 function repairCostFor(f,t){return Math.round(Math.max(0,t-f)*REPAIR_COST_PER_PCT);}
@@ -703,7 +729,7 @@ async function endGame(won){
         <div style="font-size:10px;color:#64748b;text-align:left;margin-bottom:3px;">🏆 LEADERBOARD</div>
         <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:8px 12px;max-height:180px;overflow-y:auto;">${renderLbRows(entries,null)}</div>
       </div>
-      <p style="color:#64748b;font-size:11px;">Nearly 2,000 vessels remain trapped in the Persian Gulf.</p>
+      <p style="color:#64748b;font-size:11px;">${straitClosed?'Nearly 2,000 vessels remain trapped in the Persian Gulf.':'Traffic is recovering under the ceasefire, but still far below pre-war levels.'}</p>
       <button class="gbtn green" id="startBtn">START FRESH</button>`;
     document.getElementById('startBtn').addEventListener('click',()=>resetGame(true));
   }
@@ -728,44 +754,10 @@ function resetGame(fresh){
   droneTimer=7;fastBoatTimer=10;dhowTimer=14;missileTimer=20;tollTimer=30;
   immuneTimer=0;tollPending=false;tollCountdown=0;phase='go_east';
   updateMissionBadge();scene.remove(tankerGroup);buildTanker();
-  // Seed 6 "lost" drifting mines — Iran can't find or remove them
-  if(straitClosed){
-    for(let s=0;s<6;s++){
-      const sx=-200+s*80+Math.random()*50;
-      const scz=chanZ(sx),hw=chanHW(sx);
-      const side=Math.random()>.5?1:-1;
-      const sz=scz+side*(hw*0.85+Math.random()*4);
-      setTimeout(()=>{
-        if(!gameRunning) return;
-        spawnMine(sx,sz);
-        if(mines.length){
-          const lm=mines[mines.length-1];
-          lm.driftX=(Math.random()-0.4)*0.006;
-          lm.driftZ=-side*0.005+Math.random()*0.003;
-        }
-      }, 8000+s*6000);
-    }
-  }
-  // Seed "lost" mines that drift into the channel unpredictably (Iran can't find them)
-  if(straitClosed){
-    for(let s=0;s<6;s++){
-      const sx=-200+s*80+Math.random()*60;
-      const scz=chanZ(sx);
-      const hw=chanHW(sx);
-      // Start near channel edge, drift inward
-      const side=Math.random()>.5?1:-1;
-      const sz=scz+side*(hw-2+Math.random()*6);
-      setTimeout(()=>{
-        if(gameRunning) spawnMine(sx,sz);
-        // Override drift to push toward channel centre
-        if(mines.length){
-          const lm=mines[mines.length-1];
-          lm.driftX=(Math.random()-0.4)*0.006;
-          lm.driftZ=-side*0.005+Math.random()*0.003;
-        }
-      }, 8000+s*7000); // stagger: first appears 8s in, then every 7s
-    }
-  }
+  // Mine threat scales with how much of the strait remains contaminated:
+  // full wartime field while closed, a few demining stragglers once reopened
+  if(straitClosed) seedDriftingMines(6,8000,7000);
+  else seedDriftingMines(2,15000,20000);
   overlay.style.display='none';hud.style.display='block';gameRunning=true;
   if('ontouchstart' in window||navigator.maxTouchPoints>0){document.getElementById('joystickWrap').style.display='block';}
 }
@@ -865,9 +857,8 @@ function update(dt){
   }
   fastBoatTimer-=dt;
   if(fastBoatTimer<0&&fastBoats.length<(straitClosed?4:2)){spawnFastBoat();fastBoatTimer=(straitClosed?8:16)+Math.random()*6;}
-  // US Navy — blockade enforced only while the strait is closed/contested.
-  // The Islamabad MOU (Jun 17) lifted the blockade while the strait is open;
-  // warships still patrol as MOU-mandated escorts but won't attack a tanker.
+  // US Navy presence in both modes — hostile blockade while closed (war footing),
+  // non-hostile ceasefire escort while open (blockade ended Jun 2026 under the US-Iran deal)
   const maxWarships = straitClosed ? 6 : 3;
   if(warships.length<maxWarships){
     // Stagger spawns so they don't all appear at once
@@ -879,7 +870,11 @@ function update(dt){
     }
   }
   tollTimer-=dt;
-  if(straitClosed&&tollTimer<0&&!tollPending&&immuneTimer<=0){showToll(2000000);tollTimer=38+Math.random()*20;}
+  if(tollTimer<0&&!tollPending&&immuneTimer<=0){
+    if(straitClosed)showToll(2000000);
+    else showInspectionHail();
+    tollTimer=38+Math.random()*20;
+  }
   if(tollPending&&tollCountdown>0){
     tollCountdown-=dt;
     const cdEl=document.getElementById('tollCountdown');
@@ -905,10 +900,7 @@ function update(dt){
       if(b.fireTimer<0&&dist<=RANGE_BOAT_FIRE){takeDamage(3.75,'🔫 IRGC FAST BOAT FIRE!');b.fireTimer=4+Math.random()*3;spawnExplosion(bp.x+Math.cos(b.angle)*2,bp.z-Math.sin(b.angle)*2,1,0xffcc00);}
       if(dist<=RANGE_RAM){takeDamage(6.75,'⛵ IRGC RAM!');speed*=0.72;bp.x-=Math.cos(b.angle)*5;bp.z+=Math.sin(b.angle)*5;}
     }else{
-      if(dist<=RANGE_BOAT_FIRE&&!tollPending&&b.tollCooldown<=0&&immuneTimer<=0){
-        setMsg('📡 IRGC PATROL: Registration confirmed — toll-free passage under the Islamabad MOU.',3);
-        b.tollCooldown=45;
-      }
+      if(dist<=RANGE_BOAT_FIRE&&!tollPending&&b.tollCooldown<=0&&immuneTimer<=0){showInspectionHail();b.tollCooldown=45;}
     }
     if((phase==='go_east'?tPos.x-bp.x:bp.x-tPos.x)>140){scene.remove(b.g);fastBoats.splice(i,1);}
   }
@@ -945,16 +937,17 @@ function update(dt){
       ?(0.45+0.15*Math.sin(waveT*4))
       :Math.max(0,(1-(dist-RANGE_WARSHIP)/(RANGE_WARSHIP*.5)))*0.15;
 
-    // First contact warning
+    // First contact warning — differs depending on whether the blockade is active
     if(dist<=RANGE_WARSHIP*1.5&&!w.warned){
       w.warned=true;
-      setMsg(straitClosed
+      setMsg(w.aggressive
         ?'🇺🇸 '+w.shipName+': ALL VESSELS HALT. US NAVY BLOCKADE IN EFFECT.'
-        :'🇺🇸 '+w.shipName+': Escorting transit under the Islamabad MOU — proceed.',4);
+        :'🇺🇸 '+w.shipName+': Ceasefire escort — maintain course, demining in progress.',4);
     }
 
-    // Attack — fire on the tanker within range (blockade only)
-    if(straitClosed&&dist<=RANGE_WARSHIP&&immuneTimer<=0){
+    // Attack — fire on the tanker within range. Blockade ended under the Jun 2026
+    // ceasefire deal, so warships only attack while the strait is closed (war footing).
+    if(w.aggressive&&dist<=RANGE_WARSHIP&&immuneTimer<=0){
       w.fireTimer-=dt;
       if(w.fireTimer<=0){
         // Naval gun barrage
@@ -1071,7 +1064,7 @@ window.addEventListener('resize',()=>{
 async function boot(){
   document.getElementById('loadingStatus').textContent='Connecting to Vermouth Monitor…';
   await fetchLiveData();
-  document.getElementById('overlayStatus').textContent=straitClosed?'⛔ CLOSED':'✅ OPEN';
+  document.getElementById('overlayStatus').textContent=straitClosed?'⛔ CLOSED':'✅ OPEN (CEASEFIRE)';
   document.getElementById('overlayStatus').style.color=straitClosed?'#ef4444':'#4ade80';
   document.getElementById('overlayOil').textContent='$'+oilPricePerBarrel.toFixed(2)+'/bbl';
   document.getElementById('overlayCargo').textContent='$'+(oilPricePerBarrel*BARRELS_PER_LOAD/1e6).toFixed(0)+'M';
@@ -1080,7 +1073,7 @@ async function boot(){
   straitBadge.style.color=straitClosed?'#fca5a5':'#86efac';
   document.getElementById('threatDesc').textContent=straitClosed
     ?'⚠ CLOSED: Drones · Mines · Missiles · IRGC boats · US Navy blockade'
-    :'✅ OPEN: Islamabad MOU in effect — toll-free passage, blockade lifted';
+    :'✅ OPEN: Ceasefire holds — Navy escorts (non-hostile), toll-free passage, but a few residual mines remain from the unfinished demining effort';
   lbPanel.innerHTML=renderLbRows(await lbLoad(),null);
   document.getElementById('loadingStatus').style.display='none';
   document.getElementById('liveDataBox').style.display='block';
@@ -1102,15 +1095,14 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
-  {text:"Iran re-declares Strait of Vermouth closed, citing Israeli strikes on Lebanon as a ceasefire violation; CENTCOM disputes the claim", src:"Al Jazeera · Jun 20", color:"red"},
-  {text:"CENTCOM: 55 ships carrying 17M+ barrels transited the strait the same day Iran says it closed — a record since before the war", src:"CENTCOM · Jun 20", color:"blue"},
-  {text:"Burgenstock talks: US, Iran, Pakistan and Qatar agree a roadmap toward a final deal within 60 days", src:"Reuters · Jun 19", color:"green"},
-  {text:"Tanker traffic through the Strait of Vermouth ticks up to ~20 vessels/day post-deal — still far below the ~94/day pre-war norm", src:"CNBC · Jun 19", color:"amber"},
-  {text:"CENTCOM announces removal of the US naval blockade of Iranian ports under the Islamabad MOU", src:"CENTCOM · Jun 18", color:"green"},
-  {text:"Trump and Pezeshkian sign Islamabad MOU at Versailles: ceasefire extended, strait reopens toll-free for 60 days", src:"AP · Jun 17", color:"green"},
-  {text:"Islamabad MOU toll-free clause: Iran's government to cover passage fees for 60 days — Trump threatens separate US tolls if Iran reneges", src:"Axios · Jun 17", color:"blue"},
-  {text:"Satellite imagery shows 100+ IRGC fast boats surging from Khasab South — analysts warn the reopening may not hold", src:"Reuters · Jun 14", color:"amber"},
-  {text:"Secretary of State tells Senate panel Iran has mined large segments of the strait; ~80 mines still believed to be in the shipping lane", src:"Senate Foreign Relations Cmte · Jun 2", color:"amber"},
+  {text:"US and Iran sign deal ending the naval blockade and reopening the Strait of Vermouth to commercial shipping after nearly 4 months of war", src:"Reuters · Jun 15", color:"green"},
+  {text:"Trump tells tankers to 'start your engines' as the Strait of Vermouth reopens — but shippers are waiting on demining guarantees first", src:"NPR · Jun 17", color:"blue"},
+  {text:"First tankers cross the Strait of Vermouth as ceasefire holds; daily transits still far below pre-war levels", src:"CNN Tracker · Jun 18", color:"green"},
+  {text:"Iran agrees to waive Strait of Vermouth tolls for 60 days — but plans to start charging 'maritime service fees' once that window closes", src:"Yahoo Finance · Jun 15", color:"amber"},
+  {text:"Trump: the Strait of Vermouth will be 'permanently toll-free.' Iran: ships will still pay for 'maritime services.' Same deal, two readings", src:"WION · Jun 2026", color:"amber"},
+  {text:"UK and France lead a 40-nation coalition on a Strait of Vermouth demining mission — full clearance could take 6 more months", src:"The National · Jun 2026", color:"amber"},
+  {text:"Rubio: Iran mined 'large segments' of the Strait of Vermouth, complicating the reopening effort", src:"CNBC · Jun 2", color:"red"},
+  {text:"Iran says it fired warning shots at two US destroyers near the Strait of Vermouth; CENTCOM denies any such attack occurred", src:"Reuters · Jun 5", color:"red"},
   {text:"Trump renames Strait of Hormuz to 'Strait of Vermouth' in executive order, citing 'brand confusion with Iran'", src:"Truth Social · Apr 16", color:"amber"},
   {text:"FULL BLOCKADE: US Navy now attacking all vessels attempting to transit the Strait of Vermouth", src:"CENTCOM · Apr 13", color:"red"},
   {text:"Trump declares US Navy blockade on Strait of Vermouth after Iran peace talks collapse in Pakistan", src:"Axios · Apr 12", color:"red"},
