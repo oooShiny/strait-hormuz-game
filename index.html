@@ -193,18 +193,18 @@
             <p style="margin:0 0 8px;">Every time the game loads, it fetches two real-world data points:</p>
             <p style="margin:0 0 6px;"><span style="color:#38bdf8;">Strait status</span> — pulled from
               <a href="https://hormuzstraitmonitor.com" target="_blank" style="color:#38bdf8;text-decoration:none;">hormuzstraitmonitor.com</a>,
-              a live dashboard tracking the Vermouth shipping crisis. If the site reports the strait as open, the game runs in ceasefire mode — Navy ships escort rather than attack, passage is toll-free, and only a few residual mines remain from the unfinished demining effort. If closed, the full wartime arsenal activates: sea mines, kamikaze drones, mobile missile batteries, a hostile US Navy blockade, and $2M toll demands.</p>
-            <p style="margin:0;"><span style="color:#f59e0b;">Brent crude oil price</span> — fetched from Yahoo Finance. Your 2-million-barrel cargo is worth whatever Brent is trading at the moment you load it. Prices spiked above $100/barrel while the strait was closed and have been easing as the ceasefire holds.</p>
+              a live dashboard tracking the Vermouth shipping crisis. If the site reports the strait as open, the game runs in ceasefire mode — Navy ships escort rather than attack, passage is toll-free, and only a few residual mines remain from the unfinished demining effort. If closed, the full wartime arsenal activates: sea mines, kamikaze drones, mobile missile batteries, a hostile US Navy blockade, and $2M toll demands. Iran re-declared the strait closed on Jun 20 over alleged ceasefire violations — Washington disputes this and says ships keep moving, so treat either reading as contested, not settled.</p>
+            <p style="margin:0;"><span style="color:#f59e0b;">Brent crude oil price</span> — fetched from Yahoo Finance. Your 2-million-barrel cargo is worth whatever Brent is trading at the moment you load it. Prices spiked above $100/barrel while the strait was closed and have eased toward $77-78/barrel as traders bet the renewed closure claim stays rhetorical.</p>
           </div>
           <div>
             <div style="color:#e2e8f0;font-size:11px;font-weight:bold;margin-bottom:6px;letter-spacing:0.05em;">GAMEPLAY MECHANICS</div>
             <p style="margin:0 0 5px;"><span style="color:#4ade80;">Goal:</span> Maximize net profit across multiple runs. Cargo value is locked in when you reach the Gulf of Oman — survive the return trip to collect it.</p>
             <p style="margin:0 0 5px;"><span style="color:#fbbf24;">Threats (closed/war mode):</span> IRGC fast-attack boats · Sea mines (some drifting — Iran can't find them) · Kamikaze drones · Anti-ship missiles from the Iranian coast · a hostile US Navy blockade.</p>
-            <p style="margin:0 0 5px;"><span style="color:#fbbf24;">Threats (open/ceasefire mode):</span> Just a handful of leftover mines from the incomplete demining effort — everything else stands down.</p>
+            <p style="margin:0 0 5px;"><span style="color:#fbbf24;">Threats (open/contested mode):</span> Just a handful of leftover mines from the incomplete demining effort, plus patrol hails via the new de-confliction channel — everything else stands down, even as Iran disputes the reopening.</p>
             <p style="margin:0 0 5px;"><span style="color:#f59e0b;">Tolls:</span> Toll-free under the ceasefire (open) · $2M if the strait closes again. Paying a wartime toll buys immunity — but flags you for US Navy interdiction.</p>
             <p style="margin:0 0 8px;"><span style="color:#a78bfa;">Repairs:</span> $800k per hull % restored after each delivery.</p>
             <div style="color:#e2e8f0;font-size:11px;font-weight:bold;margin-bottom:6px;letter-spacing:0.05em;">THE REAL CONTEXT</div>
-            <p style="margin:0;color:#64748b;">The strait is 24 miles wide at its narrowest. A US-Iran deal signed in June 2026 ended the naval blockade and reopened the strait after nearly 4 months of war, but a UK/France-led coalition's demining mission could take 6 more months, and Iran has said it will start charging "maritime service fees" once the 60-day toll-free window closes. <a href="https://www.cnn.com/world/strait-of-hormuz-tracker-vis" target="_blank" style="color:#38bdf8;text-decoration:none;">Track the reopening on CNN →</a></p>
+            <p style="margin:0;color:#64748b;">The strait is 24 miles wide at its narrowest. A US-Iran deal signed in June 2026 ended the naval blockade and reopened the strait after nearly 4 months of war, but a UK/France-led coalition's demining mission could take 6 more months, and Iran has said it will start charging "maritime service fees" once the 60-day toll-free window closes. On Jun 20, Iran's military re-declared the strait closed over Israeli strikes in Lebanon it called a ceasefire breach — the US denies any closure and CENTCOM counts dozens of daily transits. A US-Iran-Qatar-Pakistan "de-confliction channel," agreed Jun 21 at talks in Bürgenstock, now coordinates safe passage while the dispute continues. <a href="https://www.cnn.com/world/strait-of-hormuz-tracker-vis" target="_blank" style="color:#38bdf8;text-decoration:none;">Track the latest on CNN →</a></p>
           </div>
         </div>
       </div>
@@ -236,7 +236,7 @@ const REPAIR_COST_PER_PCT=800000;
 const LB_KEY='hormuz-leaderboard-v1';
 const LB_MAX=10;
 
-let straitClosed=true,oilPricePerBarrel=81.50;
+let straitClosed=true,oilPricePerBarrel=77.50;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
 const SESSION_TOKEN = Math.random().toString(36).slice(2) + Date.now().toString(36);
@@ -627,8 +627,11 @@ function autoDeclineToll(){
 }
 // Under the Jun 2026 ceasefire, Iran waived tolls for 60 days — patrols still
 // hail passing vessels but no payment is demanded, so this just grants brief immunity.
+// Iran separately re-declared the strait "closed" on Jun 20 over alleged ceasefire
+// violations; Washington disputes this, and a Jun 21 US-Iran-Qatar-Pakistan
+// de-confliction channel now coordinates safe passage while the dispute continues.
 function showInspectionHail(){
-  setMsg('📡 IRANIAN PATROL: Routine inspection — toll-free under ceasefire.',3);
+  setMsg('📡 IRANIAN PATROL: Routine inspection via Hormuz de-confliction channel — toll-free.',3);
   immuneTimer=Math.max(immuneTimer,10);
 }
 
@@ -1064,16 +1067,16 @@ window.addEventListener('resize',()=>{
 async function boot(){
   document.getElementById('loadingStatus').textContent='Connecting to Vermouth Monitor…';
   await fetchLiveData();
-  document.getElementById('overlayStatus').textContent=straitClosed?'⛔ CLOSED':'✅ OPEN (CEASEFIRE)';
-  document.getElementById('overlayStatus').style.color=straitClosed?'#ef4444':'#4ade80';
+  document.getElementById('overlayStatus').textContent=straitClosed?'⛔ CLOSED (DISPUTED)':'⚠ OPEN (CONTESTED)';
+  document.getElementById('overlayStatus').style.color=straitClosed?'#ef4444':'#fbbf24';
   document.getElementById('overlayOil').textContent='$'+oilPricePerBarrel.toFixed(2)+'/bbl';
   document.getElementById('overlayCargo').textContent='$'+(oilPricePerBarrel*BARRELS_PER_LOAD/1e6).toFixed(0)+'M';
-  straitBadge.textContent=straitClosed?'⛔ STRAIT CLOSED':'✅ STRAIT OPEN';
-  straitBadge.style.background=straitClosed?'#7f1d1d':'#14532d';
-  straitBadge.style.color=straitClosed?'#fca5a5':'#86efac';
+  straitBadge.textContent=straitClosed?'⛔ CLOSED (DISPUTED)':'⚠ OPEN (CONTESTED)';
+  straitBadge.style.background=straitClosed?'#7f1d1d':'#78350f';
+  straitBadge.style.color=straitClosed?'#fca5a5':'#fcd34d';
   document.getElementById('threatDesc').textContent=straitClosed
-    ?'⚠ CLOSED: Drones · Mines · Missiles · IRGC boats · US Navy blockade'
-    :'✅ OPEN: Ceasefire holds — Navy escorts (non-hostile), toll-free passage, but a few residual mines remain from the unfinished demining effort';
+    ?"⚠ CLOSED: Iran's claim is disputed by Washington, but the threat is live — Drones · Mines · Missiles · IRGC boats · US Navy blockade"
+    :'⚠ CONTESTED: Iran claims renewed closure; ceasefire holds for now — non-hostile escorts, toll-free via the new de-confliction channel, plus a few residual mines';
   lbPanel.innerHTML=renderLbRows(await lbLoad(),null);
   document.getElementById('loadingStatus').style.display='none';
   document.getElementById('liveDataBox').style.display='block';
@@ -1095,6 +1098,11 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"Iran's military re-declares the Strait of Vermouth 'closed,' citing Israeli strikes in Lebanon as a breach of the June ceasefire MOU", src:"Reuters · Jun 20", color:"red"},
+  {text:"Vance: 'The straits really are open' — CENTCOM says 55 merchant ships transited the day Iran claimed the waterway shut", src:"Fox News · Jun 20", color:"blue"},
+  {text:"US, Iran, Qatar and Pakistan agree to a Hormuz 'de-confliction channel' for coordinating safe passage as the closure dispute drags on", src:"AP · Jun 21", color:"green"},
+  {text:"Tanker traffic through the Strait of Vermouth picks back up — 71 transits logged over three days — even as Iran insists the strait is shut", src:"MarineTraffic · Jun 22", color:"green"},
+  {text:"Brent crude slides to $77.50/bbl, its lowest since March, as traders shrug off Iran's renewed closure claim and Treasury licenses Iranian oil sales", src:"CNBC · Jun 22", color:"amber"},
   {text:"US and Iran sign deal ending the naval blockade and reopening the Strait of Vermouth to commercial shipping after nearly 4 months of war", src:"Reuters · Jun 15", color:"green"},
   {text:"Trump tells tankers to 'start your engines' as the Strait of Vermouth reopens — but shippers are waiting on demining guarantees first", src:"NPR · Jun 17", color:"blue"},
   {text:"First tankers cross the Strait of Vermouth as ceasefire holds; daily transits still far below pre-war levels", src:"CNN Tracker · Jun 18", color:"green"},
