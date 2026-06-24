@@ -193,18 +193,19 @@
             <p style="margin:0 0 8px;">Every time the game loads, it fetches two real-world data points:</p>
             <p style="margin:0 0 6px;"><span style="color:#38bdf8;">Strait status</span> — pulled from
               <a href="https://hormuzstraitmonitor.com" target="_blank" style="color:#38bdf8;text-decoration:none;">hormuzstraitmonitor.com</a>,
-              a live dashboard tracking the Vermouth shipping crisis. If the site reports the strait as open, the game runs in ceasefire mode — Navy ships escort rather than attack, passage is toll-free, and only a few residual mines remain from the unfinished demining effort. If closed, the full wartime arsenal activates: sea mines, kamikaze drones, mobile missile batteries, a hostile US Navy blockade, and $2M toll demands. Iran re-declared the strait closed on Jun 20 over alleged ceasefire violations — Washington disputes this and says ships keep moving, so treat either reading as contested, not settled.</p>
-            <p style="margin:0;"><span style="color:#f59e0b;">Brent crude oil price</span> — fetched from Yahoo Finance. Your 2-million-barrel cargo is worth whatever Brent is trading at the moment you load it. Prices spiked above $100/barrel while the strait was closed and have eased toward $77-78/barrel as traders bet the renewed closure claim stays rhetorical.</p>
+              a live dashboard tracking the Vermouth shipping crisis. If the site reports the strait as open, the game runs in ceasefire mode — Navy ships escort rather than attack, passage is toll-free, only a few residual mines remain from the unfinished demining effort, and IMO evacuation convoys cross the channel. If closed, the full wartime arsenal activates: sea mines, kamikaze drones, mobile missile batteries, a hostile US Navy blockade, and $2M toll demands. Iran re-declared the strait closed on Jun 20 over alleged ceasefire violations — Washington disputes this and says ships keep moving, and a Jun 24 US-Iran hotline now backs the safe-passage pledge, so treat either reading as contested, not settled.</p>
+            <p style="margin:0;"><span style="color:#f59e0b;">Brent crude oil price</span> — fetched from Yahoo Finance. Your 2-million-barrel cargo is worth whatever Brent is trading at the moment you load it. Prices spiked above $100/barrel while the strait was closed and have since slid below $77/barrel — their lowest since Feb 27 — as the evacuation corridor and steady transits ease supply fears.</p>
           </div>
           <div>
             <div style="color:#e2e8f0;font-size:11px;font-weight:bold;margin-bottom:6px;letter-spacing:0.05em;">GAMEPLAY MECHANICS</div>
             <p style="margin:0 0 5px;"><span style="color:#4ade80;">Goal:</span> Maximize net profit across multiple runs. Cargo value is locked in when you reach the Gulf of Oman — survive the return trip to collect it.</p>
             <p style="margin:0 0 5px;"><span style="color:#fbbf24;">Threats (closed/war mode):</span> IRGC fast-attack boats · Sea mines (some drifting — Iran can't find them) · Kamikaze drones · Anti-ship missiles from the Iranian coast · a hostile US Navy blockade.</p>
-            <p style="margin:0 0 5px;"><span style="color:#fbbf24;">Threats (open/contested mode):</span> Just a handful of leftover mines from the incomplete demining effort, plus patrol hails via the new de-confliction channel — everything else stands down, even as Iran disputes the reopening.</p>
+            <p style="margin:0 0 5px;"><span style="color:#fbbf24;">Threats (open/contested mode):</span> Just a handful of leftover mines from the incomplete demining effort, plus patrol hails via the new US-Iran hotline — everything else stands down, even as Iran disputes the reopening.</p>
+            <p style="margin:0 0 5px;"><span style="color:#7dd3fc;">Evacuation convoys (open/contested mode):</span> Unarmed IMO convoys now cross the strait carrying stranded seafarers to safety — they won't hurt you, but ramming one scrapes your hull and kills your speed, so give way.</p>
             <p style="margin:0 0 5px;"><span style="color:#f59e0b;">Tolls:</span> Toll-free under the ceasefire (open) · $2M if the strait closes again. Paying a wartime toll buys immunity — but flags you for US Navy interdiction.</p>
             <p style="margin:0 0 8px;"><span style="color:#a78bfa;">Repairs:</span> $800k per hull % restored after each delivery.</p>
             <div style="color:#e2e8f0;font-size:11px;font-weight:bold;margin-bottom:6px;letter-spacing:0.05em;">THE REAL CONTEXT</div>
-            <p style="margin:0;color:#64748b;">The strait is 24 miles wide at its narrowest. A US-Iran deal signed in June 2026 ended the naval blockade and reopened the strait after nearly 4 months of war, but a UK/France-led coalition's demining mission could take 6 more months, and Iran has said it will start charging "maritime service fees" once the 60-day toll-free window closes. On Jun 20, Iran's military re-declared the strait closed over Israeli strikes in Lebanon it called a ceasefire breach — the US denies any closure and CENTCOM counts dozens of daily transits. A US-Iran-Qatar-Pakistan "de-confliction channel," agreed Jun 21 at talks in Bürgenstock, now coordinates safe passage while the dispute continues. <a href="https://www.cnn.com/world/strait-of-hormuz-tracker-vis" target="_blank" style="color:#38bdf8;text-decoration:none;">Track the latest on CNN →</a></p>
+            <p style="margin:0;color:#64748b;">The strait is 24 miles wide at its narrowest. A US-Iran deal signed in June 2026 ended the naval blockade and reopened the strait after nearly 4 months of war, but a UK/France-led coalition's demining mission could take 6 more months, and Iran has said it will start charging "maritime service fees" once the 60-day toll-free window closes. On Jun 20, Iran's military re-declared the strait closed over Israeli strikes in Lebanon it called a ceasefire breach — the US denies any closure and CENTCOM counts dozens of daily transits. A US-Iran-Qatar-Pakistan "de-confliction channel," agreed Jun 21 at talks in Bürgenstock, now coordinates safe passage, and on Jun 24 Washington and Tehran agreed a direct hotline to head off "misunderstandings" in the strait. The IMO began evacuating roughly 11,000 seafarers stranded near the strait on Jun 23, after 14 died during the war. <a href="https://www.cnn.com/world/strait-of-hormuz-tracker-vis" target="_blank" style="color:#38bdf8;text-decoration:none;">Track the latest on CNN →</a></p>
           </div>
         </div>
       </div>
@@ -229,14 +230,14 @@
 <script>
 (function(){
 const DMG=0.75;
-const RANGE_BOAT_FIRE=14,RANGE_RAM=4.5,RANGE_MINE=3.0,RANGE_MISSILE_AOE=7,RANGE_DRONE_AOE=4.5,RANGE_WARSHIP=20;
+const RANGE_BOAT_FIRE=14,RANGE_RAM=4.5,RANGE_MINE=3.0,RANGE_MISSILE_AOE=7,RANGE_DRONE_AOE=4.5,RANGE_WARSHIP=20,RANGE_CONVOY=3.4;
 const COAST_DMG_INTERVAL=0.55;
 const BARRELS_PER_LOAD=2000000;
 const REPAIR_COST_PER_PCT=800000;
 const LB_KEY='hormuz-leaderboard-v1';
 const LB_MAX=10;
 
-let straitClosed=true,oilPricePerBarrel=77.50;
+let straitClosed=true,oilPricePerBarrel=76.00;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
 const SESSION_TOKEN = Math.random().toString(36).slice(2) + Date.now().toString(36);
@@ -337,11 +338,11 @@ const lbPanel=document.getElementById('lbPanel');
 let hull=100,speed=0,heading=0,invTimer=0,waveT=0;
 let tPos={x:-250,z:0};
 let gameRunning=false,wonOrLost=false,lastT=0,msgTimer=0;
-let droneTimer,fastBoatTimer,dhowTimer,missileTimer,tollTimer;
+let droneTimer,fastBoatTimer,dhowTimer,missileTimer,tollTimer,convoyTimer;
 let immuneTimer=0,tollPending=false,tollCountdown=0,profit=0,phase='go_east',runCount=0;
 let coastDmgTimer=0;
-let fastBoats=[],dhows=[],mines=[],missiles=[],drones=[],particles=[],explosions=[],warships=[];
-let tollsPaid=0;
+let fastBoats=[],dhows=[],mines=[],missiles=[],drones=[],particles=[],explosions=[],warships=[],convoys=[];
+let tollsPaid=0,convoysAided=0;
 let playerName='CAPTAIN', playerFlag='🏴';
 
 const H=620;let W=canvas.clientWidth||900;
@@ -507,6 +508,23 @@ function spawnDhow(){
   scene.add(g);
   dhows.push({g,spd:0.016+Math.random()*.01,angle:Math.atan2(-(tPos.z-g.position.z),tPos.x-ex),mineTimer:4+Math.random()*4,dropped:0});
 }
+// IMO evacuation convoys: under the Jun 2026 ceasefire and Jun 24 US-Iran hotline,
+// ~11,000 stranded seafarers are being routed west-to-east out of the Persian Gulf
+// through temporary corridors. Civilian, unarmed — give them way.
+function spawnConvoy(){
+  const g=new THREE.Group();
+  for(let i=0;i<2;i++){
+    const h=new THREE.Mesh(new THREE.BoxGeometry(1.3,0.6,3.2),new THREE.MeshLambertMaterial({color:0xe8e8e8}));
+    h.position.set(i*2.4-1.2,0.25,0);g.add(h);
+    const cab=new THREE.Mesh(new THREE.BoxGeometry(0.9,0.6,1.0),new THREE.MeshLambertMaterial({color:0x2563eb}));
+    cab.position.set(i*2.4-1.2,0.85,-0.9);g.add(cab);
+  }
+  const sx=-232+Math.random()*8;
+  const cz=chanZ(sx),hw=chanHW(sx);
+  g.position.set(sx,0,cz+(Math.random()-.5)*hw*1.1);
+  scene.add(g);
+  convoys.push({g,spd:0.017+Math.random()*0.006,warned:false});
+}
 function spawnMine(x,z){
   const g=new THREE.Group();
   const sp=new THREE.Mesh(new THREE.SphereGeometry(0.9,8,8),new THREE.MeshLambertMaterial({color:0x222222}));g.add(sp);
@@ -631,7 +649,7 @@ function autoDeclineToll(){
 // violations; Washington disputes this, and a Jun 21 US-Iran-Qatar-Pakistan
 // de-confliction channel now coordinates safe passage while the dispute continues.
 function showInspectionHail(){
-  setMsg('📡 IRANIAN PATROL: Routine inspection via Hormuz de-confliction channel — toll-free.',3);
+  setMsg('📡 IRANIAN PATROL: Routine inspection via the US-Iran hotline — safe passage guaranteed, toll-free.',3);
   immuneTimer=Math.max(immuneTimer,10);
 }
 
@@ -655,6 +673,7 @@ async function endGame(won){
       <p style="color:#4ade80;font-size:13px;">Run #${runCount} complete</p>
       <p style="color:#f59e0b;font-size:20px;margin:5px 0;">Net profit: $${Math.round(profit).toLocaleString()}</p>
       <p style="color:#94a3b8;font-size:11px;">${(BARRELS_PER_LOAD/1e6).toFixed(0)}M bbl @ $${oilPricePerBarrel.toFixed(2)}/bbl &nbsp;·&nbsp; Hull: ${Math.round(hull)}%</p>
+      ${convoysAided>0?`<p style="color:#7dd3fc;font-size:11px;">🛟 Helped ${convoysAided} IMO evacuation convoy${convoysAided>1?'s':''} reach safety</p>`:''}
       <div style="margin:8px 0;">
         <div style="font-size:11px;color:#64748b;margin-bottom:6px;">Captain name &amp; flag:</div>
         <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center;">
@@ -728,6 +747,7 @@ async function endGame(won){
       <h1>💀 VESSEL LOST</h1>
       <p style="color:#ef4444;font-size:13px;">Your tanker has been destroyed.</p>
       <p style="color:#94a3b8;font-size:12px;">Prior profit: $${Math.round(Math.max(0,profit)).toLocaleString()}</p>
+      ${convoysAided>0?`<p style="color:#7dd3fc;font-size:11px;">🛟 Helped ${convoysAided} IMO evacuation convoy${convoysAided>1?'s':''} reach safety before going down</p>`:''}
       <div style="max-width:380px;width:100%;margin:10px 0;">
         <div style="font-size:10px;color:#64748b;text-align:left;margin-bottom:3px;">🏆 LEADERBOARD</div>
         <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:8px 12px;max-height:180px;overflow-y:auto;">${renderLbRows(entries,null)}</div>
@@ -739,22 +759,22 @@ async function endGame(won){
 }
 
 function clearAll(){
-  [...fastBoats,...dhows].forEach(b=>scene.remove(b.g));
+  [...fastBoats,...dhows,...convoys].forEach(b=>scene.remove(b.g));
   mines.forEach(m=>scene.remove(m.g));
   missiles.forEach(m=>{scene.remove(m.g);scene.remove(m.ring);});
   drones.forEach(d=>{scene.remove(d.g);scene.remove(d.shadow);});
   explosions.forEach(e=>scene.remove(e.m));
   particles.forEach(p=>scene.remove(p.m));
-  fastBoats=[];dhows=[];mines=[];missiles=[];drones=[];explosions=[];particles=[];
+  fastBoats=[];dhows=[];mines=[];missiles=[];drones=[];explosions=[];particles=[];convoys=[];
   warships.forEach(w=>scene.remove(w.g));warships=[];
 }
 function resetGame(fresh){
   clearAll();
   Object.keys(keys).forEach(k => delete keys[k]); // flush any stuck keypresses
-  if(fresh){hull=100;profit=0;runCount=0;tollsPaid=0;}
+  if(fresh){hull=100;profit=0;runCount=0;tollsPaid=0;convoysAided=0;}
   speed=0;heading=0;invTimer=0;waveT=0;coastDmgTimer=0; // heading always reset to east
   tPos={x:-238,z:chanZ(-238)};
-  droneTimer=7;fastBoatTimer=10;dhowTimer=14;missileTimer=20;tollTimer=30;
+  droneTimer=7;fastBoatTimer=10;dhowTimer=14;missileTimer=20;tollTimer=30;convoyTimer=18;
   immuneTimer=0;tollPending=false;tollCountdown=0;phase='go_east';
   updateMissionBadge();scene.remove(tankerGroup);buildTanker();
   // Mine threat scales with how much of the strait remains contaminated:
@@ -837,7 +857,7 @@ function update(dt){
 
   if(phase==='go_east'&&tPos.x>248){
     phase='go_west';profit+=oilPricePerBarrel*BARRELS_PER_LOAD;tollsPaid=0;
-    clearAll();fastBoatTimer=10;dhowTimer=14;droneTimer=7;missileTimer=20;tollTimer=30;
+    clearAll();fastBoatTimer=10;dhowTimer=14;droneTimer=7;missileTimer=20;tollTimer=30;convoyTimer=18;
     updateMissionBadge();
     setMsg(`⛽ OIL LOADED — $${oilPricePerBarrel.toFixed(2)}/bbl. Head WEST!`,5);
   }
@@ -857,6 +877,9 @@ function update(dt){
       missileTimer=12+Math.random()*10;
     }
     batteries.forEach(b=>{if(b.cooldown>0)b.cooldown-=dt;});
+  }else{
+    // IMO evacuation corridor only operates while the strait is open/contested
+    convoyTimer-=dt;if(convoyTimer<0&&convoys.length<2){spawnConvoy();convoyTimer=22+Math.random()*14;}
   }
   fastBoatTimer-=dt;
   if(fastBoatTimer<0&&fastBoats.length<(straitClosed?4:2)){spawnFastBoat();fastBoatTimer=(straitClosed?8:16)+Math.random()*6;}
@@ -997,6 +1020,19 @@ function update(dt){
     if(d.mineTimer<0&&d.dropped<3){spawnMine(dp.x+(Math.random()-.5)*4,dp.z+(Math.random()-.5)*4);d.mineTimer=5+Math.random()*3;d.dropped++;}
     if((phase==='go_east'?tPos.x-dp.x:dp.x-tPos.x)>100||d.dropped>=3){scene.remove(d.g);dhows.splice(i,1);}
   }
+  // Evacuation convoys: civilian, unarmed, always heading out of the Persian Gulf.
+  // Colliding scrapes your hull and costs speed — give way, don't ram rescue ships.
+  for(let i=convoys.length-1;i>=0;i--){
+    const c=convoys[i],cp=c.g.position;
+    cp.x+=c.spd*60*dt;cp.y=Math.sin(waveT*1.6+i)*.06;
+    const dx=tPos.x-cp.x,dz=tPos.z-cp.z,dist=Math.sqrt(dx*dx+dz*dz);
+    if(!c.warned&&dist<30){c.warned=true;setMsg('🛟 IMO EVACUATION CONVOY — give way, seafarers aboard',3);}
+    if(dist<RANGE_CONVOY){
+      takeDamage(1.5,'⚠ NEAR-MISS — EVACUATION CONVOY!');speed*=0.85;
+      const d=dist||1;tPos.x+=dx/d*1.2;tPos.z+=dz/d*1.2;
+    }
+    if(cp.x>262){convoysAided++;scene.remove(c.g);convoys.splice(i,1);setMsg('🛟 Convoy reaches open water — seafarers safe',2.2);}
+  }
   for(let i=mines.length-1;i>=0;i--){
     const m=mines[i];
     // Drift — mines move with current unpredictably
@@ -1076,7 +1112,7 @@ async function boot(){
   straitBadge.style.color=straitClosed?'#fca5a5':'#fcd34d';
   document.getElementById('threatDesc').textContent=straitClosed
     ?"⚠ CLOSED: Iran's claim is disputed by Washington, but the threat is live — Drones · Mines · Missiles · IRGC boats · US Navy blockade"
-    :'⚠ CONTESTED: Iran claims renewed closure; ceasefire holds for now — non-hostile escorts, toll-free via the new de-confliction channel, plus a few residual mines';
+    :'⚠ CONTESTED: Iran claims renewed closure; a new US-Iran hotline holds the ceasefire together — non-hostile escorts, toll-free passage, a few residual mines, and IMO evacuation convoys to give way for';
   lbPanel.innerHTML=renderLbRows(await lbLoad(),null);
   document.getElementById('loadingStatus').style.display='none';
   document.getElementById('liveDataBox').style.display='block';
@@ -1087,9 +1123,9 @@ async function boot(){
   document.getElementById('newsFeed').style.display='flex';
   document.getElementById('btnRow').style.display='flex';
   renderNewsFeed();
-  hull=100;profit=0;runCount=0;speed=0;heading=0;invTimer=0;waveT=0;coastDmgTimer=0;
+  hull=100;profit=0;runCount=0;speed=0;heading=0;invTimer=0;waveT=0;coastDmgTimer=0;convoysAided=0;
   tPos={x:-238,z:chanZ(-238)};
-  droneTimer=7;fastBoatTimer=10;dhowTimer=14;missileTimer=20;tollTimer=30;
+  droneTimer=7;fastBoatTimer=10;dhowTimer=14;missileTimer=20;tollTimer=30;convoyTimer=18;
   immuneTimer=0;tollPending=false;tollCountdown=0;phase='go_east';updateMissionBadge();buildTanker();
   requestAnimationFrame(t=>{lastT=t;animate(t);});
 }
@@ -1098,6 +1134,10 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"US and Iran agree a direct hotline to head off 'misunderstandings' in the Strait of Vermouth; Tehran's negotiators confirm both sides will allow ships to pass safely", src:"AP · Jun 24", color:"green"},
+  {text:"Brent crude falls below $77/bbl, its lowest since Feb 27, as the evacuation corridor and steady transits ease traders' supply fears", src:"CNBC · Jun 24", color:"amber"},
+  {text:"Tanker traffic holds steady — nearly two dozen vessels transit the Strait of Vermouth in 24 hours — as the closure dispute drags into its fourth day", src:"CENTCOM/AIS · Jun 24", color:"blue"},
+  {text:"IMO launches evacuation of roughly 11,000 seafarers stranded near the Strait of Vermouth, routing ships out through two temporary corridors after 14 deaths during the war", src:"IMO · Jun 23", color:"amber"},
   {text:"Iran's military re-declares the Strait of Vermouth 'closed,' citing Israeli strikes in Lebanon as a breach of the June ceasefire MOU", src:"Reuters · Jun 20", color:"red"},
   {text:"Vance: 'The straits really are open' — CENTCOM says 55 merchant ships transited the day Iran claimed the waterway shut", src:"Fox News · Jun 20", color:"blue"},
   {text:"US, Iran, Qatar and Pakistan agree to a Hormuz 'de-confliction channel' for coordinating safe passage as the closure dispute drags on", src:"AP · Jun 21", color:"green"},
