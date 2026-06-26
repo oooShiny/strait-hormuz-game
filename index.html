@@ -543,20 +543,24 @@ function spawnMine(x,z){
 }
 // Seeds mines Iran can't find or remove, staggered in over time and drifting
 // toward the channel centre. `count` reflects how much of the strait is still
-// mined: the full wartime field while closed, or a handful of leftovers during
+// mined: the full wartime field while closed, or the residual stragglers during
 // the post-ceasefire reopening (the UK/France-led demining effort is ongoing).
-function seedDriftingMines(count,firstDelay,interval){
+// `centerChannel`: as of late Jun 2026 the ~80 mines still charted sit in the
+// contested central deep-water channel itself, not the banks — Iran's IRGC says
+// only its own designated southern lane is safe passage, so leftover mines now
+// spawn hugging the centreline, rewarding players who favor the southern edge.
+function seedDriftingMines(count,firstDelay,interval,centerChannel){
   for(let s=0;s<count;s++){
     const sx=-200+s*(480/count)+Math.random()*50;
     const scz=chanZ(sx),hw=chanHW(sx);
     const side=Math.random()>.5?1:-1;
-    const sz=scz+side*(hw-2+Math.random()*6);
+    const sz=centerChannel?scz+side*(Math.random()*hw*0.35):scz+side*(hw-2+Math.random()*6);
     setTimeout(()=>{
       if(!gameRunning) return;
       spawnMine(sx,sz);
       const lm=mines[mines.length-1];
       lm.driftX=(Math.random()-0.4)*0.006;
-      lm.driftZ=-side*0.005+Math.random()*0.003;
+      lm.driftZ=centerChannel?(Math.random()-0.5)*0.004:-side*0.005+Math.random()*0.003;
     }, firstDelay+s*interval);
   }
 }
@@ -787,9 +791,10 @@ function resetGame(fresh){
   immuneTimer=0;tollPending=false;tollCountdown=0;phase='go_east';
   updateMissionBadge();scene.remove(tankerGroup);buildTanker();
   // Mine threat scales with how much of the strait remains contaminated:
-  // full wartime field while closed, a few demining stragglers once reopened
+  // full wartime field while closed, ~80 charted stragglers clustered in the
+  // contested central channel once reopened — hug the southern lane to dodge them
   if(straitClosed) seedDriftingMines(6,8000,7000);
-  else seedDriftingMines(2,15000,20000);
+  else{seedDriftingMines(2,15000,20000,true);setMsg('📡 IRGC: only our designated southern lane is safe — central channel still mined',4.5);}
   overlay.style.display='none';hud.style.display='block';gameRunning=true;
   if('ontouchstart' in window||navigator.maxTouchPoints>0){document.getElementById('joystickWrap').style.display='block';}
 }
