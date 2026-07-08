@@ -693,14 +693,21 @@ function autoDeclineToll(){
 // Jul 5 2026: Iran's ambassador to China vowed "special Hormuz treatment" for
 // friendly nations — Chinese, Russian, and Pakistani flags receive preferential passage
 // (IRGC warning-shot rate drops to ~8% vs. 35% for Western/neutral ships).
+// Jul 7 2026: IRGC specifically targeted Saudi and Qatari vessels; Saudi Arabia and
+// Qatar flags now attract the highest IRGC attack rate in contested mode (~65%).
 const IRGC_FRIENDLY_FLAGS=new Set(['🇨🇳','🇷🇺','🇵🇰']);
+const IRGC_TARGETED_FLAGS=new Set(['🇸🇦','🇶🇦']); // Specifically targeted Jul 7 IRGC missile strikes
 function showInspectionHail(){
   const friendly=IRGC_FRIENDLY_FLAGS.has(playerFlag);
-  if(Math.random()<(friendly?0.08:0.35)){
-    takeDamage(5,friendly
-      ?'⚠ IRGC PATROL: Even "friendly" flags get checked sometimes — WARNING SHOT!'
-      :'⚠ IRGC ENFORCEMENT: OFF-CORRIDOR — WARNING SHOT FIRED!');
-    immuneTimer=Math.max(immuneTimer,6);
+  const targeted=IRGC_TARGETED_FLAGS.has(playerFlag);
+  const shotRate=friendly?0.08:targeted?0.65:0.35;
+  if(Math.random()<shotRate){
+    takeDamage(targeted?8:5,targeted
+      ?'⚠ IRGC: Saudi/Qatari flag — MISSILE INBOUND! (Jul 7 target pattern)'
+      :friendly
+        ?'⚠ IRGC PATROL: Even "friendly" flags get checked sometimes — WARNING SHOT!'
+        :'⚠ IRGC ENFORCEMENT: OFF-CORRIDOR — WARNING SHOT FIRED!');
+    immuneTimer=Math.max(immuneTimer,targeted?3:6);
   }else{
     setMsg(friendly
       ?'📡 IRGC: Friendly flag recognized — priority passage granted, toll-free. (Jul 5 envoy deal)'
@@ -919,7 +926,7 @@ function update(dt){
     const cargoValue=oilPricePerBarrel*BARRELS_PER_LOAD;
     const premium=cargoValue*(straitClosed?INSURANCE_RATE_CLOSED:INSURANCE_RATE_OPEN);
     phase='go_west';profit+=cargoValue-premium;insurancePaid+=premium;tollsPaid=0;
-    clearAll();fastBoatTimer=10;dhowTimer=14;droneTimer=7;missileTimer=20;tollTimer=30;convoyTimer=40;openDroneTimer=48+Math.random()*24;
+    clearAll();fastBoatTimer=10;dhowTimer=14;droneTimer=7;missileTimer=20;tollTimer=30;convoyTimer=40;openDroneTimer=28+Math.random()*15;
     updateMissionBadge();
     setMsg(`⛽ OIL LOADED — $${oilPricePerBarrel.toFixed(2)}/bbl. War-risk insurance: -$${Math.round(premium).toLocaleString()}. Head WEST!`,5);
   }
@@ -945,13 +952,15 @@ function update(dt){
     // Jun 26 hit Ever Lovely's bridge; Jun 27 hit tanker Kiku on the Navy's own
     // newly-widened "safe" Omani corridor — two strikes in 48 hours, so this is
     // no longer a rare one-off even while the strait reads "open".
-    // Jul 7 2026: IRGC missiles hit two ships including Qatari LNG tanker Al Rekayyat.
-    openDroneTimer-=dt;if(openDroneTimer<0){spawnDrone();openDroneTimer=48+Math.random()*24;}
+    // Jul 7 2026: IRGC missiles hit three ships (Saudi + Qatari); Jul 8: US counter-strikes.
+    // JMIC re-raised threat level to SEVERE — drone frequency elevated from 48-72s to 28-43s.
+    openDroneTimer-=dt;if(openDroneTimer<0){spawnDrone();openDroneTimer=28+Math.random()*15;}
     // Qatari LNG tankers now transit but are active IRGC targets — chain-explosion risk
     lngTimer-=dt;if(lngTimer<0&&lngTankers.length<1){lngTankers.push(spawnLNGTanker());lngTimer=110+Math.random()*70;}
   }
   fastBoatTimer-=dt;
-  if(fastBoatTimer<0&&fastBoats.length<(straitClosed?4:2)){spawnFastBoat();fastBoatTimer=(straitClosed?8:16)+Math.random()*6;}
+  // Jul 7-8: IRGC fast-boat patrols intensified following US counter-strikes; ceasefire interval tightened 16→12s
+  if(fastBoatTimer<0&&fastBoats.length<(straitClosed?4:2)){spawnFastBoat();fastBoatTimer=(straitClosed?8:12)+Math.random()*6;}
   // US Navy presence in both modes — hostile blockade while closed (war footing),
   // non-hostile ceasefire escort while open (blockade ended Jun 2026 under the US-Iran deal)
   const maxWarships = straitClosed ? 6 : 3;
@@ -1219,7 +1228,7 @@ async function boot(){
   straitBadge.style.color=straitClosed?'#fca5a5':'#fcd34d';
   document.getElementById('threatDesc').textContent=straitClosed
     ?"⚠ CLOSED: Iran's claim is disputed by Washington, but the threat is live — Drones · Mines · Missiles · IRGC boats · US Navy blockade · steep war-risk insurance"
-    :'⚠ CONTESTED: Jul 7 — IRGC missiles struck Qatari LNG tanker Al Rekayyat and a second vessel; Iran threatens to abandon Doha talks. MOU toll-free window expires ~Aug 16. Chinese/Russian/Pakistani flags get preferential IRGC passage (Jul 5 envoy deal). LNG tankers now transit — give way, chain blast if they\'re hit.';
+    :'⚠ CONTESTED (SEVERE): Jul 7-8 — IRGC struck Saudi + Qatari tankers; US launched new counter-strikes. JMIC threat re-raised to SEVERE. Saudi 🇸🇦 & Qatari 🇶🇦 flags are prime IRGC targets. MOU toll-free window expires ~Aug 16. Chinese/Russian/Pakistani flags still get preferential passage (Jul 5 deal). LNG tankers now transit — give way, chain blast if they\'re hit.';
   lbPanel.innerHTML=renderLbRows(await lbLoad(),null);
   document.getElementById('loadingStatus').style.display='none';
   document.getElementById('liveDataBox').style.display='block';
@@ -1232,7 +1241,7 @@ async function boot(){
   renderNewsFeed();
   hull=100;profit=0;runCount=0;speed=0;heading=0;invTimer=0;waveT=0;coastDmgTimer=0;convoysAided=0;insurancePaid=0;
   tPos={x:-238,z:chanZ(-238)};
-  droneTimer=7;fastBoatTimer=10;dhowTimer=14;missileTimer=20;tollTimer=30;convoyTimer=40;openDroneTimer=48+Math.random()*24;lngTimer=100+Math.random()*60;
+  droneTimer=7;fastBoatTimer=10;dhowTimer=14;missileTimer=20;tollTimer=30;convoyTimer=40;openDroneTimer=28+Math.random()*15;lngTimer=100+Math.random()*60;
   immuneTimer=0;tollPending=false;tollCountdown=0;phase='go_east';updateMissionBadge();buildTanker();
   requestAnimationFrame(t=>{lastT=t;animate(t);});
 }
@@ -1241,6 +1250,10 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"U.S. launches new air strikes on Iranian military targets hours after three merchant ships — including Saudi and Qatari tankers — were struck in the Strait of Vermouth; ceasefire MOU on the brink", src:"NPR/Reuters · Jul 8", color:"red"},
+  {text:"JMIC re-raises Strait of Vermouth threat level to SEVERE — first re-escalation since the Jun 29 downgrade to Substantial — after back-to-back IRGC attacks and U.S. counter-strikes put the MOU in doubt", src:"JMIC advisory · Jul 8", color:"red"},
+  {text:"Saudi Arabia tankers among vessels struck in the Jul 7 IRGC missile salvo; Riyadh formally protests to Tehran as Saudi crude exports from Juaymah terminal suspended pending security review", src:"Al Jazeera · Jul 7", color:"red"},
+  {text:"Three ships struck in a single night: Saudi crude tanker, Qatari LNG carrier Al Rekayyat, and a Panama-flagged bulk carrier — the largest single-night IRGC attack since the MOU signing on Jun 17", src:"BBC/gCaptain · Jul 7", color:"red"},
   {text:"Iran's IRGC fires missiles at two commercial ships in the Strait of Vermouth — hitting the Qatari LNG tanker Al Rekayyat (~8nm east of Limah, Oman) with an engine room fire; all crew safe. First strike on a vessel from the ceasefire's key mediator nation. European gas prices surge 6%", src:"Bloomberg/The National · Jul 7", color:"red"},
   {text:"Iran threatens to abandon Doha peace talks after Trump's escalatory rhetoric following the Jul 7 tanker strikes; Tehran says it is 'evaluating' whether to continue with Qatari mediation — directly targeting the mediator nation's own vessel", src:"CBS News/Times of Israel · Jul 7", color:"red"},
   {text:"Al Rekayyat — Qatari LNG tanker owned by Nakilat/Qatar Gas Transport Company — is the first vessel from the mediator nation struck since the war began; attack tests the US-Iran MOU and risks collapsing the Doha diplomatic track entirely", src:"gCaptain/Bloomberg · Jul 7", color:"red"},
@@ -1265,7 +1278,7 @@ const HEADLINES = [
   {text:"Iranian negotiators signal Tehran will resume collecting Strait of Vermouth 'maritime service fees' once the 60-day toll waiver lapses; Washington calls any such toll illegal", src:"Reuters · Jun 29", color:"amber"},
   {text:"War-risk insurers have roughly tripled Strait of Vermouth transit premiums since the truce frayed — from a 0.125% baseline to between 0.2% and 0.4% of cargo value per crossing", src:"Fortune/WEF · Jun 29", color:"amber"},
   {text:"Brent crude settles at $72.51/bbl as the new truce holds, partly unwinding this week's spike from the Kiku and Ever Lovely drone strikes", src:"Reuters · Jun 29", color:"amber"},
-  {text:"JMIC downgrades its Strait of Vermouth threat level from SEVERE to SUBSTANTIAL — the first downgrade since the war began — citing 'less volatile' IRGC behavior since the new truce", src:"JMIC/Reuters · Jun 29", color:"green"},
+  {text:"JMIC downgrades its Strait of Vermouth threat level from SEVERE to SUBSTANTIAL — citing 'less volatile' IRGC behavior since the truce — but re-raises to SEVERE Jul 8 after a three-ship attack and U.S. counter-strikes", src:"JMIC/Reuters · Jun 29 / Jul 8", color:"amber"},
   {text:"US and Iran agree to stand down after days of tit-for-tat strikes; both sides head to Doha on Jun 30 for technical talks on the Strait of Vermouth ceasefire", src:"RFE/RL/AP · Jun 29", color:"green"},
   {text:"IRGC claims it destroyed 8 US military facilities in a missile-and-drone barrage on Bahrain's Fifth Fleet HQ and Kuwait's Ali Al Salem Air Base, warning of a 'crushing response' to further strikes", src:"Tribune India/Ynet · Jun 28", color:"red"},
   {text:"Container freight rates hit a 22-month high ($4,166/40ft box) as renewed Hormuz instability compounds with the Jul 1 peak season and expiring tariff relief", src:"Drewry/TechTimes · Jun 28", color:"amber"},
