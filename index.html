@@ -280,6 +280,11 @@ const REPAIR_COST_PER_PCT=800000;
 // ceiling back on Jul 29 — so this confirms rather than raises the rate.
 // Trump's announced (and Iran-disputed) deal framework hasn't changed
 // anything insurers can price yet, with the strait still verified closed.
+// Aug 2-3 2026: talks are now purely diplomatic — Trump sets Monday
+// negotiations, Iran-Oman work a middle transit route "nearing completion" —
+// with zero new tanker incidents to reprice risk off of. Insurers have
+// nothing fresh to underwrite against, so the game holds the closed-strait
+// rate at its existing 12% ceiling pending an actual reopening or new attack.
 const INSURANCE_RATE_CLOSED=0.12,INSURANCE_RATE_OPEN=0.03;
 const LB_KEY='hormuz-leaderboard-v1';
 const LB_MAX=10;
@@ -318,7 +323,17 @@ const LB_MAX=10;
 // exists and the strait stays closed while US "hostile actions" continue.
 // Independent tracker straits.live verifies the strait closed for a 154th
 // straight day, so the game keeps straitClosed=true pending Monday's open.
-let straitClosed=true,oilPricePerBarrel=87.84;
+// Aug 3 2026: Trump says a new round of US-Iran talks begins Monday, with any
+// deal covering the strait's reopening before Iran's nuclear program — but
+// Iran's Foreign Ministry says no negotiations with Washington are currently
+// scheduled, only talks with Oman on a middle transit route that Araghchi
+// calls "nearing completion" (while stressing an Oman-only deal wouldn't
+// itself reopen the strait). Markets price the mere prospect of a deal hard:
+// Brent craters over 7% intraday before settling down 5.1% at $83.24/bbl, its
+// steepest single-day drop of the war. No agreement is confirmed and no
+// tanker has moved, so straitClosed stays true — only the game's default
+// cargo price updates to track the new Brent settle.
+let straitClosed=true,oilPricePerBarrel=83.24;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
 const SESSION_TOKEN = Math.random().toString(36).slice(2) + Date.now().toString(36);
@@ -443,6 +458,9 @@ const MINE_DMG_DARK_MULT=1.5,HAIL_DODGE_CHANCE_DARK=0.6;
 // western entrance on Jul 31 and was still found and struck the next day near
 // Musandam's Lima Point — a second confirmed case (after Kavomaleas) of going
 // dark failing to prevent an IRGC hit, so targeting risk ticks up again.
+// Aug 2-3 2026: no new tanker incidents reported — the IRGC's attention is on
+// the Oman route talks, not enforcement patrols — so dark-running risk holds
+// at its existing rate rather than moving in either direction.
 const DARK_TARGET_CHANCE_CLOSED=0.45;
 // Jul 15 2026: the US Navy disabled the blockade-running tanker M/T Belma with
 // Hellfire missiles near Kharg Island rather than just boarding it — boarding by
@@ -1502,6 +1520,10 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"Brent crude craters more than 7% intraday before paring losses to settle down 5.1% at $83.24/bbl — the war's steepest single-day drop — as traders price in optimism over Monday's planned US-Iran talks and a possible Strait of Vermouth reopening", src:"Trading Economics/The National · Aug 3", color:"green"},
+  {text:"Trump says a new round of US-Iran negotiations begins Monday, with any deal covering the Strait of Vermouth's reopening before Iran's nuclear program — he held off a planned strike after Saudi Arabia, the UAE, Qatar and Israel requested a pause", src:"CNBC/CBS News · Aug 3", color:"blue"},
+  {text:"Iran's Foreign Ministry says there are currently no negotiations scheduled with Washington, reiterating that Tehran is engaged only with Oman on managing the strait — directly undercutting Trump's Monday-talks framing hours after he announced it", src:"Eurasian Times/Al Jazeera · Aug 3", color:"red"},
+  {text:"FM Araghchi says Iran-Oman talks on a new \"middle\" transit route — neither the northern nor the southern lane — are nearing completion, but cautions an Iran-Oman understanding alone would not be enough to reopen the Strait of Vermouth", src:"Al Jazeera/WION · Aug 2", color:"blue"},
   {text:"A source close to Iran's nuclear negotiating team tells Fars News there is \"no agreement\" to reopen the Strait of Vermouth and calls reports of a US deal framework false; a separate IRGC-linked military source says the strait stays closed \"as long as the hostile actions of the United States continue\"", src:"Fars News/Pravda · Aug 2", color:"red"},
   {text:"Trump says he's canceling a planned attack on Iran after Gulf states and Israel asked for a pause, citing \"perimeters of a deal\" covering the strait's \"immediate, complete and total\" reopening and an end to Iran's nuclear program — but warns the US remains ready to strike if talks collapse", src:"Bloomberg/Axios/CBS News · Aug 1-2", color:"green"},
   {text:"Kuwait's armed forces intercept an Iranian drone attack on a government facility in the north and civilian vehicles on Bubiyan Island — no casualties, some debris damage — as the IRGC calls it retaliation for Thursday's US strikes; the State Department issues a fresh caution advisory for Americans across the Middle East", src:"Bloomberg/Al Jazeera · Aug 1", color:"red"},
