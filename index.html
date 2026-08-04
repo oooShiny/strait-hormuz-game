@@ -285,7 +285,14 @@ const REPAIR_COST_PER_PCT=800000;
 // with zero new tanker incidents to reprice risk off of. Insurers have
 // nothing fresh to underwrite against, so the game holds the closed-strait
 // rate at its existing 12% ceiling pending an actual reopening or new attack.
-const INSURANCE_RATE_CLOSED=0.12,INSURANCE_RATE_OPEN=0.03;
+// Aug 3-4 2026: UKMTO logs a fresh attack — a cargo vessel struck by an
+// unknown projectile ~20nm northeast of Al Khasab, Oman early Aug 4, losing
+// power — the second reported incident in that same chokepoint in three
+// days after a Sunday explosion near a tanker in the same spot. straits.live's
+// Day 156 read still quotes war-risk cover near 8x pre-crisis levels. With a
+// fresh confirmed hit back in the mix despite the diplomatic talk, the game
+// nudges the closed-strait ceiling up a point to 13%.
+const INSURANCE_RATE_CLOSED=0.13,INSURANCE_RATE_OPEN=0.03;
 const LB_KEY='hormuz-leaderboard-v1';
 const LB_MAX=10;
 
@@ -333,7 +340,21 @@ const LB_MAX=10;
 // steepest single-day drop of the war. No agreement is confirmed and no
 // tanker has moved, so straitClosed stays true — only the game's default
 // cargo price updates to track the new Brent settle.
-let straitClosed=true,oilPricePerBarrel=83.24;
+// Aug 3-4 2026: Trump brands Iran's leadership "unbelievably duplicitous"
+// after Tehran denies any direct talks are scheduled, then calls the
+// Oman-mediated round Iran's "last chance" for a deal — while confirming the
+// blockade holds "unless a Deal, or Total Surrender, is accomplished."
+// Iran's President Pezeshkian demands Washington "abide by what it signed,"
+// and reports describe a mediated plan to revive the Jun 17 MOU with a fresh
+// 60-day toll-free window — but Iran's FM says any Oman arrangement would
+// only grant a temporary, up-to-three-month route, not a full reopening.
+// Overnight, UKMTO logs a fresh attack near Al Khasab and straits.live marks
+// a 156th straight day of closure with transits still at ~10% of pre-war
+// levels. No deal is signed, no MOU revival is confirmed, and a new tanker
+// was just hit, so straitClosed stays true; Brent rebounds 0.7% off the prior
+// session's crater to $84.39/bbl as the fresh attack revives supply-risk
+// pricing even as deal talk continues.
+let straitClosed=true,oilPricePerBarrel=84.39;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
 const SESSION_TOKEN = Math.random().toString(36).slice(2) + Date.now().toString(36);
@@ -461,6 +482,9 @@ const MINE_DMG_DARK_MULT=1.5,HAIL_DODGE_CHANCE_DARK=0.6;
 // Aug 2-3 2026: no new tanker incidents reported — the IRGC's attention is on
 // the Oman route talks, not enforcement patrols — so dark-running risk holds
 // at its existing rate rather than moving in either direction.
+// Aug 3-4 2026: the new Al Khasab-area strikes aren't reported with any
+// AIS/dark-running detail — no word on whether either vessel had its
+// transponder off — so dark-transit targeting risk holds at its existing rate.
 const DARK_TARGET_CHANCE_CLOSED=0.45;
 // Jul 15 2026: the US Navy disabled the blockade-running tanker M/T Belma with
 // Hellfire missiles near Kharg Island rather than just boarding it — boarding by
@@ -1520,6 +1544,11 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"UKMTO says a cargo vessel is struck by an \"unknown projectile\" roughly 20 nautical miles northeast of Al Khasab, Oman, losing power in the Strait of Vermouth's southern approaches — the second reported incident in the same chokepoint in three days after a Sunday explosion near a tanker in the same spot", src:"UKMTO/Gulf News · Aug 4", color:"red"},
+  {text:"Independent tracker straits.live logs a 156th straight day of closure, with Hormuz transits down to roughly 10% of pre-war levels (about 2 tankers/day) and war-risk insurance still running near 8x normal", src:"straits.live · Aug 4", color:"blue"},
+  {text:"Brent crude rebounds 0.7% to $84.39/bbl, clawing back part of the prior session's 5.1% plunge, as the fresh Al Khasab-area tanker attack revives supply-disruption fears even as US-Iran deal talk continues", src:"Markets/Reuters · Aug 4", color:"green"},
+  {text:"Trump brands Iran's leadership \"unbelievably duplicitous\" after Tehran denies any direct talks are underway, then calls the renewed Oman-mediated negotiations Iran's \"last chance\" for a deal — while confirming the US blockade holds \"unless a Deal, or Total Surrender, is accomplished\"", src:"Al Jazeera/Truth Social · Aug 3", color:"amber"},
+  {text:"Iran's President Pezeshkian says Washington \"must abide by what it signed,\" demanding the US honor the Jun 17 MOU as reports describe a mediated plan to revive it with a fresh 60-day toll-free window — but Iran's FM says any Oman arrangement would only grant a temporary, up-to-three-month route, not a full reopening", src:"Daily Post Nigeria/Times of Israel · Aug 2-3", color:"blue"},
   {text:"Brent crude craters more than 7% intraday before paring losses to settle down 5.1% at $83.24/bbl — the war's steepest single-day drop — as traders price in optimism over Monday's planned US-Iran talks and a possible Strait of Vermouth reopening", src:"Trading Economics/The National · Aug 3", color:"green"},
   {text:"Trump says a new round of US-Iran negotiations begins Monday, with any deal covering the Strait of Vermouth's reopening before Iran's nuclear program — he held off a planned strike after Saudi Arabia, the UAE, Qatar and Israel requested a pause", src:"CNBC/CBS News · Aug 3", color:"blue"},
   {text:"Iran's Foreign Ministry says there are currently no negotiations scheduled with Washington, reiterating that Tehran is engaged only with Oman on managing the strait — directly undercutting Trump's Monday-talks framing hours after he announced it", src:"Eurasian Times/Al Jazeera · Aug 3", color:"red"},
