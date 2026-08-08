@@ -315,6 +315,17 @@ const REPAIR_COST_PER_PCT=800000;
 // newly taxed inside the strait, so insurers have nothing fresh on the
 // water to reprice against — the game holds the closed-strait rate at its
 // existing 13% ceiling.
+// Aug 7-8 2026: Iran's state media says a shipping agreement with Oman has
+// been reached — but the actual framework reported by Reuters/CBS/PBS
+// carries no toll or service fee at all (ships in via the Iran-coordinated
+// lane, out via the Oman-coordinated lane), directly superseding Tehran's
+// own 7%-fee parliamentary draft from a day earlier. Iran still wants US-
+// and Israel-linked ships barred outright and "hostile" countries charged
+// compensation, and its parliament is still debating that wording — so
+// nothing enacted, no toll collected, and a UKMTO-reported twin explosion
+// near Kumzar, Oman on Aug 5 left no vessel damage and no claim of
+// responsibility. Insurers have nothing fresh to reprice against — the
+// game holds the closed-strait rate at its existing 13% ceiling.
 const INSURANCE_RATE_CLOSED=0.13,INSURANCE_RATE_OPEN=0.03;
 const LB_KEY='hormuz-leaderboard-v1';
 const LB_MAX=10;
@@ -427,7 +438,24 @@ const LB_MAX=10;
 // signed, no toll is actually being collected, and the strait itself sees
 // no new attack, so straitClosed stays true; only the default cargo price
 // updates to track the new Brent move.
-let straitClosed=true,oilPricePerBarrel=82.80;
+// Aug 7-8 2026: Iran's state media claims a shipping agreement with Oman
+// has been "reached," but Reuters/CBS/PBS report the actual framework —
+// no tolls or fees, inbound via the Iran-coordinated lane, outbound via
+// the Oman-coordinated lane — is itself not what Tehran's parliament was
+// drafting a day earlier, and Iran still wants US/Israel ships banned and
+// "hostile" nations charged compensation, terms its own parliament hasn't
+// settled. Trump calls the talks "moving along," not done, and CNN's
+// analysis is blunt: whatever is "taking shape" is not the immediate, full
+// reopening Trump publicly promised — Washington maintains a bilateral
+// Iran-Oman deal doesn't by itself lift the blockade. A UKMTO-reported
+// pair of explosions ~9nm off Kumzar, Oman on Aug 5 left crew and vessel
+// safe with no claim of responsibility. Brent gives back Aug 6's spike,
+// settling $82.04/bbl on Aug 7 after an $83.49 open, as traders discount
+// a deal that still isn't signed, enacted, or backed by Washington. No
+// route deal is signed, no toll is actually being collected, and the
+// strait itself sees no new attack, so straitClosed stays true; only the
+// default cargo price updates to track the new Brent move.
+let straitClosed=true,oilPricePerBarrel=82.04;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
 const SESSION_TOKEN = Math.random().toString(36).slice(2) + Date.now().toString(36);
@@ -572,6 +600,11 @@ const MINE_DMG_DARK_MULT=1.5,HAIL_DODGE_CHANCE_DARK=0.6;
 // new IRGC patrol activity — no fresh report of a dark-running vessel being
 // hunted or caught inside the strait, so dark-transit targeting risk holds
 // at its existing rate.
+// Aug 7-8 2026: the reported Iran-Oman no-toll route framework and Iran's
+// still-unsettled US/Israel-ban wording are diplomatic developments, and
+// the Kumzar-area explosions carry no AIS/dark-running detail — no fresh
+// report of a dark-running vessel being hunted or caught inside the
+// strait, so dark-transit targeting risk holds at its existing rate.
 const DARK_TARGET_CHANCE_CLOSED=0.45;
 // Jul 15 2026: the US Navy disabled the blockade-running tanker M/T Belma with
 // Hellfire missiles near Kharg Island rather than just boarding it — boarding by
@@ -1608,7 +1641,7 @@ async function boot(){
   straitBadge.style.background=straitClosed?'#7f1d1d':'#78350f';
   straitBadge.style.color=straitClosed?'#fca5a5':'#fcd34d';
   document.getElementById('threatDesc').textContent=straitClosed
-    ?"⛔ TOLL PLAN DRAFTED, DEAL STILL NOT SIGNED (Aug 6-7): Iran's parliament is reviewing a draft plan to ban US- and Israel-linked vessels from the strait outright and charge everyone else fees up to 7% of cargo value, with a 20% cargo fine for violations — Tehran frames it as war-damage compensation. A US official rejects it flat out: \"Any temporary routes will be without any impediments — meaning no approvals or permissions and no tolls or charges,\" insisting \"no party controls the lanes.\" Trump says he expects the war to end \"pretty soon\" and doesn't think Iran \"can go much longer,\" and both sides keep calling an interim Oman route deal \"close\" — but the core fight over who controls strait access is unresolved. Saudi Arabia, Turkey and Pakistan sign a Mecca mutual-defense pact the same week, against the backdrop of the war and a revived Houthi campaign on Saudi Arabia's southern border. Brent jumps over 4% to $82.80 on Aug 6, extending gains above $83 into Aug 7 — paying the in-game toll still funds the US-sanctioned network (Persian Gulf Marine Insurance Co. / Hormuz Safe Marine Services Authority), raising your Navy disable risk once immunity lapses. Drones · Mines (harder-hitting if you're dark) · Missiles · IRGC boats · US Navy blockade (targets Iranian flags and sanctioned-toll payers, now disables boarded vessels) · war-risk insurance at a 13% cargo-value ceiling as P&I clubs pull cover entirely — going dark or refusing a hail can draw a targeted missile-and-drone strike"
+    ?"⛔ IRAN CLAIMS OMAN DEAL 'REACHED' — NOT ENACTED (Aug 7-8): Iranian state media says a shipping agreement with Oman has been reached, but the framework itself has no toll or fee — inbound ships use the Iran-coordinated lane, outbound ships use the Oman-coordinated lane — a reversal from Tehran's own 7%-fee parliamentary draft from a day earlier, which is still unpassed. Iran still wants US- and Israel-linked vessels banned outright and \"hostile\" nations charged compensation, terms its parliament hasn't settled. Trump calls the talks \"moving along,\" not done, and Washington maintains a bilateral Iran-Oman deal doesn't by itself lift the blockade. A UKMTO-reported twin explosion off Kumzar, Oman on Aug 5 left crew and vessel safe with no claim of responsibility. Brent gives back Aug 6's spike, settling $82.04 on Aug 7 as traders discount a deal that isn't signed, enacted, or backed by the US — paying the in-game toll still funds the US-sanctioned network (Persian Gulf Marine Insurance Co. / Hormuz Safe Marine Services Authority), raising your Navy disable risk once immunity lapses. Drones · Mines (harder-hitting if you're dark) · Missiles · IRGC boats · US Navy blockade (targets Iranian flags and sanctioned-toll payers, now disables boarded vessels) · war-risk insurance at a 13% cargo-value ceiling as P&I clubs pull cover entirely — going dark or refusing a hail can draw a targeted missile-and-drone strike"
     :'⚠ CONTESTED (SEVERE): US strikes on Greater Tunb (Jul 15) and Qeshm Island (Jul 17) have knocked out two of the coastal batteries you\'ll no longer face, and disabled the blockade-runner Belma near Kharg Island. Iranian-flagged tankers risk being disabled if boarded, not just fined; everyone else rides Navy escort protection. Saudi 🇸🇦, Qatari 🇶🇦, Emirati 🇦🇪, Kuwaiti 🇰🇼 & Bahraini 🇧🇭 flags are still prime IRGC targets — Kuwaiti tanker Kaifan was hit off Oman Jul 20-21. Chinese/Russian/Pakistani flags get preferential passage. LNG tankers transit — give way, chain blast if hit. The IRGC\'s Jul 18 combined missile-and-drone interception of 4 vessels means ignoring a patrol hail now risks the same fate. Iran has now suspended the MOU entirely after the Jul 18 Jordan strike killed 2 US troops, and the Houthis\' new Bab el-Mandeb blockade shows the closure risk spreading beyond the strait itself — evacuation stragglers now cross even less often. As of Jul 27, CENTCOM\'s strike pause has held for a third day and Brent has crashed 8.2% on de-escalation hopes, but Iran says it isn\'t seeking renewed talks and traffic remains near a standstill — nothing confirms a real change to the strait itself. Updated Jul 28-29: the pause ended when Iran fired intercepted ballistic missiles at the same Jordan base hit Jul 18, CENTCOM/Saudi forces struck back in Iraq, and the IRGC hit three more tankers on the southern route — Brent jumped back above $87.';
   lbPanel.innerHTML=renderLbRows(await lbLoad(),null);
   document.getElementById('loadingStatus').style.display='none';
@@ -1631,6 +1664,13 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"Brent crude gives back Aug 6's spike, settling $82.04/bbl on Aug 7 after an $83.49 open, as traders discount an Iran-Oman shipping deal that still isn't signed, enacted, or backed by Washington", src:"Yahoo Finance/Fortune · Aug 7", color:"green"},
+  {text:"UKMTO says a tanker master heard two explosions roughly 9 nautical miles southeast of Kumzar, Oman on Aug 5 — crew and vessel are safe, no environmental damage is reported, and no group has claimed responsibility", src:"UKMTO/Arab News · Aug 5-6", color:"red"},
+  {text:"CNN analysis: whatever Iran and Oman are shaping on the Strait of Vermouth is not the immediate, unconditional reopening Trump has publicly promised — Washington maintains a bilateral Iran-Oman deal doesn't by itself lift the US blockade", src:"CNN · Aug 5, updated Aug 7", color:"amber"},
+  {text:"Trump says the Hormuz talks are \"moving along\" even as Iran's parliament keeps debating the wording of a clause to bar US- and Israel-linked vessels — a sign no final text is settled", src:"Bloomberg · Aug 7", color:"blue"},
+  {text:"Reuters/CBS/PBS report the Iran-Oman shipping framework carries no tolls or service fees at all — inbound vessels use the lane closest to Iran under Tehran's coordination, outbound vessels use the lane closest to Oman under Muscat's coordination", src:"Reuters/CBS News/PBS · Aug 6-7", color:"blue"},
+  {text:"Iran still intends to bar US- and Israeli-linked ships from the Strait of Vermouth outright and demand compensation from other \"hostile\" countries before letting them transit — unresolved terms its own parliament hasn't settled", src:"CBS News/PBS · Aug 6-7", color:"amber"},
+  {text:"Iranian state media says Tehran and Oman have \"reached\" a shipping agreement on the Strait of Vermouth — but Iran's own framing and Washington both stress it is not a full reopening of the waterway", src:"Fortune/IRNA · Aug 7", color:"amber"},
   {text:"Saudi Arabia, Turkey and Pakistan sign a mutual-defense pact in Mecca — pledging that an armed attack on any one of the three is an attack on all — against the backdrop of the war on Iran and a revived Houthi campaign on Saudi Arabia's southern border", src:"Al Jazeera/TRT World · Aug 7", color:"blue"},
   {text:"Trump says he expects the war on Iran to conclude \"pretty soon,\" telling reporters he doesn't believe Tehran \"can go much longer\" as pressure builds from high energy prices", src:"Al Jazeera · Aug 7", color:"amber"},
   {text:"Iran and the US both call an interim Strait of Vermouth deal \"close,\" but analysts note one side or the other will have to back down — Washington won't cede Tehran any control over strait access, while Iran insists it won't return to a fully open international waterway", src:"NBC News · Aug 6-7", color:"blue"},
