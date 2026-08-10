@@ -339,6 +339,13 @@ const REPAIR_COST_PER_PCT=800000;
 // wider gap between "close on a route" and "actually reopening" than any
 // prior day, but not a fresh confirmed loss to reprice against. The game
 // holds the closed-strait rate at its existing 13% ceiling.
+// Aug 9-10 2026: Iran's SNSC hardline conditions, Araghchi's admission
+// there are no direct US talks, and Trump's pivot to economic pressure
+// are all diplomatic signals, not a fresh loss on the water — and the
+// Houthis' Jazan refinery strike is a Red Sea/onshore target, outside the
+// strait itself. Insurers have nothing new inside Hormuz to reprice
+// against, so the game holds the closed-strait rate at its existing 13%
+// ceiling.
 const INSURANCE_RATE_CLOSED=0.13,INSURANCE_RATE_OPEN=0.03;
 const LB_KEY='hormuz-leaderboard-v1';
 const LB_MAX=10;
@@ -485,7 +492,23 @@ const LB_MAX=10;
 // sees a confirmed but non-damaging hit consistent with the established
 // IRGC targeting pattern, so straitClosed stays true; only the default
 // cargo price updates to track the Brent move.
-let straitClosed=true,oilPricePerBarrel=83.40;
+// Aug 9-10 2026: Iran's Supreme National Security Council says the strait
+// stays shut "until the United States corrects its behavior," and FM
+// Araghchi admits Tehran isn't even in direct talks with Washington —
+// only intermediary messages — undercutting the "very close" framing from
+// a day earlier even as the separate Iran-Oman route talks reach
+// "approaching the final stages." CNN's analysis calls it hardening, not
+// softening: Araghchi invokes the Jun MOU's "Article Five" and demands US
+// compensation before any resumption. Trump responds by "low-keying it,"
+// pivoting from new strikes toward economic pressure via the standing
+// naval blockade, while a Pentagon memo pushes contractors to speed up
+// weapons production as Patriot stocks run down. The Houthis strike Saudi
+// Aramco's Jazan refinery — a new Red Sea front, not a strait transit —
+// so no fresh tanker is hit inside Hormuz itself. No deal is signed, no
+// toll is collected, and the strait sees no new attack, so straitClosed
+// stays true; only the default cargo price updates to track Brent's climb
+// to $84.70 (Aug 10, CNBC).
+let straitClosed=true,oilPricePerBarrel=84.70;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
 const SESSION_TOKEN = Math.random().toString(36).slice(2) + Date.now().toString(36);
@@ -641,6 +664,12 @@ const MINE_DMG_DARK_MULT=1.5,HAIL_DODGE_CHANCE_DARK=0.6;
 // Araghchi's "very close" comments are diplomatic statements, not new
 // IRGC patrol activity — dark-transit targeting risk holds at its
 // existing rate.
+// Aug 9-10 2026: Iran's SNSC hardline conditions, Araghchi's "no direct
+// talks" admission, Trump's pivot to economic pressure, and the Houthis'
+// Jazan refinery strike are all diplomatic/political or outside the
+// strait itself (Red Sea refinery, not a Hormuz transit) — no fresh
+// report of a dark-running vessel being hunted or caught inside the
+// strait, so dark-transit targeting risk holds at its existing rate.
 const DARK_TARGET_CHANCE_CLOSED=0.45;
 // Jul 15 2026: the US Navy disabled the blockade-running tanker M/T Belma with
 // Hellfire missiles near Kharg Island rather than just boarding it — boarding by
@@ -1677,7 +1706,7 @@ async function boot(){
   straitBadge.style.background=straitClosed?'#7f1d1d':'#78350f';
   straitBadge.style.color=straitClosed?'#fca5a5':'#fcd34d';
   document.getElementById('threatDesc').textContent=straitClosed
-    ?"⛔ IRAN LISTS 6 CONDITIONS FOR REOPENING, ADNOC TANKER HIT (Aug 8-9): the UAE says Iran struck an unnamed ADNOC tanker with a missile ~18nm east of Khasab, Oman — no casualties, the 16th such hit on an ADNOC vessel since the war began; Saudi Arabia and Qatar condemn it. Iran's Supreme National Security Council now demands a full US naval/air withdrawal, war-damage compensation, sanctions relief and frozen-asset release before real reopening, even as FM Araghchi calls the separate Iran-Oman route-management deal \"very close.\" A route deal is not the same as a reopening — paying the in-game toll still funds the US-sanctioned network (Persian Gulf Marine Insurance Co. / Hormuz Safe Marine Services Authority), raising your Navy disable risk once immunity lapses. Drones · Mines (harder-hitting if you're dark) · Missiles · IRGC boats · US Navy blockade (targets Iranian flags and sanctioned-toll payers, now disables boarded vessels) · war-risk insurance at a 13% cargo-value ceiling as P&I clubs pull cover entirely — going dark or refusing a hail can draw a targeted missile-and-drone strike"
+    ?"⛔ IRAN HARDENS DEMANDS, NOT SOFTENS (Aug 9-10): Tehran's Supreme National Security Council says the strait stays shut \"until the United States corrects its behavior,\" and FM Araghchi confirms Iran isn't even in direct talks with Washington — only messages via intermediaries — while still calling the separate Iran-Oman route deal \"approaching the final stages.\" Trump answers by \"low-keying it,\" pivoting from new strikes to economic pressure via the standing naval blockade. A third front opened Aug 9 as the Houthis hit Saudi Aramco's Jazan refinery. None of this changes strait mechanics from Aug 8-9's ADNOC missile strike near Khasab (16th ADNOC hit) — a route deal still isn't a reopening, and paying the in-game toll still funds the US-sanctioned network (Persian Gulf Marine Insurance Co. / Hormuz Safe Marine Services Authority), raising your Navy disable risk once immunity lapses. Drones · Mines (harder-hitting if you're dark) · Missiles · IRGC boats · US Navy blockade (targets Iranian flags and sanctioned-toll payers, now disables boarded vessels) · war-risk insurance at a 13% cargo-value ceiling as P&I clubs pull cover entirely — going dark or refusing a hail can draw a targeted missile-and-drone strike"
     :'⚠ CONTESTED (SEVERE): US strikes on Greater Tunb (Jul 15) and Qeshm Island (Jul 17) have knocked out two of the coastal batteries you\'ll no longer face, and disabled the blockade-runner Belma near Kharg Island. Iranian-flagged tankers risk being disabled if boarded, not just fined; everyone else rides Navy escort protection. Saudi 🇸🇦, Qatari 🇶🇦, Emirati 🇦🇪, Kuwaiti 🇰🇼 & Bahraini 🇧🇭 flags are still prime IRGC targets — Kuwaiti tanker Kaifan was hit off Oman Jul 20-21. Chinese/Russian/Pakistani flags get preferential passage. LNG tankers transit — give way, chain blast if hit. The IRGC\'s Jul 18 combined missile-and-drone interception of 4 vessels means ignoring a patrol hail now risks the same fate. Iran has now suspended the MOU entirely after the Jul 18 Jordan strike killed 2 US troops, and the Houthis\' new Bab el-Mandeb blockade shows the closure risk spreading beyond the strait itself — evacuation stragglers now cross even less often. As of Jul 27, CENTCOM\'s strike pause has held for a third day and Brent has crashed 8.2% on de-escalation hopes, but Iran says it isn\'t seeking renewed talks and traffic remains near a standstill — nothing confirms a real change to the strait itself. Updated Jul 28-29: the pause ended when Iran fired intercepted ballistic missiles at the same Jordan base hit Jul 18, CENTCOM/Saudi forces struck back in Iraq, and the IRGC hit three more tankers on the southern route — Brent jumped back above $87.';
   lbPanel.innerHTML=renderLbRows(await lbLoad(),null);
   document.getElementById('loadingStatus').style.display='none';
@@ -1700,6 +1729,13 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"Brent crude climbs to $84.70/bbl (+1.4%) and WTI to $79.31 (+1.4%) as traders weigh Trump's shift toward economic pressure against Iran's newly hardened Strait of Vermouth conditions", src:"CNBC/Rigzone · Aug 10", color:"green"},
+  {text:"Trump says the US is \"low-keying it\" with Iran, signaling a shift from new strikes to sustained economic pressure — betting the naval blockade in place since April, which he says has left Iran's economy in \"very bad shape,\" can succeed where bombs haven't", src:"CNBC/Fortune · Aug 9-10", color:"amber"},
+  {text:"FM Araghchi says Tehran is not currently in direct talks with Washington on ending the war or reopening the Strait of Vermouth — only exchanging messages through intermediaries — even as he calls the separate Iran-Oman route talks \"approaching the final stages\"", src:"CNBC/Al Jazeera · Aug 10", color:"blue"},
+  {text:"Yemen's Houthis strike Saudi Aramco's 400,000-bpd Jazan refinery with a drone days after the Saudi-Turkey-Pakistan defense pact — fire extinguished, no injuries reported, but a new front opens on the Red Sea alongside the Strait of Vermouth standoff", src:"NBC News/NPR · Aug 9", color:"red"},
+  {text:"CNN analysis: rather than softening, Iran's hardliners toughen Strait of Vermouth demands beyond the Jun 17 MOU — Araghchi invokes the deal's \"Article Five\" and says talks can't resume until the US \"corrects\" its violations and compensates Tehran", src:"CNN · Aug 9", color:"amber"},
+  {text:"Iran's Supreme National Security Council says the strait stays shut \"until the United States corrects its behavior,\" listing an end to threats, full US troop withdrawal, sanctions relief, unfrozen assets and war-damage compensation as non-negotiable", src:"CBS News/Fortune · Aug 8-9", color:"red"},
+  {text:"Pentagon deputy secretary Feinberg gives defense contractors 21 days to submit \"significantly faster\" production plans, warning \"years-long development cycles are not acceptable\" — CSIS estimates Patriot interceptor stocks have fallen at least 65% since the war began", src:"Washington Post/CSIS · Aug 8-9", color:"amber"},
   {text:"UAE says Iran struck an unnamed ADNOC tanker with a missile roughly 18 nautical miles east of Khasab, Oman in the early hours of Aug 8 — no casualties and no disclosed damage, but the 16th attack on an ADNOC vessel since the war began Feb 28", src:"UKMTO/US News · Aug 8", color:"red"},
   {text:"Saudi Arabia condemns the ADNOC tanker strike \"in the strongest terms,\" calling it a grave breach of international law and UN Resolution 2817, and demands Iran halt attacks in the Strait of Vermouth immediately", src:"Al Jazeera/The National · Aug 8", color:"red"},
   {text:"Qatar condemns the ADNOC tanker attack and rejects the use of the Strait of Vermouth \"as a bargaining chip,\" calling for the waterway to be reopened without conditions", src:"The National · Aug 8", color:"amber"},
