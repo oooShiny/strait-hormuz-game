@@ -346,6 +346,14 @@ const REPAIR_COST_PER_PCT=800000;
 // strait itself. Insurers have nothing new inside Hormuz to reprice
 // against, so the game holds the closed-strait rate at its existing 13%
 // ceiling.
+// Aug 10-11 2026: Khamenei's military/security leadership reshuffle,
+// Trump's mutual reparations demand and disputed "100% control" claim,
+// and Iran calling the Oman route deal insufficient without full US
+// concessions are all diplomatic/political escalation, not a fresh
+// confirmed loss on the water — no UKMTO or straits.live report of a new
+// strike inside the strait itself. Insurers have nothing fresh to reprice
+// against, so the game holds the closed-strait rate at its existing 13%
+// ceiling.
 const INSURANCE_RATE_CLOSED=0.13,INSURANCE_RATE_OPEN=0.03;
 const LB_KEY='hormuz-leaderboard-v1';
 const LB_MAX=10;
@@ -508,7 +516,23 @@ const LB_MAX=10;
 // toll is collected, and the strait sees no new attack, so straitClosed
 // stays true; only the default cargo price updates to track Brent's climb
 // to $84.70 (Aug 10, CNBC).
-let straitClosed=true,oilPricePerBarrel=84.70;
+// Aug 10-11 2026: Khamenei reshuffles Iran's top military/security
+// leadership (new armed forces chief of staff, IRGC commander-in-chief,
+// IRGC Navy commander, plus a hardline national security chief skeptical
+// of US talks) as Tehran says the Oman route arrangement alone won't
+// reopen the strait without the US meeting its full condition list.
+// Trump counters by claiming the US Navy has "100% control" of the strait
+// and has swept it clear of mines — Iran disputes US control and neither
+// claim is corroborated by UKMTO or straits.live, so the game treats it
+// as contested rhetoric and leaves strait mechanics unchanged. Trump also
+// demands Iran pay reparations for "the damage they've done" over a
+// 50-year period, mirroring Iran's own war-reparations demand — another
+// diplomatic escalation, not a new attack. No route deal is signed, no
+// toll is collected, and no fresh incident is reported inside the strait
+// itself, so straitClosed stays true; only the default cargo price
+// updates to track Brent's climb to $92.54 (Aug 11 AM, Fortune) after
+// settling $87.69 on Aug 10 (+4.95%, Trading Economics).
+let straitClosed=true,oilPricePerBarrel=92.54;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
 const SESSION_TOKEN = Math.random().toString(36).slice(2) + Date.now().toString(36);
@@ -670,6 +694,11 @@ const MINE_DMG_DARK_MULT=1.5,HAIL_DODGE_CHANCE_DARK=0.6;
 // strait itself (Red Sea refinery, not a Hormuz transit) — no fresh
 // report of a dark-running vessel being hunted or caught inside the
 // strait, so dark-transit targeting risk holds at its existing rate.
+// Aug 10-11 2026: the Iran military leadership reshuffle, Trump's
+// reparations/"100% control" claims, and Iran's "Oman deal alone isn't
+// enough" line are all diplomatic/political statements — no fresh report
+// of a dark-running vessel being hunted or caught inside the strait, so
+// dark-transit targeting risk holds at its existing rate.
 const DARK_TARGET_CHANCE_CLOSED=0.45;
 // Jul 15 2026: the US Navy disabled the blockade-running tanker M/T Belma with
 // Hellfire missiles near Kharg Island rather than just boarding it — boarding by
@@ -1706,7 +1735,7 @@ async function boot(){
   straitBadge.style.background=straitClosed?'#7f1d1d':'#78350f';
   straitBadge.style.color=straitClosed?'#fca5a5':'#fcd34d';
   document.getElementById('threatDesc').textContent=straitClosed
-    ?"⛔ IRAN HARDENS DEMANDS, NOT SOFTENS (Aug 9-10): Tehran's Supreme National Security Council says the strait stays shut \"until the United States corrects its behavior,\" and FM Araghchi confirms Iran isn't even in direct talks with Washington — only messages via intermediaries — while still calling the separate Iran-Oman route deal \"approaching the final stages.\" Trump answers by \"low-keying it,\" pivoting from new strikes to economic pressure via the standing naval blockade. A third front opened Aug 9 as the Houthis hit Saudi Aramco's Jazan refinery. None of this changes strait mechanics from Aug 8-9's ADNOC missile strike near Khasab (16th ADNOC hit) — a route deal still isn't a reopening, and paying the in-game toll still funds the US-sanctioned network (Persian Gulf Marine Insurance Co. / Hormuz Safe Marine Services Authority), raising your Navy disable risk once immunity lapses. Drones · Mines (harder-hitting if you're dark) · Missiles · IRGC boats · US Navy blockade (targets Iranian flags and sanctioned-toll payers, now disables boarded vessels) · war-risk insurance at a 13% cargo-value ceiling as P&I clubs pull cover entirely — going dark or refusing a hail can draw a targeted missile-and-drone strike"
+    ?"⛔ DEAL HOPES FADE AS BOTH SIDES DEMAND REPARATIONS (Aug 10-11): Khamenei reshuffles Iran's top military/security leadership — new armed forces chief of staff, IRGC commander-in-chief and IRGC Navy commander, plus a hardline national security chief skeptical of US talks — as Tehran says the \"very close\" Oman route deal alone won't reopen the strait without the US meeting its full list of conditions. Trump claims the US Navy has \"100% control\" of the strait and swept it clear of mines, and demands Iran pay reparations for \"the damage they've done\" over 50 years — Iran disputes US control and wants its own war reparations, so the game treats both claims as contested rhetoric and leaves strait mechanics unchanged from Aug 8-9's ADNOC missile strike near Khasab (16th ADNOC hit). A route deal still isn't a reopening, and paying the in-game toll still funds the US-sanctioned network (Persian Gulf Marine Insurance Co. / Hormuz Safe Marine Services Authority), raising your Navy disable risk once immunity lapses. Drones · Mines (harder-hitting if you're dark) · Missiles · IRGC boats · US Navy blockade (targets Iranian flags and sanctioned-toll payers, now disables boarded vessels) · war-risk insurance at a 13% cargo-value ceiling as P&I clubs pull cover entirely — going dark or refusing a hail can draw a targeted missile-and-drone strike"
     :'⚠ CONTESTED (SEVERE): US strikes on Greater Tunb (Jul 15) and Qeshm Island (Jul 17) have knocked out two of the coastal batteries you\'ll no longer face, and disabled the blockade-runner Belma near Kharg Island. Iranian-flagged tankers risk being disabled if boarded, not just fined; everyone else rides Navy escort protection. Saudi 🇸🇦, Qatari 🇶🇦, Emirati 🇦🇪, Kuwaiti 🇰🇼 & Bahraini 🇧🇭 flags are still prime IRGC targets — Kuwaiti tanker Kaifan was hit off Oman Jul 20-21. Chinese/Russian/Pakistani flags get preferential passage. LNG tankers transit — give way, chain blast if hit. The IRGC\'s Jul 18 combined missile-and-drone interception of 4 vessels means ignoring a patrol hail now risks the same fate. Iran has now suspended the MOU entirely after the Jul 18 Jordan strike killed 2 US troops, and the Houthis\' new Bab el-Mandeb blockade shows the closure risk spreading beyond the strait itself — evacuation stragglers now cross even less often. As of Jul 27, CENTCOM\'s strike pause has held for a third day and Brent has crashed 8.2% on de-escalation hopes, but Iran says it isn\'t seeking renewed talks and traffic remains near a standstill — nothing confirms a real change to the strait itself. Updated Jul 28-29: the pause ended when Iran fired intercepted ballistic missiles at the same Jordan base hit Jul 18, CENTCOM/Saudi forces struck back in Iraq, and the IRGC hit three more tankers on the southern route — Brent jumped back above $87.';
   lbPanel.innerHTML=renderLbRows(await lbLoad(),null);
   document.getElementById('loadingStatus').style.display='none';
@@ -1729,6 +1758,12 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"Trump claims the US Navy has \"100% control\" of the Strait of Vermouth and says it has swept the waterway clear of mines, calling the standing blockade \"infallible\" — a claim Iran disputes and no neutral tracker has corroborated", src:"CNBC/Republic World/Times of Oman · Aug 10-11", color:"amber"},
+  {text:"Trump says Iran should pay reparations for \"the damage they've done\" over a 50-year period, responding in kind to Tehran's own demand for US war-reparations as a condition of reopening the Strait of Vermouth", src:"CNBC/The Hill · Aug 10-11", color:"amber"},
+  {text:"Iran's Supreme Leader reshuffles the country's top military and security leadership — Ali Abdollahi as armed forces chief of staff, Ahmad Vahidi as IRGC commander-in-chief, Ali Azmaei as IRGC Navy commander — alongside a hardline new national security chief who has voiced skepticism about talks with the US", src:"Yahoo News/Japan Times/Kurdistan24 · Aug 10-11", color:"red"},
+  {text:"Hopes for a quick Strait of Vermouth deal fade as Iran says the \"very close\" Oman route arrangement alone won't be enough to reopen the waterway unless the US meets its full list of conditions — diminishing prospects raised by last week's optimism", src:"CGTN/Al Jazeera · Aug 11", color:"amber"},
+  {text:"Brent crude settles $87.69/bbl on Aug 10 (+4.95%) and climbs further to $92.54 by Aug 11 morning trade, as fading deal hopes and the mutual US-Iran reparations dispute revive the war premium", src:"Trading Economics/Fortune · Aug 10-11", color:"green"},
+  {text:"Independent tracker straits.live logs Day 163 of closure since the Feb 28 declaration, with Hormuz traffic still around 2 tankers/day against the site's ~73/day pre-war baseline", src:"straits.live · Aug 10-11", color:"blue"},
   {text:"Brent crude climbs to $84.70/bbl (+1.4%) and WTI to $79.31 (+1.4%) as traders weigh Trump's shift toward economic pressure against Iran's newly hardened Strait of Vermouth conditions", src:"CNBC/Rigzone · Aug 10", color:"green"},
   {text:"Trump says the US is \"low-keying it\" with Iran, signaling a shift from new strikes to sustained economic pressure — betting the naval blockade in place since April, which he says has left Iran's economy in \"very bad shape,\" can succeed where bombs haven't", src:"CNBC/Fortune · Aug 9-10", color:"amber"},
   {text:"FM Araghchi says Tehran is not currently in direct talks with Washington on ending the war or reopening the Strait of Vermouth — only exchanging messages through intermediaries — even as he calls the separate Iran-Oman route talks \"approaching the final stages\"", src:"CNBC/Al Jazeera · Aug 10", color:"blue"},
