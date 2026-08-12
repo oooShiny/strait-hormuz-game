@@ -354,6 +354,18 @@ const REPAIR_COST_PER_PCT=800000;
 // strike inside the strait itself. Insurers have nothing fresh to reprice
 // against, so the game holds the closed-strait rate at its existing 13%
 // ceiling.
+// Aug 11-12 2026: CENTCOM disables the Panama-flagged M/V Vela Nova with
+// two Hellfire missiles off Pakistan's coast for running the US blockade
+// toward an Iranian port (the 3rd disabled blockade-runner since Jul 14,
+// with 55 vessels redirected and 2 boarded) — a blockade-enforcement
+// action against a sanctions-violator, not an IRGC strike on an inbound
+// or outbound tanker inside Hormuz. Yemen's Houthis kill 6 (4 crew, 2
+// rescuers) hitting the cargo ship Tihamah in the Bab el-Mandeb — the
+// war's first fatal strike on shipping, but Red Sea, not the strait
+// itself. Trump tells Axios he's now "only semi-negotiating," content to
+// let it "work out" on its own. None of this is a fresh confirmed loss
+// inside the strait, so the game holds the closed-strait rate at its
+// existing 13% ceiling.
 const INSURANCE_RATE_CLOSED=0.13,INSURANCE_RATE_OPEN=0.03;
 const LB_KEY='hormuz-leaderboard-v1';
 const LB_MAX=10;
@@ -532,7 +544,15 @@ const LB_MAX=10;
 // itself, so straitClosed stays true; only the default cargo price
 // updates to track Brent's climb to $92.54 (Aug 11 AM, Fortune) after
 // settling $87.69 on Aug 10 (+4.95%, Trading Economics).
-let straitClosed=true,oilPricePerBarrel=92.54;
+// Aug 11-12 2026: Brent eases off that spike, trading down toward $87-88
+// during the Aug 11 session before recovering to a $88.70 close, then
+// climbs again to $89.70 (+0.9%) in Aug 12 morning trade as fading
+// US-Iran deal hopes (Trump's "only semi-negotiating" line) combine with
+// the Vela Nova blockade strike and the Houthis' first fatal hit on
+// shipping to revive the war premium. Neither incident is inside the
+// strait itself, so straitClosed stays true and only the default cargo
+// price updates to track Brent's Aug 12 morning trade.
+let straitClosed=true,oilPricePerBarrel=89.70;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
 const SESSION_TOKEN = Math.random().toString(36).slice(2) + Date.now().toString(36);
@@ -699,10 +719,19 @@ const MINE_DMG_DARK_MULT=1.5,HAIL_DODGE_CHANCE_DARK=0.6;
 // enough" line are all diplomatic/political statements — no fresh report
 // of a dark-running vessel being hunted or caught inside the strait, so
 // dark-transit targeting risk holds at its existing rate.
+// Aug 11-12 2026: the Vela Nova disabling was a US blockade action off
+// Pakistan's coast, not an IRGC hunt for a dark-running vessel inside the
+// strait, and the Tihamah loss was the Houthis in the Bab el-Mandeb, not
+// Hormuz — so dark-transit targeting risk holds at its existing rate.
 const DARK_TARGET_CHANCE_CLOSED=0.45;
 // Jul 15 2026: the US Navy disabled the blockade-running tanker M/T Belma with
 // Hellfire missiles near Kharg Island rather than just boarding it — boarding by
 // an aggressive warship now has a chance of the same fate.
+// Aug 11-12 2026: CENTCOM disables the Panama-flagged M/V Vela Nova off
+// Pakistan's coast — the 3rd blockade-runner disabled since Jul 14 (after
+// Belma Jul 15 and Lavine Jul 24), with 55 vessels redirected and 2
+// boarded overall. A third confirmed disable using the same tactic
+// confirms rather than raises the existing rate.
 const BLOCKADE_DISABLE_CHANCE=0.2;
 // Jul 29 2026: US Treasury sanctioned Iran's "extortion network" — the Persian
 // Gulf Marine Insurance Co. and Hormuz Safe Marine Services Authority — the two
@@ -1735,7 +1764,7 @@ async function boot(){
   straitBadge.style.background=straitClosed?'#7f1d1d':'#78350f';
   straitBadge.style.color=straitClosed?'#fca5a5':'#fcd34d';
   document.getElementById('threatDesc').textContent=straitClosed
-    ?"⛔ DEAL HOPES FADE AS BOTH SIDES DEMAND REPARATIONS (Aug 10-11): Khamenei reshuffles Iran's top military/security leadership — new armed forces chief of staff, IRGC commander-in-chief and IRGC Navy commander, plus a hardline national security chief skeptical of US talks — as Tehran says the \"very close\" Oman route deal alone won't reopen the strait without the US meeting its full list of conditions. Trump claims the US Navy has \"100% control\" of the strait and swept it clear of mines, and demands Iran pay reparations for \"the damage they've done\" over 50 years — Iran disputes US control and wants its own war reparations, so the game treats both claims as contested rhetoric and leaves strait mechanics unchanged from Aug 8-9's ADNOC missile strike near Khasab (16th ADNOC hit). A route deal still isn't a reopening, and paying the in-game toll still funds the US-sanctioned network (Persian Gulf Marine Insurance Co. / Hormuz Safe Marine Services Authority), raising your Navy disable risk once immunity lapses. Drones · Mines (harder-hitting if you're dark) · Missiles · IRGC boats · US Navy blockade (targets Iranian flags and sanctioned-toll payers, now disables boarded vessels) · war-risk insurance at a 13% cargo-value ceiling as P&I clubs pull cover entirely — going dark or refusing a hail can draw a targeted missile-and-drone strike"
+    ?"⛔ VELA NOVA DISABLED, HOUTHIS' FIRST FATAL STRIKE, TRUMP \"SEMI-NEGOTIATING\" (Aug 11-12): CENTCOM disables the Panama-flagged M/V Vela Nova with two Hellfire missiles off Pakistan's coast for running the US blockade toward an Iranian port — the 3rd blockade-runner disabled since Jul 14, with 55 vessels redirected and 2 boarded overall. Yemen's Houthis kill 6 (4 crew, 2 rescuers) hitting the cargo ship Tihamah in the Bab el-Mandeb, the war's first fatal strike on shipping — but Red Sea, not the strait itself. Trump tells Axios he's now \"only semi-negotiating\" with Iran, content to let it \"work out\" on its own, as deal hopes keep fading from last week's optimism. Neither incident is a fresh confirmed loss inside Hormuz, so the game leaves strait mechanics unchanged from Aug 8-9's ADNOC missile strike near Khasab (16th ADNOC hit). A route deal still isn't a reopening, and paying the in-game toll still funds the US-sanctioned network (Persian Gulf Marine Insurance Co. / Hormuz Safe Marine Services Authority), raising your Navy disable risk once immunity lapses. Drones · Mines (harder-hitting if you're dark) · Missiles · IRGC boats · US Navy blockade (targets Iranian flags and sanctioned-toll payers, now disables boarded vessels) · war-risk insurance at a 13% cargo-value ceiling as P&I clubs pull cover entirely — going dark or refusing a hail can draw a targeted missile-and-drone strike"
     :'⚠ CONTESTED (SEVERE): US strikes on Greater Tunb (Jul 15) and Qeshm Island (Jul 17) have knocked out two of the coastal batteries you\'ll no longer face, and disabled the blockade-runner Belma near Kharg Island. Iranian-flagged tankers risk being disabled if boarded, not just fined; everyone else rides Navy escort protection. Saudi 🇸🇦, Qatari 🇶🇦, Emirati 🇦🇪, Kuwaiti 🇰🇼 & Bahraini 🇧🇭 flags are still prime IRGC targets — Kuwaiti tanker Kaifan was hit off Oman Jul 20-21. Chinese/Russian/Pakistani flags get preferential passage. LNG tankers transit — give way, chain blast if hit. The IRGC\'s Jul 18 combined missile-and-drone interception of 4 vessels means ignoring a patrol hail now risks the same fate. Iran has now suspended the MOU entirely after the Jul 18 Jordan strike killed 2 US troops, and the Houthis\' new Bab el-Mandeb blockade shows the closure risk spreading beyond the strait itself — evacuation stragglers now cross even less often. As of Jul 27, CENTCOM\'s strike pause has held for a third day and Brent has crashed 8.2% on de-escalation hopes, but Iran says it isn\'t seeking renewed talks and traffic remains near a standstill — nothing confirms a real change to the strait itself. Updated Jul 28-29: the pause ended when Iran fired intercepted ballistic missiles at the same Jordan base hit Jul 18, CENTCOM/Saudi forces struck back in Iraq, and the IRGC hit three more tankers on the southern route — Brent jumped back above $87.';
   lbPanel.innerHTML=renderLbRows(await lbLoad(),null);
   document.getElementById('loadingStatus').style.display='none';
@@ -1758,6 +1787,12 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"CENTCOM disables the Panama-flagged M/V Vela Nova with two Hellfire missiles off Pakistan's coast after its crew ignored repeated warnings while running the US blockade toward an Iranian port — the 3rd blockade-runner disabled since Jul 14, after Belma (Jul 15) and Lavine (Jul 24)", src:"CENTCOM/gCaptain · Aug 11", color:"red"},
+  {text:"CENTCOM says its blockade has now redirected 55 commercial vessels for evasion and boarded 2, up from 20 redirected three weeks earlier, as enforcement activity keeps climbing", src:"CENTCOM · Aug 11", color:"red"},
+  {text:"Yemen's Houthis strike the Egyptian-owned cargo ship Tihamah with ballistic missiles in the Bab el-Mandeb, killing 6 — 4 crew and 2 rescuers in a second strike on the evacuation effort — the war's first fatal Houthi hit on commercial shipping since Feb 28", src:"AP/Maritime Executive · Aug 11", color:"red"},
+  {text:"Trump tells Axios he's now \"only semi-negotiating\" with Iran and expects the standoff to just \"work out\" on its own, a notable cooling from last week's talk of an imminent Strait of Vermouth deal", src:"Axios · Aug 9-12", color:"amber"},
+  {text:"Iran's list of conditions for reopening the Strait of Vermouth remains unchanged: an end to US attacks, a lifted naval blockade, full troop withdrawal, sanctions relief, unfrozen assets and war-damage compensation — with no sign Washington will meet them", src:"Forbes/Common Dreams · Aug 11-12", color:"amber"},
+  {text:"Brent crude eases off its Aug 11 morning spike, trading near $87-88.70 during the session before climbing again to $89.70 (+0.9%) in Aug 12 morning trade on fading deal hopes and the fresh Vela Nova and Tihamah incidents", src:"HDFC Sky/Trading Economics · Aug 11-12", color:"green"},
   {text:"Trump claims the US Navy has \"100% control\" of the Strait of Vermouth and says it has swept the waterway clear of mines, calling the standing blockade \"infallible\" — a claim Iran disputes and no neutral tracker has corroborated", src:"CNBC/Republic World/Times of Oman · Aug 10-11", color:"amber"},
   {text:"Trump says Iran should pay reparations for \"the damage they've done\" over a 50-year period, responding in kind to Tehran's own demand for US war-reparations as a condition of reopening the Strait of Vermouth", src:"CNBC/The Hill · Aug 10-11", color:"amber"},
   {text:"Iran's Supreme Leader reshuffles the country's top military and security leadership — Ali Abdollahi as armed forces chief of staff, Ahmad Vahidi as IRGC commander-in-chief, Ali Azmaei as IRGC Navy commander — alongside a hardline new national security chief who has voiced skepticism about talks with the US", src:"Yahoo News/Japan Times/Kurdistan24 · Aug 10-11", color:"red"},
