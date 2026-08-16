@@ -389,6 +389,13 @@ const REPAIR_COST_PER_PCT=800000;
 // the USS Lincoln-to-George Washington carrier swap are rhetoric and
 // logistics, not fresh losses on the water — the game holds the
 // closed-strait rate at its existing 13% ceiling.
+// Aug 15-16 2026: UKMTO logs a third ADNOC-linked vessel hit in 48 hours
+// — a bulk carrier takes an "unknown projectile" to the hull ~2000 UTC
+// Aug 14 near the Omani route, crew safe, no damage assessment yet. UAE's
+// presidential diplomatic adviser says "repeated" targeting "will not
+// deter" Abu Dhabi. Same UAE-flagged/ADNOC-affiliated targeting pattern
+// already priced in for weeks, not a new tactic or a hit on a fresh flag
+// — the game holds the closed-strait rate at its existing 13% ceiling.
 const INSURANCE_RATE_CLOSED=0.13,INSURANCE_RATE_OPEN=0.03;
 const LB_KEY='hormuz-leaderboard-v1';
 const LB_MAX=10;
@@ -603,6 +610,17 @@ const LB_MAX=10;
 // the waterway stays shut until its conditions are met — no route deal,
 // so straitClosed stays true; only the default cargo price updates to
 // track Brent's Aug 14 settle.
+// Aug 15-16 2026: no new Brent settle — Aug 15 falls on a weekend with
+// futures markets closed, so the default cargo price holds at Friday's
+// $88.38 close. Iran's Deputy FM Gharibabadi rebuffs Trump's "declare it
+// US territory" rally pledge ("cannot be seized by tweet... will only be
+// closed and opened under Iran's command"), Iran and Oman announce a
+// shipping-route-map "agreement" but say a joint implementation
+// statement is still being finalized, and Treasury Secretary Bessent
+// previews an "unprecedented" new Iran sanctions package for the week of
+// Aug 17 — rhetoric, a still-unfinished route deal, and a not-yet-enacted
+// sanctions plan, not a reopening or a fresh strait mechanic, so
+// straitClosed stays true.
 let straitClosed=true,oilPricePerBarrel=88.38;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
@@ -792,6 +810,12 @@ const MINE_DMG_DARK_MULT=1.5,HAIL_DODGE_CHANCE_DARK=0.6;
 // transits with no AIS detail disclosed — no confirmed case of Iran
 // hunting a specific dark vessel inside the strait, so dark-transit
 // targeting risk holds at its existing rate.
+// Aug 15-16 2026: the new bulk-carrier hit carries no AIS/dark-running
+// detail (UKMTO calls it an unidentified-projectile strike on a normally
+// transiting vessel), and the Iran-Oman route-map announcement and
+// Bessent's sanctions preview are diplomatic/economic news, not new IRGC
+// patrol activity — dark-transit targeting risk holds at its existing
+// rate.
 const DARK_TARGET_CHANCE_CLOSED=0.45;
 // Jul 15 2026: the US Navy disabled the blockade-running tanker M/T Belma with
 // Hellfire missiles near Kharg Island rather than just boarding it — boarding by
@@ -813,6 +837,11 @@ const DARK_TARGET_CHANCE_CLOSED=0.45;
 // gone 200+ days without a port call), not a new enforcement tactic — no
 // fresh boarding or disable is reported, so the game holds the existing
 // rate.
+// Aug 15-16 2026: the bulk-carrier strike is another IRGC attack on a
+// transiting vessel, not a US Navy blockade action, and Bessent's
+// sanctions preview is a Treasury-side plan not yet unveiled rather than
+// a new boarding/disable tactic — no fresh enforcement action is
+// reported, so the game holds the existing rate.
 const BLOCKADE_DISABLE_CHANCE=0.2;
 // Jul 29 2026: US Treasury sanctioned Iran's "extortion network" — the Persian
 // Gulf Marine Insurance Co. and Hormuz Safe Marine Services Authority — the two
@@ -821,6 +850,12 @@ const BLOCKADE_DISABLE_CHANCE=0.2;
 // funds a formally sanctioned network, so a warship that catches up to you after
 // your paid-toll immunity lapses is more likely to treat you as a sanctions
 // target and disable rather than just board you.
+// Aug 15-16 2026: Bessent previews a further "economic isolation"
+// sanctions package targeting Iran, expected the week of Aug 17 as a
+// "one-two punch" alongside the continued blockade — until its actual
+// targets/entities are named, this doesn't add to what the in-game toll
+// network is already sanctioned for, so the disable bonus holds; watch
+// next update once the package's specifics land.
 const TOLL_SANCTIONS_DISABLE_BONUS=0.15;
 let coastDmgTimer=0;
 let fastBoats=[],dhows=[],mines=[],missiles=[],drones=[],particles=[],explosions=[],warships=[],convoys=[],lngTankers=[],saudiTankers=[];
@@ -1845,7 +1880,7 @@ async function boot(){
   straitBadge.style.background=straitClosed?'#7f1d1d':'#78350f';
   straitBadge.style.color=straitClosed?'#fca5a5':'#fcd34d';
   document.getElementById('threatDesc').textContent=straitClosed
-    ?"⛔ TRUMP VOWS TO \"DECLARE\" HORMUZ US TERRITORY, TWIN ADNOC DRONE STRIKES (Aug 14-15): President Trump tells a Long Island rally he will \"declare the Hormuz Strait a territory of the United States\" once Iran is \"defeated\" — a claim that ignores Oman's and Iran's own jurisdiction over the waterway and has no enforcement mechanism yet, but signals no US exit in sight. UKMTO logs two more separate drone strikes on ADNOC-affiliated tankers making outbound transits Friday evening — minor damage, crews safe, pushing the tally to 17 ADNOC vessels hit since Feb 28, a day after reports ADNOC's trading arm is expanding a dark-transit shuttle service for Iraqi crude through the strait. The undermanned USS Lincoln — 200+ days without a port call, a modern-day record, amid crew mental-health concerns — is being relieved by the USS George Washington strike group. UKMTO counts just 151 vessels in/out over the past week; Defense Secretary Hegseth says the blockade can hold \"indefinitely\" by rotating ships. Brent rebounds 1.5% to $88.38 as the drone strikes and Trump's territorial rhetoric revive the war premium against bearish OPEC/IEA demand cuts. None of this changes the closed-strait arsenal from Aug 13-14's state — a route deal still isn't a reopening, and paying the in-game toll still funds the US-sanctioned network (Persian Gulf Marine Insurance Co. / Hormuz Safe Marine Services Authority), raising your Navy disable risk once immunity lapses. Drones · Mines (harder-hitting if you're dark) · Missiles · IRGC boats · US Navy blockade (targets Iranian flags and sanctioned-toll payers, now disables boarded vessels) · war-risk insurance at a 13% cargo-value ceiling as P&I clubs pull cover entirely — going dark or refusing a hail can draw a targeted missile-and-drone strike"
+    ?"⛔ IRAN TO TRUMP: HORMUZ \"CANNOT BE SEIZED BY TWEET\", THIRD ADNOC-LINKED VESSEL HIT IN 48 HOURS (Aug 15-16): Iran's Deputy Foreign Minister Kazem Gharibabadi rebuffs Trump's Long Island rally pledge to \"declare the Hormuz Strait a territory of the United States,\" saying the waterway \"cannot be seized by tweet, by aircraft carrier, by issuing an order or by an election speech\" and \"will only be closed and opened under Iran's command.\" UKMTO logs a third ADNOC-linked vessel struck in 48 hours — a bulk carrier takes an unidentified projectile to the hull off the Omani route, crew safe — as the UAE's presidential diplomatic adviser vows \"repeated\" targeting \"will not deter\" Abu Dhabi. Iran's Foreign Ministry says it has reached a shipping-route-map \"agreement\" with Oman after three months of talks, though a joint implementation statement is still being finalized. Treasury Secretary Bessent previews an \"unprecedented\" new Iran sanctions package for the week of Aug 17, calling it a \"one-two punch\" alongside the continued naval blockade. Brent holds at $88.38 with futures markets closed for the weekend. None of this changes the closed-strait arsenal from Aug 14-15's state — a route-map announcement still isn't a reopening, and paying the in-game toll still funds the US-sanctioned network (Persian Gulf Marine Insurance Co. / Hormuz Safe Marine Services Authority), raising your Navy disable risk once immunity lapses. Drones · Mines (harder-hitting if you're dark) · Missiles · IRGC boats · US Navy blockade (targets Iranian flags and sanctioned-toll payers, now disables boarded vessels) · war-risk insurance at a 13% cargo-value ceiling as P&I clubs pull cover entirely — going dark or refusing a hail can draw a targeted missile-and-drone strike"
     :'⚠ CONTESTED (SEVERE): US strikes on Greater Tunb (Jul 15) and Qeshm Island (Jul 17) have knocked out two of the coastal batteries you\'ll no longer face, and disabled the blockade-runner Belma near Kharg Island. Iranian-flagged tankers risk being disabled if boarded, not just fined; everyone else rides Navy escort protection. Saudi 🇸🇦, Qatari 🇶🇦, Emirati 🇦🇪, Kuwaiti 🇰🇼 & Bahraini 🇧🇭 flags are still prime IRGC targets — Kuwaiti tanker Kaifan was hit off Oman Jul 20-21. Chinese/Russian/Pakistani flags get preferential passage. LNG tankers transit — give way, chain blast if hit. The IRGC\'s Jul 18 combined missile-and-drone interception of 4 vessels means ignoring a patrol hail now risks the same fate. Iran has now suspended the MOU entirely after the Jul 18 Jordan strike killed 2 US troops, and the Houthis\' new Bab el-Mandeb blockade shows the closure risk spreading beyond the strait itself — evacuation stragglers now cross even less often. As of Jul 27, CENTCOM\'s strike pause has held for a third day and Brent has crashed 8.2% on de-escalation hopes, but Iran says it isn\'t seeking renewed talks and traffic remains near a standstill — nothing confirms a real change to the strait itself. Updated Jul 28-29: the pause ended when Iran fired intercepted ballistic missiles at the same Jordan base hit Jul 18, CENTCOM/Saudi forces struck back in Iraq, and the IRGC hit three more tankers on the southern route — Brent jumped back above $87.';
   lbPanel.innerHTML=renderLbRows(await lbLoad(),null);
   document.getElementById('loadingStatus').style.display='none';
@@ -1868,6 +1903,13 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"Iran's Deputy Foreign Minister Kazem Gharibabadi rebuffs Trump's rally pledge to \"declare the Hormuz Strait a territory of the United States,\" saying the waterway \"cannot be seized by tweet, by aircraft carrier, by issuing an order or by an election speech\" and \"will only be closed and opened under Iran's command\"", src:"Euronews/Forbes/The Hill · Aug 15", color:"red"},
+  {text:"UKMTO reports a bulk carrier struck by an \"unknown projectile\" to the hull near the Omani transit route — crew safe, no damage assessment yet — the third ADNOC-linked vessel targeted in 48 hours; UAE's presidential diplomatic adviser says \"repeated\" targeting \"will not deter\" Abu Dhabi", src:"UKMTO/Bloomberg/gCaptain · Aug 15", color:"red"},
+  {text:"Iran's Foreign Ministry says it has reached a shipping-route-map \"agreement\" with Oman for the Strait of Vermouth after three months of technical talks, though spokesman Esmail Baghaei says a joint implementation statement between Tehran and Muscat is still being finalized", src:"Defa Press/Bloomberg · Aug 15", color:"green"},
+  {text:"Treasury Secretary Scott Bessent previews an \"unprecedented\" new Iran sanctions package — \"measures like have never been seen in the history of economic isolation on a country\" — expected the week of Aug 17, calling it a \"one-two punch\" alongside the continued Strait of Vermouth blockade", src:"Bloomberg/The Hill · Aug 14-15", color:"amber"},
+  {text:"UKMTO's latest weekly report shows just 151 vessels transited the Strait of Vermouth in/out over seven days — 17% of the pre-conflict average, up from a 4% low the week before, versus roughly 966 vessels/week (~138/day) before the war", src:"UKMTO · Aug 14-15", color:"blue"},
+  {text:"Brent crude holds at Friday's $88.38 settle with futures markets closed for the weekend; the fresh ADNOC-linked strike, Iran's Oman route-map claim and Bessent's sanctions preview offer no new trading-day signal either way", src:"Investing.com · Aug 15-16", color:"amber"},
+  {text:"Independent tracker straits.live logs Day 168 of closure since the Feb 28 declaration, with Hormuz traffic still a small fraction of its pre-war baseline despite Washington's repeated insistence the strait is open", src:"straits.live · Aug 16", color:"blue"},
   {text:"President Trump tells a Long Island rally he will \"declare the Hormuz Strait a territory of the United States\" once Iran is \"defeated\" — a claim that sidesteps Oman's and Iran's own jurisdiction over the waterway and carries no announced enforcement mechanism", src:"NOTUS/Al Jazeera/The Hill · Aug 14", color:"red"},
   {text:"UKMTO logs two separate drone strikes on ADNOC-affiliated tankers making outbound transits of the Strait of Vermouth Friday evening — both suffer minor damage, crews safe and accounted for, pushing the ADNOC tally to 17 vessels struck since Feb 28", src:"UKMTO/gCaptain · Aug 14", color:"red"},
   {text:"Report: ADNOC's trading arm is expanding a dark-transit shuttle operation to move Iraqi Basrah crude through the Strait of Vermouth — short hops with transponders off before transferring cargo to other ships just outside the Gulf — a day before two of its outbound tankers were struck", src:"gCaptain · Aug 13-14", color:"amber"},
