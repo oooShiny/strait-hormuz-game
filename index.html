@@ -396,6 +396,14 @@ const REPAIR_COST_PER_PCT=800000;
 // deter" Abu Dhabi. Same UAE-flagged/ADNOC-affiliated targeting pattern
 // already priced in for weeks, not a new tactic or a hit on a fresh flag
 // — the game holds the closed-strait rate at its existing 13% ceiling.
+// Aug 16-17 2026: the Jun 17 MOU's 60-day toll-free window formally
+// expires with no extension and no new deal — Araghchi says Iran "has
+// not made a decision to restart negotiations," and Kpler/Reuters clock
+// traffic crashing to a three-month low (5 vessels Sat, zero Sun, vs 31
+// the weekend prior). No new vessel strike is reported and P&I clubs
+// already treat the corridor as effectively uninsurable at the existing
+// ceiling, so the game holds the closed-strait rate at 13% rather than
+// pricing in a "formal" expiry the market priced in back on Jul 19.
 const INSURANCE_RATE_CLOSED=0.13,INSURANCE_RATE_OPEN=0.03;
 const LB_KEY='hormuz-leaderboard-v1';
 const LB_MAX=10;
@@ -621,7 +629,20 @@ const LB_MAX=10;
 // Aug 17 — rhetoric, a still-unfinished route deal, and a not-yet-enacted
 // sanctions plan, not a reopening or a fresh strait mechanic, so
 // straitClosed stays true.
-let straitClosed=true,oilPricePerBarrel=88.38;
+// Aug 16-17 2026: the Jun 17 MOU's 60-day toll-free window formally
+// expires Monday with no extension in sight — a senior White House
+// official calls the talks "static," and Araghchi posts that Iran "has
+// not made a decision to restart negotiations with the United States."
+// Iran's Sunday claim of "full control" over the strait and Trump's
+// rival claims of US "total control" are dueling rhetoric, not a
+// verified change on the water; the Iran-Oman route-map deal is still
+// an unsigned "agreement in principle" pending a joint implementation
+// statement, so it isn't a reopening. Brent settles $88.31 Monday (-0.24%),
+// holding most of last week's gains as the formal ceasefire expiry and
+// fresh Israeli strikes on Lebanon keep the regional risk premium up —
+// straitClosed stays true and the default cargo price updates to track
+// the new settle.
+let straitClosed=true,oilPricePerBarrel=88.31;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
 const SESSION_TOKEN = Math.random().toString(36).slice(2) + Date.now().toString(36);
@@ -816,6 +837,11 @@ const MINE_DMG_DARK_MULT=1.5,HAIL_DODGE_CHANCE_DARK=0.6;
 // Bessent's sanctions preview are diplomatic/economic news, not new IRGC
 // patrol activity — dark-transit targeting risk holds at its existing
 // rate.
+// Aug 16-17 2026: the ceasefire's formal expiry, Iran's "full control"
+// claim and Araghchi's no-talks post are all diplomatic/rhetorical, and
+// the traffic collapse to near-zero is a demand-side chilling effect
+// (operators self-deterring), not a new IRGC dark-vessel hunting tactic
+// — dark-transit targeting risk holds at its existing rate.
 const DARK_TARGET_CHANCE_CLOSED=0.45;
 // Jul 15 2026: the US Navy disabled the blockade-running tanker M/T Belma with
 // Hellfire missiles near Kharg Island rather than just boarding it — boarding by
@@ -842,6 +868,10 @@ const DARK_TARGET_CHANCE_CLOSED=0.45;
 // sanctions preview is a Treasury-side plan not yet unveiled rather than
 // a new boarding/disable tactic — no fresh enforcement action is
 // reported, so the game holds the existing rate.
+// Aug 16-17 2026: no new boarding or disable is reported — the ceasefire's
+// formal expiry and both sides' dueling "control" claims are rhetoric,
+// not a fresh Navy enforcement action, so the game holds the existing
+// rate.
 const BLOCKADE_DISABLE_CHANCE=0.2;
 // Jul 29 2026: US Treasury sanctioned Iran's "extortion network" — the Persian
 // Gulf Marine Insurance Co. and Hormuz Safe Marine Services Authority — the two
@@ -856,6 +886,12 @@ const BLOCKADE_DISABLE_CHANCE=0.2;
 // targets/entities are named, this doesn't add to what the in-game toll
 // network is already sanctioned for, so the disable bonus holds; watch
 // next update once the package's specifics land.
+// Aug 16-17 2026: Bessent's "unprecedented" sanctions package is still
+// unlaunched as of Monday — the ceasefire's expiry is a separate
+// diplomatic deadline, not a Treasury designation — so the toll network
+// remains sanctioned only for the existing Persian Gulf Marine
+// Insurance Co. / Hormuz Safe Marine Services Authority listings; the
+// disable bonus holds, still a watch item for once the package lands.
 const TOLL_SANCTIONS_DISABLE_BONUS=0.15;
 let coastDmgTimer=0;
 let fastBoats=[],dhows=[],mines=[],missiles=[],drones=[],particles=[],explosions=[],warships=[],convoys=[],lngTankers=[],saudiTankers=[];
@@ -1880,7 +1916,7 @@ async function boot(){
   straitBadge.style.background=straitClosed?'#7f1d1d':'#78350f';
   straitBadge.style.color=straitClosed?'#fca5a5':'#fcd34d';
   document.getElementById('threatDesc').textContent=straitClosed
-    ?"⛔ IRAN TO TRUMP: HORMUZ \"CANNOT BE SEIZED BY TWEET\", THIRD ADNOC-LINKED VESSEL HIT IN 48 HOURS (Aug 15-16): Iran's Deputy Foreign Minister Kazem Gharibabadi rebuffs Trump's Long Island rally pledge to \"declare the Hormuz Strait a territory of the United States,\" saying the waterway \"cannot be seized by tweet, by aircraft carrier, by issuing an order or by an election speech\" and \"will only be closed and opened under Iran's command.\" UKMTO logs a third ADNOC-linked vessel struck in 48 hours — a bulk carrier takes an unidentified projectile to the hull off the Omani route, crew safe — as the UAE's presidential diplomatic adviser vows \"repeated\" targeting \"will not deter\" Abu Dhabi. Iran's Foreign Ministry says it has reached a shipping-route-map \"agreement\" with Oman after three months of talks, though a joint implementation statement is still being finalized. Treasury Secretary Bessent previews an \"unprecedented\" new Iran sanctions package for the week of Aug 17, calling it a \"one-two punch\" alongside the continued naval blockade. Brent holds at $88.38 with futures markets closed for the weekend. None of this changes the closed-strait arsenal from Aug 14-15's state — a route-map announcement still isn't a reopening, and paying the in-game toll still funds the US-sanctioned network (Persian Gulf Marine Insurance Co. / Hormuz Safe Marine Services Authority), raising your Navy disable risk once immunity lapses. Drones · Mines (harder-hitting if you're dark) · Missiles · IRGC boats · US Navy blockade (targets Iranian flags and sanctioned-toll payers, now disables boarded vessels) · war-risk insurance at a 13% cargo-value ceiling as P&I clubs pull cover entirely — going dark or refusing a hail can draw a targeted missile-and-drone strike"
+    ?"⛔ US-IRAN CEASEFIRE FORMALLY EXPIRES, TRAFFIC CRASHES TO 3-MONTH LOW (Aug 16-17): The Jun 17 MOU's 60-day toll-free ceasefire window lapses Monday with no extension and no deal — a senior White House official calls the negotiations \"static,\" and Iran's FM Araghchi posts that Tehran \"has not made a decision to restart negotiations with the United States.\" Kpler/Reuters data shows Hormuz traffic collapsing over the weekend — just 5 cargo ships transited Saturday and zero on Sunday, versus 31 the weekend prior — a three-month low. Iran claims \"full control\" of the strait Sunday, directly disputing Trump's own repeated \"total control\" claims; both remain unverified rhetoric. Iran's Foreign Ministry still calls its shipping-route-map deal with Oman an \"agreement in principle\" pending a joint implementation statement — not a reopening. Brent settles $88.31 Monday (-0.24%), holding most of last week's gains as fresh Israeli strikes on Lebanon add to the regional risk premium. None of this changes the closed-strait arsenal — the MOU has been treated as void in-game since Iran suspended it Jul 19, so its Aug 17 \"formal\" expiry changes nothing on the water, and paying the in-game toll still funds the US-sanctioned network (Persian Gulf Marine Insurance Co. / Hormuz Safe Marine Services Authority), raising your Navy disable risk once immunity lapses. Drones · Mines (harder-hitting if you're dark) · Missiles · IRGC boats · US Navy blockade (targets Iranian flags and sanctioned-toll payers, now disables boarded vessels) · war-risk insurance at a 13% cargo-value ceiling as P&I clubs pull cover entirely — going dark or refusing a hail can draw a targeted missile-and-drone strike"
     :'⚠ CONTESTED (SEVERE): US strikes on Greater Tunb (Jul 15) and Qeshm Island (Jul 17) have knocked out two of the coastal batteries you\'ll no longer face, and disabled the blockade-runner Belma near Kharg Island. Iranian-flagged tankers risk being disabled if boarded, not just fined; everyone else rides Navy escort protection. Saudi 🇸🇦, Qatari 🇶🇦, Emirati 🇦🇪, Kuwaiti 🇰🇼 & Bahraini 🇧🇭 flags are still prime IRGC targets — Kuwaiti tanker Kaifan was hit off Oman Jul 20-21. Chinese/Russian/Pakistani flags get preferential passage. LNG tankers transit — give way, chain blast if hit. The IRGC\'s Jul 18 combined missile-and-drone interception of 4 vessels means ignoring a patrol hail now risks the same fate. Iran has now suspended the MOU entirely after the Jul 18 Jordan strike killed 2 US troops, and the Houthis\' new Bab el-Mandeb blockade shows the closure risk spreading beyond the strait itself — evacuation stragglers now cross even less often. As of Jul 27, CENTCOM\'s strike pause has held for a third day and Brent has crashed 8.2% on de-escalation hopes, but Iran says it isn\'t seeking renewed talks and traffic remains near a standstill — nothing confirms a real change to the strait itself. Updated Jul 28-29: the pause ended when Iran fired intercepted ballistic missiles at the same Jordan base hit Jul 18, CENTCOM/Saudi forces struck back in Iraq, and the IRGC hit three more tankers on the southern route — Brent jumped back above $87.';
   lbPanel.innerHTML=renderLbRows(await lbLoad(),null);
   document.getElementById('loadingStatus').style.display='none';
@@ -1903,6 +1939,13 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"The Jun 17 MOU's 60-day toll-free ceasefire window formally expires with no extension and no deal in sight; a senior White House official describes US-Iran negotiations as \"static\"", src:"Politico/CNBC · Aug 17", color:"red"},
+  {text:"Kpler/Reuters data shows Strait of Vermouth traffic crashing to a three-month low over the weekend — just 5 cargo ships transited Saturday and zero on Sunday, versus 31 vessels the previous weekend", src:"Kpler/Reuters/CNBC · Aug 16-17", color:"red"},
+  {text:"Iran's Foreign Minister Abbas Araghchi posts on Telegram that Tehran \"has not made a decision to restart negotiations with the United States,\" even as Iran works a separate track toward a traffic-restoring deal with Oman", src:"Telegram/Al Jazeera · Aug 16", color:"red"},
+  {text:"Iran claims \"full control\" over the Strait of Vermouth Sunday, directly disputing President Trump's own repeated claims of US \"total control\" — neither claim is independently verified", src:"Fox News/AP · Aug 16", color:"amber"},
+  {text:"Deputy Foreign Minister Gharibabadi's rebuff of Trump's \"declare it US territory\" pledge continues to reverberate — Tehran maintains the strait \"will only be closed and opened under Iran's command\"", src:"Euronews/The Hill · Aug 16", color:"amber"},
+  {text:"Brent crude settles at $88.31 Monday, down 0.24%, holding most of last week's gains as the formal ceasefire expiry and fresh Israeli strikes on Lebanon that killed 11 people keep the regional risk premium elevated", src:"Investing.com/Trading Economics · Aug 17", color:"amber"},
+  {text:"Independent tracker straits.live logs Day 169 of closure since the Feb 28 declaration, with Hormuz traffic still a small fraction of its pre-war baseline despite Washington's repeated insistence the strait is open", src:"straits.live · Aug 17", color:"blue"},
   {text:"Iran's Deputy Foreign Minister Kazem Gharibabadi rebuffs Trump's rally pledge to \"declare the Hormuz Strait a territory of the United States,\" saying the waterway \"cannot be seized by tweet, by aircraft carrier, by issuing an order or by an election speech\" and \"will only be closed and opened under Iran's command\"", src:"Euronews/Forbes/The Hill · Aug 15", color:"red"},
   {text:"UKMTO reports a bulk carrier struck by an \"unknown projectile\" to the hull near the Omani transit route — crew safe, no damage assessment yet — the third ADNOC-linked vessel targeted in 48 hours; UAE's presidential diplomatic adviser says \"repeated\" targeting \"will not deter\" Abu Dhabi", src:"UKMTO/Bloomberg/gCaptain · Aug 15", color:"red"},
   {text:"Iran's Foreign Ministry says it has reached a shipping-route-map \"agreement\" with Oman for the Strait of Vermouth after three months of technical talks, though spokesman Esmail Baghaei says a joint implementation statement between Tehran and Muscat is still being finalized", src:"Defa Press/Bloomberg · Aug 15", color:"green"},
