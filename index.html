@@ -435,6 +435,15 @@ const REPAIR_COST_PER_PCT=800000;
 // that — a preview, pending Monday's formal rollout — so insurers have
 // nothing new to reprice against. The game holds the closed-strait rate
 // at its 15% ceiling.
+// Aug 22-23 2026: SNSC secretary Rezaei says the strait "will not open
+// until America corrects its behaviour" and publishes a hard-line list
+// of reopening demands (no more threats, end the blockade, withdraw
+// regional military assets, lift sanctions, unfreeze assets, war-damage
+// compensation) — rhetoric and a wish list, not a new hull loss. Iran's
+// grant of transit permits to a batch of Iraqi tankers is an operational
+// carve-out, not an underwriting event either. No fresh strike or
+// seizure to reprice against, so the game holds the closed-strait rate
+// at its 15% ceiling.
 const INSURANCE_RATE_CLOSED=0.15,INSURANCE_RATE_OPEN=0.03;
 const LB_KEY='hormuz-leaderboard-v1';
 const LB_MAX=10;
@@ -711,6 +720,19 @@ const LB_MAX=10;
 // straits.live logs a 174th straight day of closure over the weekend
 // with no fresh strike or seizure. straitClosed stays true; the default
 // cargo price updates to track the $93.40 settle.
+// Aug 22-23 2026: Brent futures don't trade over the weekend, so there's
+// no fresh settle — the game holds Friday's $93.40 print. SNSC secretary
+// Rezaei declares the strait "closed, despite American claims" and won't
+// reopen "until America corrects its behaviour," publishing a hard-line
+// list of conditions (end the blockade, withdraw regional military
+// assets, lift sanctions, unfreeze assets, compensate Iran for war
+// damages). Separately, Iran's Persian Gulf Strait Authority grants
+// transit permits to a number of Iraqi oil tankers after Baghdad's
+// repeated requests during parliament speaker Ghalibaf's visit — while
+// Rezaei warns every lane, Iraq's included, gets shut down again if a
+// neighboring state joins Washington's sanctions campaign. Neither a
+// reopening deal nor a new strike, so straitClosed stays true;
+// straits.live logs a 175th straight day of closure.
 let straitClosed=true,oilPricePerBarrel=93.40;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
@@ -757,7 +779,7 @@ const NATIONS = [
   ['🇳🇴','Norway'],['🇬🇷','Greece'],['🇵🇱','Poland'],['🇸🇪','Sweden'],
   ['🇨🇭','Switzerland'],['🇦🇹','Austria'],['🇵🇹','Portugal'],['🇩🇰','Denmark'],
   ['🇫🇮','Finland'],['🇧🇪','Belgium'],['🇿🇦','South Africa'],['🇲🇽','Mexico'],
-  ['🇦🇷','Argentina'],['🇳🇿','New Zealand'],['🇮🇷','Iran'],['🇴🇲','Oman'],
+  ['🇦🇷','Argentina'],['🇳🇿','New Zealand'],['🇮🇷','Iran'],['🇴🇲','Oman'],['🇮🇶','Iraq'],
   ['🇸🇦','Saudi Arabia'],['🇦🇪','UAE'],['🇶🇦','Qatar'],['🇰🇼','Kuwait'],['🇧🇭','Bahrain'],
   ['🇵🇰','Pakistan'],['🇷🇺','Russia'],['🇹🇷','Turkey'],['🇮🇱','Israel'],['🇺🇦','Ukraine'],
   ['🏴‍☠️','Pirate'],
@@ -1377,21 +1399,36 @@ function autoDeclineToll(){
 // shipowner risk call, not evidence the Jul 5 "friendly flag" arrangement has lapsed.
 const IRGC_FRIENDLY_FLAGS=new Set(['🇨🇳','🇷🇺','🇵🇰']);
 const IRGC_TARGETED_FLAGS=new Set(['🇸🇦','🇶🇦','🇦🇪','🇰🇼','🇧🇭']); // Gulf states under direct Iranian attack — Jul 7 (ships) & Jul 12 (territory)
+// Aug 22 2026: Iran's Persian Gulf Strait Authority grants a formal transit
+// permit to a number of Iraqi oil tankers, after repeated requests relayed
+// during parliament speaker Ghalibaf's Baghdad visit — but SNSC secretary
+// Rezaei pairs the grant with a threat to shut down every lane again,
+// Iraq's included, if any neighboring state joins Washington's sanctions
+// campaign. It's a narrower, revocable carve-out, not the blanket Jul 5
+// "friendly flag" deal given China/Russia/Pakistan, so Iraqi flags get only
+// a partial break on the hail rate (20%, between the 8% friendly and 35%
+// neutral rates) and no toll waiver.
+const IRGC_PERMITTED_FLAGS=new Set(['🇮🇶']);
 function showInspectionHail(){
   const friendly=IRGC_FRIENDLY_FLAGS.has(playerFlag);
+  const permitted=IRGC_PERMITTED_FLAGS.has(playerFlag);
   const targeted=IRGC_TARGETED_FLAGS.has(playerFlag);
-  const shotRate=friendly?0.08:targeted?0.65:0.35;
+  const shotRate=friendly?0.08:targeted?0.65:permitted?0.20:0.35;
   if(Math.random()<shotRate){
     takeDamage(targeted?8:5,targeted
       ?'⚠ IRGC: Gulf-state flag — MISSILE INBOUND! (targeted since Jul 7/12)'
       :friendly
         ?'⚠ IRGC PATROL: Even "friendly" flags get checked sometimes — WARNING SHOT!'
-        :'⚠ IRGC ENFORCEMENT: OFF-CORRIDOR — WARNING SHOT FIRED!');
+        :permitted
+          ?'⚠ IRGC: Iraqi transit permit checked and still honored — WARNING SHOT anyway!'
+          :'⚠ IRGC ENFORCEMENT: OFF-CORRIDOR — WARNING SHOT FIRED!');
     immuneTimer=Math.max(immuneTimer,targeted?3:6);
   }else{
     setMsg(friendly
       ?'📡 IRGC: Friendly flag recognized — priority passage granted, toll-free. (Jul 5 envoy deal)'
-      :'📡 IRANIAN PATROL: Routine inspection via the US-Iran hotline — safe passage guaranteed, toll-free.',3);
+      :permitted
+        ?'📡 IRGC: Iraqi transit permit recognized — passage granted. (Aug 22 Baghdad deal)'
+        :'📡 IRANIAN PATROL: Routine inspection via the US-Iran hotline — safe passage guaranteed, toll-free.',3);
     immuneTimer=Math.max(immuneTimer,10);
   }
 }
@@ -2031,6 +2068,14 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"CNN's live coverage carries Tehran vowing to \"neutralize\" the coming US economic squeeze, with the Bessent/Trump sanctions package still due Monday and no sign either side is backing down", src:"CNN · Aug 23", color:"red"},
+  {text:"Independent tracker straits.live logs Day 175 of closure since the Feb 28 declaration, with Hormuz traffic still a small fraction of its pre-war baseline despite Washington's repeated insistence the strait is open", src:"straits.live · Aug 23", color:"blue"},
+  {text:"Brent crude holds at Friday's $93.40 settle with futures markets closed for the weekend; Rezaei's hard line and the Iraqi tanker permit offer no new trading-day signal either way", src:"Investing.com · Aug 22-23", color:"amber"},
+  {text:"Mohsen Rezaei, secretary of Iran's Supreme National Security Council and a senior adviser to Supreme Leader Khamenei, says the Strait of Hormuz \"is closed, despite American claims, and will not open until America corrects its behaviour\"", src:"IRNA/Tribune India · Aug 22", color:"red"},
+  {text:"Iran's Supreme National Security Council publishes a hard-line list of conditions for fully reopening the strait: Washington must never threaten Iran again, end its naval blockade, withdraw all regional military assets, lift sanctions, unfreeze Iranian assets and compensate Iran for war damage", src:"IRNA/globalsecurity.org · Aug 22", color:"red"},
+  {text:"Iran grants permission for a number of Iraqi oil tankers to pass through the Strait of Hormuz, following repeated requests from Baghdad relayed during parliament speaker Mohammad Bagher Ghalibaf's visit to Iraq", src:"IRNA/Reuters/The National · Aug 22", color:"green"},
+  {text:"Rezaei pairs the Iraqi tanker permit with a warning that Iran will shut down all traffic through the strait again — the new carve-out included — if any neighboring country joins President Trump's economic war on Tehran", src:"IRNA/Reuters · Aug 22", color:"red"},
+  {text:"CNN's live coverage headlines an Iranian military leader vowing Tehran \"will not submit,\" even as Washington previews an economic squeeze meant to force a change in behavior at the strait", src:"CNN · Aug 22", color:"red"},
   {text:"Treasury Secretary Bessent says the US will impose the \"toughest sanctions in history\" on Iran, targeting oil-smuggling networks, exchange houses, ship registries and front companies, and urges China to \"get with the programme\" and help reopen the Strait of Vermouth", src:"gCaptain/Treasury · Aug 21", color:"red"},
   {text:"President Trump calls the coming measures the \"most crushing economic operation ever taken\" against Iran, warning any country giving Tehran financial, business or government support of \"tremendous economic consequences\" — the formal sanctions package is still due Monday", src:"gCaptain/Treasury · Aug 21", color:"red"},
   {text:"Brent crude pulls back 0.3% to settle $93.40 Friday after touching a fresh intraday high of $94.24, its best print since late July — still a second straight weekly gain of roughly 6% even as the session gives back some of its Amara-seizure gains", src:"Trading Economics/HDFC Sky · Aug 21", color:"amber"},
