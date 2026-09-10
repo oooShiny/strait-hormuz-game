@@ -1716,6 +1716,27 @@ const IRGC_TARGETED_FLAGS=new Set(['🇸🇦','🇶🇦','🇦🇪','🇰🇼','
 // a partial break on the hail rate (20%, between the 8% friendly and 35%
 // neutral rates) and no toll waiver.
 const IRGC_PERMITTED_FLAGS=new Set(['🇮🇶']);
+// Sep 7-9 2026: Iran's SNSC secretary Rezaei announces a "restricted zone"
+// starting at the US Navy blockade line and reaching into the Gulf, warning
+// any vessel entering without coordinating with Tehran will be added to its
+// Hormuz blacklist (56 vessels listed as of Sep 2, up from 45 on Aug 24) --
+// the same flag-based targeting the IRGC has applied since Jul 5 (friendly
+// China/Russia/Pakistan passage) and Jul 7/12 (targeted Gulf states), but
+// until now only the open/contested branch (showInspectionHail) used the
+// IRGC_FRIENDLY_FLAGS/IRGC_TARGETED_FLAGS split -- every flag paid the same
+// flat $2M closed-strait toll. With the restricted zone/blacklist now the
+// operative enforcement mechanism for a strait that has stayed closed for
+// 190+ days straight, that split now carries into the closed-strait toll
+// too: friendly flags get the same halved rate their Jul 5 "special
+// treatment" implies, targeted Gulf flags pay a premium reflecting their
+// standing status as the IRGC's primary blacklist/strike targets. Iraq's
+// Aug 22 permit deal explicitly came with "no toll waiver," so permitted
+// flags are left at the standard rate.
+function closedTollAmount(){
+  if(IRGC_FRIENDLY_FLAGS.has(playerFlag))return 1000000;
+  if(IRGC_TARGETED_FLAGS.has(playerFlag))return 3000000;
+  return 2000000;
+}
 function showInspectionHail(){
   const friendly=IRGC_FRIENDLY_FLAGS.has(playerFlag);
   const permitted=IRGC_PERMITTED_FLAGS.has(playerFlag);
@@ -2036,7 +2057,7 @@ function update(dt){
     }else{
       const dodged=runningDark&&Math.random()<HAIL_DODGE_CHANCE_DARK;
       if(dodged)setMsg('📡 Running dark — patrol didn\'t spot you',2);
-      else if(straitClosed)showToll(2000000);
+      else if(straitClosed)showToll(closedTollAmount());
       else showInspectionHail();
     }
     tollTimer=38+Math.random()*20;
@@ -2352,7 +2373,7 @@ async function boot(){
   straitBadge.style.background=straitClosed?'#7f1d1d':'#78350f';
   straitBadge.style.color=straitClosed?'#fca5a5':'#fcd34d';
   document.getElementById('threatDesc').textContent=straitClosed
-    ?"⛔ UAE MISSILE ALERT, TRADE EMBARGO ON IRAN (Aug 18-19): The Jun 17 MOU's 60-day toll-free window formally lapsed Aug 17 with no extension — Trump says the US isn't seeking one and tells Iran to \"put up the white flag of surrender,\" then posts a map declaring the Strait of Vermouth a \"new\" US territory and threatens to bomb Oman if it \"gets in the way\" of reopening it. UKMTO logged a fresh outbound vessel hit by an unknown projectile near Khasab, Oman Aug 18 — engine-room damage plus the first confirmed crew casualty on a Hormuz-strait hit since the insurance ceiling was set. Tuesday evening the UAE broadcast a missile alert: air-defense systems detected two projectiles from the direction of Iran, one falling inside Emirati territorial waters; Iran denies launching anything and vows a fully \"offensive\" posture. Abu Dhabi responded by suspending all trade and financial dealings with Tehran indefinitely — the war's first Gulf-state economic break with Iran. Kpler/Reuters data shows just 6 vessels crossed the strait Tuesday, down from 9 the day before and a 10-day average of 11; straits.live logs Day 171 of closure. Brent climbed a fourth straight session toward $92, settling $91.52. None of this is a signed reopening deal or a confirmed tanker loss beyond the Khasab hit, so the closed-strait arsenal holds — the MOU has been treated as void in-game since Iran suspended it Jul 19, and paying the in-game toll still funds the US-sanctioned network (Persian Gulf Marine Insurance Co. / Hormuz Safe Marine Services Authority), raising your Navy disable risk once immunity lapses. Drones · Mines (harder-hitting if you're dark) · Missiles · IRGC boats · US Navy blockade (targets Iranian flags and sanctioned-toll payers, now disables boarded vessels) · war-risk insurance at a 15% cargo-value ceiling as P&I clubs pull cover entirely — going dark or refusing a hail can draw a targeted missile-and-drone strike"
+    ?"⛔ UAE MISSILE ALERT, TRADE EMBARGO ON IRAN (Aug 18-19): The Jun 17 MOU's 60-day toll-free window formally lapsed Aug 17 with no extension — Trump says the US isn't seeking one and tells Iran to \"put up the white flag of surrender,\" then posts a map declaring the Strait of Vermouth a \"new\" US territory and threatens to bomb Oman if it \"gets in the way\" of reopening it. UKMTO logged a fresh outbound vessel hit by an unknown projectile near Khasab, Oman Aug 18 — engine-room damage plus the first confirmed crew casualty on a Hormuz-strait hit since the insurance ceiling was set. Tuesday evening the UAE broadcast a missile alert: air-defense systems detected two projectiles from the direction of Iran, one falling inside Emirati territorial waters; Iran denies launching anything and vows a fully \"offensive\" posture. Abu Dhabi responded by suspending all trade and financial dealings with Tehran indefinitely — the war's first Gulf-state economic break with Iran. Kpler/Reuters data shows just 6 vessels crossed the strait Tuesday, down from 9 the day before and a 10-day average of 11; straits.live logs Day 171 of closure. Brent climbed a fourth straight session toward $92, settling $91.52. None of this is a signed reopening deal or a confirmed tanker loss beyond the Khasab hit, so the closed-strait arsenal holds — the MOU has been treated as void in-game since Iran suspended it Jul 19, and paying the in-game toll still funds the US-sanctioned network (Persian Gulf Marine Insurance Co. / Hormuz Safe Marine Services Authority), raising your Navy disable risk once immunity lapses. Drones · Mines (harder-hitting if you're dark) · Missiles · IRGC boats · US Navy blockade (targets Iranian flags and sanctioned-toll payers, now disables boarded vessels) · war-risk insurance at a 15% cargo-value ceiling as P&I clubs pull cover entirely — going dark or refusing a hail can draw a targeted missile-and-drone strike. Iran's Sep 7 restricted-zone blacklist threat now splits the closed-strait toll itself: friendly 🇨🇳🇷🇺🇵🇰 flags pay a discounted $1M, targeted Gulf flags (🇸🇦🇶🇦🇦🇪🇰🇼🇧🇭) pay a $3M premium, everyone else pays the standard $2M"
     :'⚠ CONTESTED (SEVERE): US strikes on Greater Tunb (Jul 15) and Qeshm Island (Jul 17) have knocked out two of the coastal batteries you\'ll no longer face, and disabled the blockade-runner Belma near Kharg Island. Iranian-flagged tankers risk being disabled if boarded, not just fined; everyone else rides Navy escort protection. Saudi 🇸🇦, Qatari 🇶🇦, Emirati 🇦🇪, Kuwaiti 🇰🇼 & Bahraini 🇧🇭 flags are still prime IRGC targets — Kuwaiti tanker Kaifan was hit off Oman Jul 20-21. Chinese/Russian/Pakistani flags get preferential passage. LNG tankers transit — give way, chain blast if hit. The IRGC\'s Jul 18 combined missile-and-drone interception of 4 vessels means ignoring a patrol hail now risks the same fate. Iran has now suspended the MOU entirely after the Jul 18 Jordan strike killed 2 US troops, and the Houthis\' new Bab el-Mandeb blockade shows the closure risk spreading beyond the strait itself — evacuation stragglers now cross even less often. As of Jul 27, CENTCOM\'s strike pause has held for a third day and Brent has crashed 8.2% on de-escalation hopes, but Iran says it isn\'t seeking renewed talks and traffic remains near a standstill — nothing confirms a real change to the strait itself. Updated Jul 28-29: the pause ended when Iran fired intercepted ballistic missiles at the same Jordan base hit Jul 18, CENTCOM/Saudi forces struck back in Iraq, and the IRGC hit three more tankers on the southern route — Brent jumped back above $87.';
   lbPanel.innerHTML=renderLbRows(await lbLoad(),null);
   document.getElementById('loadingStatus').style.display='none';
