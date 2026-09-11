@@ -1040,7 +1040,32 @@ const LB_MAX=10;
 // Wednesday settle yet, so the game's default cargo price updates to the
 // $100 intraday level pending Thursday's print. straits.live logs Day 192
 // of closure.
-let straitClosed=true,oilPricePerBarrel=100;
+// Sep 10-11 2026: The IRGC says its navy struck a US "Saildrone-type"
+// unmanned surface vessel (hull number 5838) at the strait's mouth
+// overnight -- Tehran's first confirmed target on an unmanned US Navy
+// asset this war, with one IRGC-linked outlet claiming a seizure rather
+// than a strike; Washington hasn't confirmed either version. UKMTO
+// separately logs projectiles hitting two more vessels off Oman, and
+// Iranian state media reports blasts at Minab, Jask and Qeshm Island
+// overnight into Sep 10. Kpler data shows transits crashing to just 7
+// vessels Sep 9 -- down from 12 the day before and half the 10-day
+// average of 14, the sharpest one-day drop since the closure began.
+// None of it is a confirmed new loss on crewed commercial shipping, so
+// straitClosed stays true and mine density/spawn rates are unchanged --
+// but the first-ever USV target does earn a new in-game wrinkle (see
+// spawnUSV/usvs below): a US Navy scout drone now occasionally patrols
+// the closed strait, and a nearby IRGC fast boat will break off from the
+// player to take a shot at it instead, mirroring Tehran's stated
+// priority target on Sep 9-10. Separately, Bloomberg/FT report Oman is
+// trying to broker the war's first Gulf Cooperation Council-Iran
+// meeting -- GCC foreign ministers and Iran's FM Araghchi, tentatively
+// Monday Sep 14 in Salalah, Oman -- to seek buy-in for a temporary
+// framework managing Hormuz shipping; not confirmed, and not a signed
+// reopening deal, so it doesn't move straitClosed either. Brent extends
+// its climb to $105.71 intraday (+2.78%) on the tanker-for-tanker
+// fallout, so the default cargo price updates to $105. straits.live
+// logs Day 194 of closure.
+let straitClosed=true,oilPricePerBarrel=105;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
 const SESSION_TOKEN = Math.random().toString(36).slice(2) + Date.now().toString(36);
@@ -1142,7 +1167,7 @@ const lbPanel=document.getElementById('lbPanel');
 let hull=100,speed=0,heading=0,invTimer=0,waveT=0;
 let tPos={x:-250,z:0};
 let gameRunning=false,wonOrLost=false,lastT=0,msgTimer=0;
-let droneTimer,fastBoatTimer,dhowTimer,missileTimer,tollTimer,convoyTimer,openDroneTimer,lngTimer,saudiTankerTimer;
+let droneTimer,fastBoatTimer,dhowTimer,missileTimer,tollTimer,convoyTimer,openDroneTimer,lngTimer,saudiTankerTimer,usvTimer;
 let immuneTimer=0,tollPending=false,tollCountdown=0,profit=0,phase='go_east',runCount=0;
 // AIS Blackout: mirrors the real Jul 9-10 collapse in traceable Hormuz traffic, when at
 // least two tankers are believed to have crossed dark to dodge targeting. Toggle with B —
@@ -1309,7 +1334,7 @@ const BLOCKADE_DISABLE_CHANCE=0.2;
 // watch item for once the package lands.
 const TOLL_SANCTIONS_DISABLE_BONUS=0.15;
 let coastDmgTimer=0;
-let fastBoats=[],dhows=[],mines=[],missiles=[],drones=[],particles=[],explosions=[],warships=[],convoys=[],lngTankers=[],saudiTankers=[];
+let fastBoats=[],dhows=[],mines=[],missiles=[],drones=[],particles=[],explosions=[],warships=[],convoys=[],lngTankers=[],saudiTankers=[],usvs=[];
 let tollsPaid=0,convoysAided=0,insurancePaid=0;
 let playerName='CAPTAIN', playerFlag='🏴';
 
@@ -1470,6 +1495,31 @@ function spawnWarship(){
     // traffic, so an Iranian-flagged tanker now draws blockade enforcement even in
     // open/contested mode, while other flags get the "military assistance" escort.
     warned:false,aggressive:straitClosed||playerFlag==='🇮🇷',shipName});
+}
+
+// US Navy unmanned surface vessel (Saildrone-type scout drone) — added Sep 10-11
+// 2026 after the IRGC said its navy struck a US USV (hull #5838) at the strait's
+// mouth, the first confirmed IRGC attack on an unmanned US Navy asset this war.
+// Unarmed and non-interactive with the player; its only role is to give nearby
+// IRGC fast boats a second, IRGC-preferred target — see the fastBoats loop in
+// update(dt), where a boat in firing range breaks off from the player to shoot
+// at the USV instead, same as the real Sep 9-10 incident. Closed-strait only,
+// capped at one at a time, spawns rarely (it's a single reported incident, not
+// a recurring patrol).
+function spawnUSV(){
+  const g=new THREE.Group();
+  const hull=new THREE.Mesh(new THREE.BoxGeometry(0.7,0.35,3.0),new THREE.MeshLambertMaterial({color:0xd8d8d8}));
+  hull.position.y=0.18;g.add(hull);
+  const sail=new THREE.Mesh(new THREE.BoxGeometry(0.12,1.6,0.5),new THREE.MeshLambertMaterial({color:0xb0b8c0}));
+  sail.position.set(0,1.0,0.2);g.add(sail);
+  const sensor=new THREE.Mesh(new THREE.SphereGeometry(0.22,6,6),new THREE.MeshLambertMaterial({color:0x333}));
+  sensor.position.set(0,1.85,0.2);g.add(sensor);
+  const dir=(phase==='go_east')?1:-1;
+  const ex=tPos.x+dir*(30+Math.random()*70);
+  const cz=chanZ(ex),hw=chanHW(ex);
+  g.position.set(ex,0,cz+(Math.random()-.5)*hw*0.8);
+  scene.add(g);
+  usvs.push({g,spd:0.02+Math.random()*0.01,angle:Math.atan2(-(tPos.z-g.position.z),tPos.x-ex),hits:0});
 }
 
 function spawnDhow(){
@@ -1879,6 +1929,7 @@ function clearAll(){
   lngTankers.forEach(l=>scene.remove(l.g));lngTankers=[];
   saudiTankers.forEach(v=>scene.remove(v.g));saudiTankers=[];
   warships.forEach(w=>scene.remove(w.g));warships=[];
+  usvs.forEach(u=>scene.remove(u.g));usvs=[];
 }
 function resetGame(fresh){
   clearAll();
@@ -1886,7 +1937,7 @@ function resetGame(fresh){
   if(fresh){hull=100;profit=0;runCount=0;tollsPaid=0;convoysAided=0;insurancePaid=0;}
   speed=0;heading=0;invTimer=0;waveT=0;coastDmgTimer=0; // heading always reset to east
   tPos={x:-238,z:chanZ(-238)};
-  droneTimer=7;fastBoatTimer=10;dhowTimer=14;missileTimer=20;tollTimer=30;convoyTimer=40;openDroneTimer=18+Math.random()*14;lngTimer=100+Math.random()*60;saudiTankerTimer=130+Math.random()*70;
+  droneTimer=7;fastBoatTimer=10;dhowTimer=14;missileTimer=20;tollTimer=30;convoyTimer=40;openDroneTimer=18+Math.random()*14;lngTimer=100+Math.random()*60;saudiTankerTimer=130+Math.random()*70;usvTimer=45+Math.random()*40;
   immuneTimer=0;tollPending=false;tollCountdown=0;phase='go_east';aisOn=true;aisToggleCooldown=0;
   updateMissionBadge();scene.remove(tankerGroup);buildTanker();
   // Mine threat scales with how much of the strait remains contaminated:
@@ -2004,6 +2055,8 @@ function update(dt){
       missileTimer=12+Math.random()*10;
     }
     batteries.forEach(b=>{if(b.cooldown>0)b.cooldown-=dt;});
+    // US Navy scout USV — Sep 10-11 2026 addition, see spawnUSV() comment above.
+    usvTimer-=dt;if(usvTimer<0&&usvs.length<1){spawnUSV();usvTimer=90+Math.random()*60;}
   }else{
     // IMO evacuation corridor paused Jun 25 — only rare escorted stragglers cross now.
     // Jul 21 2026: Lloyd's List logged just 53 strait transits in the week through
@@ -2084,7 +2137,26 @@ function update(dt){
     b.ring.material.opacity=dist<RANGE_BOAT_FIRE?(0.4+0.15*Math.sin(waveT*6)):Math.max(0,1-(dist-RANGE_BOAT_FIRE)/(RANGE_BOAT_FIRE*.5))*0.2;
     if(straitClosed){
       b.fireTimer-=dt;
-      if(b.fireTimer<0&&dist<=RANGE_BOAT_FIRE){takeDamage(3.75,'🔫 IRGC FAST BOAT FIRE!');b.fireTimer=4+Math.random()*3;spawnExplosion(bp.x+Math.cos(b.angle)*2,bp.z-Math.sin(b.angle)*2,1,0xffcc00);}
+      if(b.fireTimer<0&&dist<=RANGE_BOAT_FIRE){
+        // Sep 10-11 2026: if a US Navy scout USV is also in range, the boat has a
+        // chance to break off and shoot at it instead of the player -- mirrors the
+        // IRGC's reported real-world priority target (hull #5838) on Sep 9-10.
+        const nearUsv=usvs.find(u=>{const udx=u.g.position.x-bp.x,udz=u.g.position.z-bp.z;return Math.sqrt(udx*udx+udz*udz)<=RANGE_BOAT_FIRE;});
+        if(nearUsv&&Math.random()<0.5){
+          nearUsv.hits++;
+          spawnExplosion(nearUsv.g.position.x,nearUsv.g.position.z,1.5,0xffcc00);
+          if(nearUsv.hits>=2){
+            setMsg('🇺🇸 IRGC struck the US Navy scout drone (hull #5838 precedent) — it went dark',3);
+            scene.remove(nearUsv.g);usvs.splice(usvs.indexOf(nearUsv),1);
+          }else{
+            setMsg('🔫 IRGC fast boat diverted fire to a US Navy scout drone',2.5);
+          }
+        }else{
+          takeDamage(3.75,'🔫 IRGC FAST BOAT FIRE!');
+          spawnExplosion(bp.x+Math.cos(b.angle)*2,bp.z-Math.sin(b.angle)*2,1,0xffcc00);
+        }
+        b.fireTimer=4+Math.random()*3;
+      }
       if(dist<=RANGE_RAM){takeDamage(6.75,'⛵ IRGC RAM!');speed*=0.72;bp.x-=Math.cos(b.angle)*5;bp.z+=Math.sin(b.angle)*5;}
     }else{
       if(dist<=RANGE_BOAT_FIRE&&!tollPending&&b.tollCooldown<=0&&immuneTimer<=0){
@@ -2093,6 +2165,15 @@ function update(dt){
       }
     }
     if((phase==='go_east'?tPos.x-bp.x:bp.x-tPos.x)>140){scene.remove(b.g);fastBoats.splice(i,1);}
+  }
+  // US Navy scout USV — unarmed, no interaction with the player; just patrols and
+  // can draw IRGC fast-boat fire away from the player (see fastBoats loop above).
+  for(let i=usvs.length-1;i>=0;i--){
+    const u=usvs[i],up=u.g.position;
+    up.x+=Math.cos(u.angle)*u.spd*60*dt;up.z-=Math.sin(u.angle)*u.spd*60*dt;
+    up.y=Math.sin(waveT*2+i)*.05;
+    u.g.rotation.y=-Math.PI/2+u.angle;
+    if((phase==='go_east'?tPos.x-up.x:up.x-tPos.x)>140){scene.remove(u.g);usvs.splice(i,1);}
   }
   // ── US NAVY WARSHIPS — FULL BLOCKADE ────────────────────────────────────
   for(let i=warships.length-1;i>=0;i--){
@@ -2373,7 +2454,7 @@ async function boot(){
   straitBadge.style.background=straitClosed?'#7f1d1d':'#78350f';
   straitBadge.style.color=straitClosed?'#fca5a5':'#fcd34d';
   document.getElementById('threatDesc').textContent=straitClosed
-    ?"⛔ UAE MISSILE ALERT, TRADE EMBARGO ON IRAN (Aug 18-19): The Jun 17 MOU's 60-day toll-free window formally lapsed Aug 17 with no extension — Trump says the US isn't seeking one and tells Iran to \"put up the white flag of surrender,\" then posts a map declaring the Strait of Vermouth a \"new\" US territory and threatens to bomb Oman if it \"gets in the way\" of reopening it. UKMTO logged a fresh outbound vessel hit by an unknown projectile near Khasab, Oman Aug 18 — engine-room damage plus the first confirmed crew casualty on a Hormuz-strait hit since the insurance ceiling was set. Tuesday evening the UAE broadcast a missile alert: air-defense systems detected two projectiles from the direction of Iran, one falling inside Emirati territorial waters; Iran denies launching anything and vows a fully \"offensive\" posture. Abu Dhabi responded by suspending all trade and financial dealings with Tehran indefinitely — the war's first Gulf-state economic break with Iran. Kpler/Reuters data shows just 6 vessels crossed the strait Tuesday, down from 9 the day before and a 10-day average of 11; straits.live logs Day 171 of closure. Brent climbed a fourth straight session toward $92, settling $91.52. None of this is a signed reopening deal or a confirmed tanker loss beyond the Khasab hit, so the closed-strait arsenal holds — the MOU has been treated as void in-game since Iran suspended it Jul 19, and paying the in-game toll still funds the US-sanctioned network (Persian Gulf Marine Insurance Co. / Hormuz Safe Marine Services Authority), raising your Navy disable risk once immunity lapses. Drones · Mines (harder-hitting if you're dark) · Missiles · IRGC boats · US Navy blockade (targets Iranian flags and sanctioned-toll payers, now disables boarded vessels) · war-risk insurance at a 15% cargo-value ceiling as P&I clubs pull cover entirely — going dark or refusing a hail can draw a targeted missile-and-drone strike. Iran's Sep 7 restricted-zone blacklist threat now splits the closed-strait toll itself: friendly 🇨🇳🇷🇺🇵🇰 flags pay a discounted $1M, targeted Gulf flags (🇸🇦🇶🇦🇦🇪🇰🇼🇧🇭) pay a $3M premium, everyone else pays the standard $2M"
+    ?"⛔ UAE MISSILE ALERT, TRADE EMBARGO ON IRAN (Aug 18-19): The Jun 17 MOU's 60-day toll-free window formally lapsed Aug 17 with no extension — Trump says the US isn't seeking one and tells Iran to \"put up the white flag of surrender,\" then posts a map declaring the Strait of Vermouth a \"new\" US territory and threatens to bomb Oman if it \"gets in the way\" of reopening it. UKMTO logged a fresh outbound vessel hit by an unknown projectile near Khasab, Oman Aug 18 — engine-room damage plus the first confirmed crew casualty on a Hormuz-strait hit since the insurance ceiling was set. Tuesday evening the UAE broadcast a missile alert: air-defense systems detected two projectiles from the direction of Iran, one falling inside Emirati territorial waters; Iran denies launching anything and vows a fully \"offensive\" posture. Abu Dhabi responded by suspending all trade and financial dealings with Tehran indefinitely — the war's first Gulf-state economic break with Iran. Kpler/Reuters data shows just 6 vessels crossed the strait Tuesday, down from 9 the day before and a 10-day average of 11; straits.live logs Day 171 of closure. Brent climbed a fourth straight session toward $92, settling $91.52. None of this is a signed reopening deal or a confirmed tanker loss beyond the Khasab hit, so the closed-strait arsenal holds — the MOU has been treated as void in-game since Iran suspended it Jul 19, and paying the in-game toll still funds the US-sanctioned network (Persian Gulf Marine Insurance Co. / Hormuz Safe Marine Services Authority), raising your Navy disable risk once immunity lapses. Drones · Mines (harder-hitting if you're dark) · Missiles · IRGC boats · US Navy blockade (targets Iranian flags and sanctioned-toll payers, now disables boarded vessels) · war-risk insurance at a 15% cargo-value ceiling as P&I clubs pull cover entirely — going dark or refusing a hail can draw a targeted missile-and-drone strike. Iran's Sep 7 restricted-zone blacklist threat now splits the closed-strait toll itself: friendly 🇨🇳🇷🇺🇵🇰 flags pay a discounted $1M, targeted Gulf flags (🇸🇦🇶🇦🇦🇪🇰🇼🇧🇭) pay a $3M premium, everyone else pays the standard $2M. IRGC's Sep 9-10 strike on a US Navy scout USV (hull #5838) — its first hit on an unmanned US asset — means a fast boat may now break off from you to shoot at a passing Navy drone instead"
     :'⚠ CONTESTED (SEVERE): US strikes on Greater Tunb (Jul 15) and Qeshm Island (Jul 17) have knocked out two of the coastal batteries you\'ll no longer face, and disabled the blockade-runner Belma near Kharg Island. Iranian-flagged tankers risk being disabled if boarded, not just fined; everyone else rides Navy escort protection. Saudi 🇸🇦, Qatari 🇶🇦, Emirati 🇦🇪, Kuwaiti 🇰🇼 & Bahraini 🇧🇭 flags are still prime IRGC targets — Kuwaiti tanker Kaifan was hit off Oman Jul 20-21. Chinese/Russian/Pakistani flags get preferential passage. LNG tankers transit — give way, chain blast if hit. The IRGC\'s Jul 18 combined missile-and-drone interception of 4 vessels means ignoring a patrol hail now risks the same fate. Iran has now suspended the MOU entirely after the Jul 18 Jordan strike killed 2 US troops, and the Houthis\' new Bab el-Mandeb blockade shows the closure risk spreading beyond the strait itself — evacuation stragglers now cross even less often. As of Jul 27, CENTCOM\'s strike pause has held for a third day and Brent has crashed 8.2% on de-escalation hopes, but Iran says it isn\'t seeking renewed talks and traffic remains near a standstill — nothing confirms a real change to the strait itself. Updated Jul 28-29: the pause ended when Iran fired intercepted ballistic missiles at the same Jordan base hit Jul 18, CENTCOM/Saudi forces struck back in Iraq, and the IRGC hit three more tankers on the southern route — Brent jumped back above $87.';
   lbPanel.innerHTML=renderLbRows(await lbLoad(),null);
   document.getElementById('loadingStatus').style.display='none';
@@ -2387,7 +2468,7 @@ async function boot(){
   renderNewsFeed();
   hull=100;profit=0;runCount=0;speed=0;heading=0;invTimer=0;waveT=0;coastDmgTimer=0;convoysAided=0;insurancePaid=0;
   tPos={x:-238,z:chanZ(-238)};
-  droneTimer=7;fastBoatTimer=10;dhowTimer=14;missileTimer=20;tollTimer=30;convoyTimer=40;openDroneTimer=18+Math.random()*14;lngTimer=100+Math.random()*60;saudiTankerTimer=130+Math.random()*70;
+  droneTimer=7;fastBoatTimer=10;dhowTimer=14;missileTimer=20;tollTimer=30;convoyTimer=40;openDroneTimer=18+Math.random()*14;lngTimer=100+Math.random()*60;saudiTankerTimer=130+Math.random()*70;usvTimer=45+Math.random()*40;
   immuneTimer=0;tollPending=false;tollCountdown=0;phase='go_east';aisOn=true;aisToggleCooldown=0;updateMissionBadge();buildTanker();
   requestAnimationFrame(t=>{lastT=t;animate(t);});
 }
@@ -2396,6 +2477,11 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"Independent tracker straits.live logs Day 194 of closure since the Feb 28 declaration, as Brent crude extends its climb to $105.71 intraday (+2.78%) and Oman pushes for the war's first Gulf-Iran meeting", src:"straits.live · Sep 11", color:"blue"},
+  {text:"Bloomberg/FT: Oman is trying to broker a first-ever meeting between GCC foreign ministers and Iran's FM Araghchi, tentatively Monday Sep 14 in Salalah, to seek buy-in for a temporary framework managing Hormuz shipping -- not yet confirmed", src:"Bloomberg/FT · Sep 11", color:"green"},
+  {text:"IRGC says its navy struck a US \"Saildrone-type\" unmanned surface vessel (hull #5838) at the strait's mouth, its first confirmed hit on an unmanned US Navy asset this war; one IRGC-linked outlet claims a seizure instead, Washington hasn't confirmed either version", src:"IRGC/Al Jazeera · Sep 9-10", color:"amber"},
+  {text:"UKMTO logs projectiles hitting two more vessels off the coast of Oman, and Iranian state media reports blasts at Minab, Jask and Qeshm Island overnight into Sep 10", src:"UKMTO/IRNA · Sep 10", color:"red"},
+  {text:"Kpler data shows strait transits crashing to just 7 vessels Sep 9 -- down from 12 the day before and half the 10-day average of 14, the sharpest one-day drop since the closure began", src:"Kpler/RFE-RL · Sep 10", color:"blue"},
   {text:"Independent tracker straits.live logs Day 192 of closure since the Feb 28 declaration, as Brent crude tops $100 a barrel for the first time since July amid the war's latest tanker-for-tanker exchange", src:"straits.live · Sep 9", color:"blue"},
   {text:"CENTCOM says it destroyed five Iranian government-linked tankers -- Kivik, Charminar and Horizon 1 in the Gulf of Oman, Riesco and Derya near Kharg Island -- in retaliation for IRGC ballistic missiles fired at a US Navy warship on back-to-back days; crews were warned off and no casualties are reported", src:"CENTCOM/Al Jazeera · Sep 9", color:"red"},
   {text:"Iran retaliates before dawn with ballistic missiles on Jordan's Al Azraq air base -- Jordanian air defenses intercept 18 of 20 incoming missiles, two land in unpopulated areas, no casualties reported", src:"Jordan Armed Forces/Euronews · Sep 9", color:"red"},
