@@ -1087,6 +1087,28 @@ const LB_MAX=10;
 // straitClosed branch of update(dt) below. Brent eases off its highs to
 // settle $104.42 (-2.98%) on the meeting news, so the default cargo price
 // updates to $104. straits.live logs Day 195 of closure.
+// Sep 13 2026: an Iranian-flagged container ship is hit by an unidentified
+// projectile off Hengam Island near Qeshm early Sunday, killing one crew
+// member and wounding several others, Iranian state media says; UKMTO
+// separately logs a vessel struck by a projectile while transiting the
+// strait, consistent with the same incident. It's the latest confirmed
+// casualty on commercial shipping inside the strait, but not a new
+// category of threat -- unattributed projectile strikes on transiting
+// vessels have been the baseline risk modeled since the closure began --
+// so straitClosed stays true, the insurance rate holds at its 15%
+// ceiling, and mine/drone/missile spawn rates are unchanged. Separately,
+// President Pezeshkian tells India Today TV the strait would reopen once
+// the US ends its naval blockade -- restating Tehran's existing
+// conditions, not a new offer, so it doesn't move straitClosed either.
+// Saudi Arabia and the Houthis trade strikes over the Bab el-Mandeb
+// approach, a southern-front escalation separate from the Hormuz closure
+// itself -- it feeds the oil-price backdrop but not the strait mechanic.
+// Iran's Sep 7-announced "restricted zone" beyond the blockade line still
+// hasn't been reported as enforced against any vessel, so per the Sep 7-8
+// entries above it remains a narrative item only, worth revisiting once
+// it actually takes effect. Markets remain closed for the weekend, so the
+// default cargo price holds at the $104 already in the game. straits.live
+// logs Day 196 of closure.
 let straitClosed=true,oilPricePerBarrel=104;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
@@ -2509,6 +2531,10 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"Independent tracker straits.live logs Day 196 of closure since the Feb 28 declaration, with markets closed for the weekend and Brent holding near $104 after an Iranian vessel is struck off Hengam Island ahead of Monday's Salalah meeting", src:"straits.live · Sep 13", color:"blue"},
+  {text:"An Iranian-flagged container ship is hit by an unidentified projectile off Hengam Island near Qeshm early Sunday, killing one crew member and wounding several others; UKMTO separately logs a vessel struck by a projectile while transiting the strait", src:"IRNA/UKMTO · Sep 13", color:"red"},
+  {text:"President Pezeshkian tells India Today TV the Strait of Hormuz would reopen once the US ends its naval blockade -- restating Tehran's existing conditions ahead of Monday's Gulf-Iran meeting in Salalah, Oman", src:"India Today TV/AP · Sep 13", color:"green"},
+  {text:"Saudi Arabia and Yemen's Houthis trade strikes over the Bab el-Mandeb approach, a southern-front escalation separate from the Hormuz closure that nonetheless keeps a war-risk premium on regional shipping broadly", src:"Al Jazeera · Sep 13", color:"amber"},
   {text:"Independent tracker straits.live logs Day 195 of closure since the Feb 28 declaration, as Brent eases off its highs to settle $104.42 (-2.98%) on news of a confirmed Gulf-Iran meeting", src:"straits.live · Sep 12", color:"blue"},
   {text:"Iran confirms it will meet Gulf Cooperation Council foreign ministers and Iraq's representative in Salalah, Oman on Monday Sep 14 to discuss safe-passage routes through the strait, the war's first such GCC-Iran sitdown", src:"Al Jazeera/Arab News · Sep 11", color:"green"},
   {text:"Unattributed drones launched from Iraq hit pump stations on Saudi Arabia's 7M bpd East-West crude pipeline -- the kingdom's main land bypass around Hormuz -- sparking fires and injuries; Riyadh shuts the line down as a precaution", src:"CNN/Bloomberg · Sep 10-11", color:"red"},
