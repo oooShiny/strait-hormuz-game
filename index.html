@@ -1109,7 +1109,31 @@ const LB_MAX=10;
 // it actually takes effect. Markets remain closed for the weekend, so the
 // default cargo price holds at the $104 already in the game. straits.live
 // logs Day 196 of closure.
-let straitClosed=true,oilPricePerBarrel=104;
+// Sep 14 2026: Oman's FM Badr Albusaidi says Monday's planned Salalah meeting
+// between Iran and Gulf states on a temporary Hormuz shipping corridor is
+// postponed "in the interests of consensus," after Saudi Arabia requested the
+// delay and told mediators it can't accept the draft Iran-Oman corridor deal
+// as written -- Riyadh's own frustration over continued Houthi attacks on
+// Saudi territory the stated reason; no new meeting date is set. Separately,
+// Yemen's Houthis claim a large-scale ballistic missile and drone attack on
+// Saudi Arabia's King Khalid Air Base in Khamis Mushait and expand their hold
+// on Yemen's Red Sea coast and strategic islands, cementing control of the
+// Bab el-Mandeb approach as Saudi Arabia counter-strikes -- a southern-front
+// escalation, not a new hit on commercial shipping inside the Strait of
+// Hormuz itself, so per the same logic applied to the Sep 8-10 Jazan/Mocha
+// entries it feeds the oil-price backdrop but not the strait mechanic: no
+// change to straitClosed or spawn rates. Saudi Arabia's East-West Pipeline --
+// now confirmed damaged in eight separate places by the Sep 10 Iraq-launched
+// drone strikes -- stays shut, with seaborne exports down to a 13-year low of
+// 3.2M bpd and roughly 4% of global oil supply at risk; this reinforces
+// rather than changes the Sep 11-12 call to spawn Saudi VLCC supertankers in
+// the closed strait, since the kingdom's main Hormuz bypass remains offline.
+// No deal and no new confirmed loss inside the strait itself, so straitClosed
+// stays true, the insurance rate holds at its 15% ceiling, and mine/drone/
+// missile spawn rates are unchanged. Brent jumps 3.2% to $108 (WTI +3.3% to
+// $103) on the combined postponement/escalation/pipeline news, so the
+// default cargo price updates to $108. straits.live logs Day 197 of closure.
+let straitClosed=true,oilPricePerBarrel=108;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
 const SESSION_TOKEN = Math.random().toString(36).slice(2) + Date.now().toString(36);
@@ -2531,6 +2555,13 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"Independent tracker straits.live logs Day 197 of closure since the Feb 28 declaration, as the Salalah meeting's postponement and the Saudi-Houthi escalation send Brent to its highest since acute war-premium spikes in May", src:"straits.live · Sep 14", color:"blue"},
+  {text:"Saudi crude exports fall to a 13-year low of 3.2M bpd as the East-West Pipeline -- damaged in eight places by the Sep 10 Iraq-launched drone strikes -- stays shut; analysts warn roughly 4% of global oil supply is at risk if the line doesn't resume within days", src:"Bloomberg · Sep 14", color:"red"},
+  {text:"Brent crude jumps 3.2% to $108/bbl (WTI +3.3% to $103) as the Salalah postponement, the King Khalid Air Base attack and the Saudi pipeline shutdown combine to push oil to a four-month high", src:"Bloomberg/AGBI · Sep 14", color:"amber"},
+  {text:"Houthi forces expand their hold on Yemen's Red Sea coast and strategic islands, cementing control of the Bab el-Mandeb approach as Saudi Arabia carries out counter-strikes -- a southern-front escalation separate from the Hormuz closure itself", src:"Bloomberg/AP · Sep 14", color:"amber"},
+  {text:"Yemen's Houthis claim a large-scale ballistic missile and drone attack on Saudi Arabia's King Khalid Air Base in Khamis Mushait, saying dozens of munitions hit hangars, radar, runways and ammunition depots; Riyadh hasn't confirmed the claim or any damage", src:"TRT World/Jerusalem Post · Sep 14", color:"red"},
+  {text:"Saudi Arabia tells mediators it cannot accept the draft Iran-Oman shipping-corridor agreement as written, and presses for the Salalah meeting's postponement amid its own frustration over continued Houthi attacks on Saudi territory", src:"Bloomberg · Sep 14", color:"red"},
+  {text:"Oman's Foreign Minister Badr Albusaidi says Monday's planned Salalah meeting between Iran and Gulf states on a temporary Hormuz shipping corridor is postponed \"in the interests of consensus,\" with no new date set, after Saudi Arabia requested the delay", src:"Bloomberg/CNN · Sep 13-14", color:"red"},
   {text:"Independent tracker straits.live logs Day 196 of closure since the Feb 28 declaration, with markets closed for the weekend and Brent holding near $104 after an Iranian vessel is struck off Hengam Island ahead of Monday's Salalah meeting", src:"straits.live · Sep 13", color:"blue"},
   {text:"An Iranian-flagged container ship is hit by an unidentified projectile off Hengam Island near Qeshm early Sunday, killing one crew member and wounding several others; UKMTO separately logs a vessel struck by a projectile while transiting the strait", src:"IRNA/UKMTO · Sep 13", color:"red"},
   {text:"President Pezeshkian tells India Today TV the Strait of Hormuz would reopen once the US ends its naval blockade -- restating Tehran's existing conditions ahead of Monday's Gulf-Iran meeting in Salalah, Oman", src:"India Today TV/AP · Sep 13", color:"green"},
