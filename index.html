@@ -1499,6 +1499,24 @@ const LB_MAX=10;
 // already modeled. Brent recovers above $100 to settle $102.40 Monday, so
 // the default cargo price rounds to $102. straits.live logs Day 218 of
 // closure.
+// Oct 6 2026: the Panama-flagged tanker MT On Peace is hit by a projectile
+// in the strait near Khasab, Oman, injuring 12 of its 19 crew (11 of them
+// Indian); the injured are evacuated to Oman for treatment and India's
+// Ministry of External Affairs condemns the attack and calls for a
+// cessation of strikes on shipping -- the same drone/mine/missile threat
+// already modeled, with hull damage and casualties both already priced
+// into the existing hit/sink mechanic, so the arsenal above is unchanged.
+// Separately the Greek-linked LNG carrier Maran Gas Mystras (Maran Gas
+// Maritime/Angelicoussis group) is struck near the waterline while
+// transiting the strait, the second Greek-linked vessel hit in a matter of
+// days after the Oct 4 strike on the tanker Lipsi; the carrier keeps
+// steaming under its own power and all 30 crew are reported safe -- LNG
+// tankers are already a modeled spawn type, so this is a frequency signal
+// on the existing threat, not a new one. Iran's closed-until-conditions-met
+// posture is unchanged (Al Jazeera, Oct 4), so straitClosed stays true. No
+// confirmed Tuesday Brent settle is available as of writing, so
+// oilPricePerBarrel holds at $102 pending tomorrow's close. straits.live
+// logs Day 219 of closure.
 let straitClosed=true,oilPricePerBarrel=102;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
@@ -2935,6 +2953,9 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"Independent tracker straits.live logs Day 219 of closure since the Feb 28 declaration, with no fresh Brent settle confirmed yet and the price holding at $102", src:"straits.live · Oct 6", color:"blue"},
+  {text:"Panama-flagged tanker MT On Peace hit by a projectile near Khasab, Oman, injuring 12 of 19 crew (11 Indian); India's foreign ministry condemns the attack and calls for an end to strikes on shipping", src:"MEA India/ANI · Oct 6", color:"red"},
+  {text:"Greek-linked LNG carrier Maran Gas Mystras struck near the waterline transiting the strait — the second Greek-linked vessel hit in days after the Oct 4 attack on the tanker Lipsi; all 30 crew safe, ship remains underway", src:"Cyprus Mail/Greek City Times · Oct 6", color:"amber"},
   {text:"Independent tracker straits.live logs Day 218 of closure since the Feb 28 declaration, as Brent recovers above $100 to settle $102.40 Monday", src:"straits.live · Oct 5", color:"blue"},
   {text:"UKMTO says the IRGC hailed an inbound tanker transiting the Strait of Hormuz and ordered it to turn back or be targeted, about 11 nautical miles north of Khasab, Oman; the vessel's master confirmed compliance and no shots were fired", src:"UKMTO/L'Orient Today · Oct 5", color:"amber"},
   {text:"Iran's Parliament Speaker Ghalibaf repeats that the strait stays shut until Washington meets the seven conditions Tehran set in June, rejecting \"unilateral demands\"", src:"Mehr News · Oct 5", color:"amber"},
