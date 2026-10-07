@@ -1517,7 +1517,27 @@ const LB_MAX=10;
 // confirmed Tuesday Brent settle is available as of writing, so
 // oilPricePerBarrel holds at $102 pending tomorrow's close. straits.live
 // logs Day 219 of closure.
-let straitClosed=true,oilPricePerBarrel=102;
+// Oct 7 2026: Bloomberg, Al Jazeera and CNBC all report Iran has sharply
+// accelerated the pace of tanker attacks in October -- UKMTO logs nine
+// attacks in the strait/Gulf over just the month's first six days, already
+// half of September's combined total (itself inflated by four strikes in
+// its final two days) -- even as flows keep recovering toward pre-war
+// levels: Gulf oil flows excluding Iran hit 81%+ of pre-war volumes in
+// September, and Middle East crude exports topped pre-war levels on 14 of
+// the month's 30 days (Kpler data cited in the reporting). Shipping lines
+// are absorbing higher freight, insurance and security costs to sustain
+// that recovery. Unlike prior daily entries, which each logged one new
+// incident already covered by the existing hit/sink mechanic, this is the
+// first reporting to quantify the attack RATE itself roughly doubling
+// month-over-month -- so for the first time the spawn cadence actually
+// moves: closed-strait drone and missile timers both tighten by ~20%
+// (see spawn-rate comments below), a modest, proportional nudge rather
+// than a literal 2x, since the closed-strait arsenal was already at
+// wartime severity and the cited rate spans the whole Gulf, not just the
+// player's transit lane. Brent's Tuesday close is confirmed at $100.58
+// (+0.3%, Rigzone), so the default cargo price rounds to $101.
+// straits.live logs Day 220 of closure.
+let straitClosed=true,oilPricePerBarrel=101;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
 const SESSION_TOKEN = Math.random().toString(36).slice(2) + Date.now().toString(36);
@@ -2498,13 +2518,17 @@ function update(dt){
     :Math.max(0,Math.min(100,Math.round((250-tPos.x)/500*100))))+'%';
 
   if(straitClosed){
-    droneTimer-=dt;if(droneTimer<0){spawnDrone();droneTimer=6+Math.random()*5;}
+    // Oct 7 2026: Bloomberg/Al Jazeera/CNBC report UKMTO-logged attacks on
+    // Gulf shipping roughly doubled month-over-month (9 in October's first
+    // six days vs. ~half of September's total) -- drone/missile timers
+    // tighten ~20% (was 6-11s/12-22s) to track that documented rate jump.
+    droneTimer-=dt;if(droneTimer<0){spawnDrone();droneTimer=5+Math.random()*4;}
     dhowTimer-=dt;if(dhowTimer<0&&dhows.length<3){spawnDhow();dhowTimer=13+Math.random()*8;}
     missileTimer-=dt;
     if(missileTimer<0){
       const near=batteries.filter(b=>Math.abs(b.x-tPos.x)<130&&b.cooldown<=0&&!b.suppressed);
       if(near.length&&immuneTimer<=0){const b=near[Math.floor(Math.random()*near.length)];spawnMissile(b.x,b.z);b.cooldown=25;setMsg('🚀 MISSILE INBOUND — MOVE!',2.5);}
-      missileTimer=12+Math.random()*10;
+      missileTimer=10+Math.random()*8;
     }
     batteries.forEach(b=>{if(b.cooldown>0)b.cooldown-=dt;});
     // US Navy scout USV — Sep 10-11 2026 addition, see spawnUSV() comment above.
@@ -2953,6 +2977,9 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"Independent tracker straits.live logs Day 220 of closure since the Feb 28 declaration, as Brent's confirmed Tuesday close lands at $100.58 (+0.3%)", src:"straits.live · Oct 7", color:"blue"},
+  {text:"UKMTO logs nine tanker attacks in the strait and wider Gulf in October's first six days alone — already half of all of September's combined total, which was itself inflated by four strikes in its final two days", src:"Bloomberg · Oct 6-7", color:"red"},
+  {text:"Despite the attack surge, Gulf oil flows excluding Iran recovered to over 81% of pre-war levels in September, with Middle East crude exports topping pre-war levels on 14 of the month's 30 days — though shipping lines now absorb sharply higher freight, insurance and security costs to sustain it", src:"Bloomberg/CNBC/Al Jazeera · Oct 6-7", color:"amber"},
   {text:"Independent tracker straits.live logs Day 219 of closure since the Feb 28 declaration, with no fresh Brent settle confirmed yet and the price holding at $102", src:"straits.live · Oct 6", color:"blue"},
   {text:"Panama-flagged tanker MT On Peace hit by a projectile near Khasab, Oman, injuring 12 of 19 crew (11 Indian); India's foreign ministry condemns the attack and calls for an end to strikes on shipping", src:"MEA India/ANI · Oct 6", color:"red"},
   {text:"Greek-linked LNG carrier Maran Gas Mystras struck near the waterline transiting the strait — the second Greek-linked vessel hit in days after the Oct 4 attack on the tanker Lipsi; all 30 crew safe, ship remains underway", src:"Cyprus Mail/Greek City Times · Oct 6", color:"amber"},
