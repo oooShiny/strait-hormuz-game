@@ -1537,6 +1537,20 @@ const LB_MAX=10;
 // player's transit lane. Brent's Tuesday close is confirmed at $100.58
 // (+0.3%, Rigzone), so the default cargo price rounds to $101.
 // straits.live logs Day 220 of closure.
+// Oct 8 2026: CNBC (citing Kpler) reports Hormuz-specific crude shipments --
+// as opposed to wider Gulf exports, which include Saudi's Red Sea bypass --
+// are still running about 23% below the pre-war baseline (10.3M bpd vs.
+// 13.5M bpd for the week ended Oct 3), with nearly 20 vessels attacked
+// transiting the chokepoint over the past month. Separately, shipping
+// intelligence firm Marisks describes the threat to transiting vessels as
+// "heightened and increasingly unpredictable" rather than simply more
+// frequent -- a distinct signal from Oct 7's rate-doubling finding, so
+// rather than tightening the closed-strait spawn timers further (already
+// done yesterday), their random spread widens instead: same average
+// cadence, less predictable timing (see update() below). No confirmed
+// Wednesday Brent settle is available as of writing, so oilPricePerBarrel
+// holds at $101 pending the next close. straits.live logs Day 221 of
+// closure.
 let straitClosed=true,oilPricePerBarrel=101;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
@@ -2522,13 +2536,17 @@ function update(dt){
     // Gulf shipping roughly doubled month-over-month (9 in October's first
     // six days vs. ~half of September's total) -- drone/missile timers
     // tighten ~20% (was 6-11s/12-22s) to track that documented rate jump.
-    droneTimer-=dt;if(droneTimer<0){spawnDrone();droneTimer=5+Math.random()*4;}
+    // Oct 8 2026: Marisks separately describes the threat as "heightened
+    // and increasingly unpredictable" rather than just more frequent, so
+    // today's change widens the random spread instead of the average --
+    // same mean cadence as Oct 7 (7s/14s), less predictable timing.
+    droneTimer-=dt;if(droneTimer<0){spawnDrone();droneTimer=4+Math.random()*6;}
     dhowTimer-=dt;if(dhowTimer<0&&dhows.length<3){spawnDhow();dhowTimer=13+Math.random()*8;}
     missileTimer-=dt;
     if(missileTimer<0){
       const near=batteries.filter(b=>Math.abs(b.x-tPos.x)<130&&b.cooldown<=0&&!b.suppressed);
       if(near.length&&immuneTimer<=0){const b=near[Math.floor(Math.random()*near.length)];spawnMissile(b.x,b.z);b.cooldown=25;setMsg('🚀 MISSILE INBOUND — MOVE!',2.5);}
-      missileTimer=10+Math.random()*8;
+      missileTimer=8+Math.random()*12;
     }
     batteries.forEach(b=>{if(b.cooldown>0)b.cooldown-=dt;});
     // US Navy scout USV — Sep 10-11 2026 addition, see spawnUSV() comment above.
@@ -2977,6 +2995,9 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"Independent tracker straits.live logs Day 221 of closure since the Feb 28 declaration, with no fresh Brent settle confirmed yet and the price holding at $101", src:"straits.live · Oct 8", color:"blue"},
+  {text:"Kpler data show crude shipments through the strait itself averaged just 10.3M bpd for the week ended Oct 3 — about 23% below the 13.5M bpd pre-war baseline — even as nearly 20 commercial vessels, mostly tankers, have been attacked transiting the chokepoint over the past month", src:"CNBC/Kpler · Oct 6-7", color:"red"},
+  {text:"Shipping intelligence firm Marisks warns vessels transiting the strait now face a \"heightened and increasingly unpredictable kinetic threat,\" as tanker owners pay up to $1M/day per ship in war-risk security costs to sustain the wider Gulf's export recovery", src:"NBC News/Marisks · Oct 6-7", color:"amber"},
   {text:"Independent tracker straits.live logs Day 220 of closure since the Feb 28 declaration, as Brent's confirmed Tuesday close lands at $100.58 (+0.3%)", src:"straits.live · Oct 7", color:"blue"},
   {text:"UKMTO logs nine tanker attacks in the strait and wider Gulf in October's first six days alone — already half of all of September's combined total, which was itself inflated by four strikes in its final two days", src:"Bloomberg · Oct 6-7", color:"red"},
   {text:"Despite the attack surge, Gulf oil flows excluding Iran recovered to over 81% of pre-war levels in September, with Middle East crude exports topping pre-war levels on 14 of the month's 30 days — though shipping lines now absorb sharply higher freight, insurance and security costs to sustain it", src:"Bloomberg/CNBC/Al Jazeera · Oct 6-7", color:"amber"},
