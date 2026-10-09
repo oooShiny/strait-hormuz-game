@@ -1551,6 +1551,22 @@ const LB_MAX=10;
 // Wednesday Brent settle is available as of writing, so oilPricePerBarrel
 // holds at $101 pending the next close. straits.live logs Day 221 of
 // closure.
+// Oct 9 2026: Euronews reports Iran has begun striking tankers outside the
+// Strait of Hormuz itself, in the clearest sign yet that the campaign
+// flagged as a threat back on Sep 28 (IRGC Navy deputy Ali Mohammadi's
+// vow to hit vessels "even in the Indian Ocean") is now a realized pattern
+// rather than rhetoric. CNBC separately reports Brent climbing on the
+// renewed attack tempo, alongside an unrelated Gulf-of-Mexico hurricane
+// threat to US production -- a market-price driver, not a strait mechanic.
+// Both reports describe the widening and the price move only in headline
+// terms, without a vessel-by-vessel account or a confirmed exchange
+// settle, so nothing here rises to the specificity the hit/sink and
+// toll/arsenal mechanics need to change safely. Critically, the player's
+// mapped transit lane is the strait corridor itself -- these reported hits
+// are explicitly OUTSIDE that corridor, so even taken at face value they
+// don't touch the in-strait spawn rates already tightened (Oct 7) and
+// randomized (Oct 8) this week. oilPricePerBarrel holds at $101 pending a
+// confirmed settle. straits.live logs Day 222 of closure.
 let straitClosed=true,oilPricePerBarrel=101;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
@@ -2995,6 +3011,9 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"Independent tracker straits.live logs Day 222 of closure since the Feb 28 declaration, with still no fresh Brent settle confirmed and the price holding at $101", src:"straits.live · Oct 9", color:"blue"},
+  {text:"Iran has begun striking tankers outside the Strait of Hormuz itself, Euronews reports — the clearest sign yet that the IRGC's Sep 28 vow to hit vessels \"even in the Indian Ocean\" is becoming a realized pattern rather than a threat", src:"Euronews · Oct 8", color:"red"},
+  {text:"Brent climbs on the renewed attack tempo, CNBC reports, even as a separate Gulf-of-Mexico hurricane threat to US production adds its own unrelated upward pressure on prices", src:"CNBC · Oct 8", color:"amber"},
   {text:"Independent tracker straits.live logs Day 221 of closure since the Feb 28 declaration, with no fresh Brent settle confirmed yet and the price holding at $101", src:"straits.live · Oct 8", color:"blue"},
   {text:"Kpler data show crude shipments through the strait itself averaged just 10.3M bpd for the week ended Oct 3 — about 23% below the 13.5M bpd pre-war baseline — even as nearly 20 commercial vessels, mostly tankers, have been attacked transiting the chokepoint over the past month", src:"CNBC/Kpler · Oct 6-7", color:"red"},
   {text:"Shipping intelligence firm Marisks warns vessels transiting the strait now face a \"heightened and increasingly unpredictable kinetic threat,\" as tanker owners pay up to $1M/day per ship in war-risk security costs to sustain the wider Gulf's export recovery", src:"NBC News/Marisks · Oct 6-7", color:"amber"},
