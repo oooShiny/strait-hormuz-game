@@ -1567,6 +1567,30 @@ const LB_MAX=10;
 // don't touch the in-strait spawn rates already tightened (Oct 7) and
 // randomized (Oct 8) this week. oilPricePerBarrel holds at $101 pending a
 // confirmed settle. straits.live logs Day 222 of closure.
+// Oct 10 2026: fuller reporting on the Oct 8-9 IRGC strike (Euronews, The
+// New Arab, Mehr) clarifies it was NOT outside the strait as yesterday's
+// entry read it -- the LPG carrier (named NV Sunshine/MV Sun Shine
+// depending on outlet) was hit transiting the strait's own southern
+// section near Oman, the same US-escorted corridor long modeled here as
+// the AIS dark-running route (see "AIS Blackout" control hint above):
+// the IRGC says it targets vessels using that route specifically because
+// they run with transponders off. That's squarely IN the player's mapped
+// lane, but it's also exactly the risk the dark-running mine/missile
+// mechanic already prices in (50% harder mine hits, targeted-missile
+// risk), so still no new mechanic, just confirmation the existing one is
+// well-calibrated. What IS new today: the IRGC explicitly widened its
+// threat beyond a single corridor, warning it will sanction and target
+// *any* vessel or company it accuses of cooperating with the US,
+// "throughout the region" -- an enforcement escalation from rhetoric to
+// stated policy, but still aimed outside the strait corridor itself, so
+// the spawn/arsenal mechanics are unaffected. Separately, Rubio's Oct 7
+// claim that Iran has "lost complete control" of the strait and that
+// flows are near prewar levels is directly contested by IRGC adviser
+// Naqdi's repeated "full control"/closed-until-conditions-met line --
+// textbook disputed-status reporting, treated as contested, not settled,
+// per the standing rule above. No confirmed Brent settle found for Oct
+// 8-9, so oilPricePerBarrel holds at $101. straits.live logs Day 223 of
+// closure.
 let straitClosed=true,oilPricePerBarrel=101;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
@@ -3011,7 +3035,10 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
-  {text:"Independent tracker straits.live logs Day 222 of closure since the Feb 28 declaration, with still no fresh Brent settle confirmed and the price holding at $101", src:"straits.live · Oct 9", color:"blue"},
+  {text:"Independent tracker straits.live logs Day 223 of closure since the Feb 28 declaration, with still no fresh Brent settle confirmed and the price holding at $101", src:"straits.live · Oct 10", color:"blue"},
+  {text:"Fuller reporting IDs the Oct 8 IRGC strike as the LPG carrier NV Sunshine (owner Natwit), hit in the strait's own southern section near Oman — not outside the strait as first read — after allegedly running the US-escorted corridor with its AIS transponder off; the vessel caught fire in its engine room and propulsion system", src:"Euronews/The New Arab/Mehr News · Oct 9", color:"red"},
+  {text:"The IRGC says enforcement won't stop at the strait: it will sanction and target any vessel or company it accuses of cooperating with the US \"throughout the region,\" a formal escalation from its Sep 28 threat to strike as far as the Indian Ocean", src:"Euronews/Türkiye Today · Oct 9", color:"amber"},
+  {text:"Secretary of State Rubio says Iran has \"lost complete control\" of the strait and that oil flows have returned to near prewar levels; IRGC adviser Gen. Naqdi counters that Iran's forces have \"full control\" and the strait stays closed until Tehran's conditions are met — status remains contested, not settled", src:"Times of Israel/The National · Oct 7-9", color:"blue"},
   {text:"Iran has begun striking tankers outside the Strait of Hormuz itself, Euronews reports — the clearest sign yet that the IRGC's Sep 28 vow to hit vessels \"even in the Indian Ocean\" is becoming a realized pattern rather than a threat", src:"Euronews · Oct 8", color:"red"},
   {text:"Brent climbs on the renewed attack tempo, CNBC reports, even as a separate Gulf-of-Mexico hurricane threat to US production adds its own unrelated upward pressure on prices", src:"CNBC · Oct 8", color:"amber"},
   {text:"Independent tracker straits.live logs Day 221 of closure since the Feb 28 declaration, with no fresh Brent settle confirmed yet and the price holding at $101", src:"straits.live · Oct 8", color:"blue"},
