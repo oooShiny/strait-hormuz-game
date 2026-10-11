@@ -1591,7 +1591,22 @@ const LB_MAX=10;
 // per the standing rule above. No confirmed Brent settle found for Oct
 // 8-9, so oilPricePerBarrel holds at $101. straits.live logs Day 223 of
 // closure.
-let straitClosed=true,oilPricePerBarrel=101;
+// Oct 11 2026: UKMTO reports a fresh outbound tanker hit by an unknown
+// projectile late Saturday night in the strait, sparking a fire with the
+// crew reported safe -- the same drone/mine/missile threat already
+// modeled, not a new weapon category. Separately, CENTCOM says a US
+// fighter jet disabled the Panama-flagged cargo ship Ocean Molica (aka
+// Arika Sun) in the Gulf of Oman after it left an Iranian port and
+// ignored repeated warnings to stop; CENTCOM's tally since resuming the
+// blockade Jul 14 now stands at 4 commercial vessels disabled, 135 turned
+// back, and 10 IRGC-linked tankers destroyed -- confirmation of the
+// existing hostile-Navy-blockade mechanic already modeled (ships that
+// defy the blockade get disabled), not a new one. Brent's confirmed
+// Friday close lands at $104.72, up from the prior Friday's $102.25 as
+// Kpler-tracked Hormuz-specific flows fell to ~8.5M bpd (~40% below the
+// pre-war baseline) for the week ended Oct 7, so oilPricePerBarrel rounds
+// up to $105. straits.live logs Day 224 of closure.
+let straitClosed=true,oilPricePerBarrel=105;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
 const SESSION_TOKEN = Math.random().toString(36).slice(2) + Date.now().toString(36);
@@ -3035,6 +3050,10 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"Independent tracker straits.live logs Day 224 of closure since the Feb 28 declaration, as Brent's confirmed Friday close lands at $104.72, up from $102.25 the week before", src:"straits.live · Oct 11", color:"blue"},
+  {text:"UKMTO reports a fresh outbound tanker hit by an unknown projectile late Saturday night in the strait, sparking a fire; the crew is reported safe", src:"UKMTO/The National · Oct 11", color:"red"},
+  {text:"CENTCOM says a US fighter jet disabled the Panama-flagged cargo ship Ocean Molica (aka Arika Sun) in the Gulf of Oman after it left an Iranian port and ignored repeated warnings to stop; the blockade's three-month tally since Jul 14 now stands at 4 vessels disabled, 135 turned back, and 10 IRGC-linked tankers destroyed", src:"CENTCOM/Al Jazeera · Oct 11", color:"amber"},
+  {text:"Kpler-tracked Hormuz-specific crude flows fell to roughly 8.5M bpd for the week ended Oct 7 — about 40% below the pre-war baseline — even as Brent notches a second straight weekly gain", src:"CNBC/Kpler · Oct 11", color:"amber"},
   {text:"Independent tracker straits.live logs Day 223 of closure since the Feb 28 declaration, with still no fresh Brent settle confirmed and the price holding at $101", src:"straits.live · Oct 10", color:"blue"},
   {text:"Fuller reporting IDs the Oct 8 IRGC strike as the LPG carrier NV Sunshine (owner Natwit), hit in the strait's own southern section near Oman — not outside the strait as first read — after allegedly running the US-escorted corridor with its AIS transponder off; the vessel caught fire in its engine room and propulsion system", src:"Euronews/The New Arab/Mehr News · Oct 9", color:"red"},
   {text:"The IRGC says enforcement won't stop at the strait: it will sanction and target any vessel or company it accuses of cooperating with the US \"throughout the region,\" a formal escalation from its Sep 28 threat to strike as far as the Indian Ocean", src:"Euronews/Türkiye Today · Oct 9", color:"amber"},
