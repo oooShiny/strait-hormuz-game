@@ -1606,6 +1606,26 @@ const LB_MAX=10;
 // Kpler-tracked Hormuz-specific flows fell to ~8.5M bpd (~40% below the
 // pre-war baseline) for the week ended Oct 7, so oilPricePerBarrel rounds
 // up to $105. straits.live logs Day 224 of closure.
+// Oct 12 2026: CNN's analysis (citing Kpler) reports Iran is struggling to
+// reassert its "stranglehold" on the strait as more than 80% of recent
+// transits have shifted onto the Omani side of the channel, with the US
+// Navy now actively escorting vessels making that crossing rather than
+// just intercepting blockade-runners -- a materially new protective
+// posture, not just more of the existing hostile-blockade mechanic (which
+// already disables defiant ships, not shields compliant ones). That earns
+// a new in-game wrinkle: an occasional US Navy escort now patrols the
+// closed strait and can talk a nearby IRGC fast boat out of opening fire
+// on the player (see spawnEscort/escorts below), mirroring tankers
+// increasingly surviving the crossing under that same protection. UKMTO's
+// latest reported hit (an outbound tanker struck on its port side,
+// crew safe) reads as continued coverage of the Oct 10-11 incident already
+// logged above rather than a distinct new strike, so the existing
+// drone/mine/missile arsenal is unchanged. Iran separately rejects a US
+// response to its reopening conditions as "insufficient" and threatens US
+// Gulf assets if fighting resumes -- diplomatic/rhetorical escalation, not
+// a confirmed new attack, so it doesn't move straitClosed. No new
+// confirmed Brent settle found past Friday's $104.72, so oilPricePerBarrel
+// holds at $105. straits.live logs Day 225 of closure.
 let straitClosed=true,oilPricePerBarrel=105;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
@@ -1708,7 +1728,7 @@ const lbPanel=document.getElementById('lbPanel');
 let hull=100,speed=0,heading=0,invTimer=0,waveT=0;
 let tPos={x:-250,z:0};
 let gameRunning=false,wonOrLost=false,lastT=0,msgTimer=0;
-let droneTimer,fastBoatTimer,dhowTimer,missileTimer,tollTimer,convoyTimer,openDroneTimer,lngTimer,saudiTankerTimer,usvTimer;
+let droneTimer,fastBoatTimer,dhowTimer,missileTimer,tollTimer,convoyTimer,openDroneTimer,lngTimer,saudiTankerTimer,usvTimer,escortTimer;
 let immuneTimer=0,tollPending=false,tollCountdown=0,profit=0,phase='go_east',runCount=0;
 // AIS Blackout: mirrors the real Jul 9-10 collapse in traceable Hormuz traffic, when at
 // least two tankers are believed to have crossed dark to dodge targeting. Toggle with B —
@@ -1874,8 +1894,13 @@ const BLOCKADE_DISABLE_CHANCE=0.2;
 // Marine Services Authority listings; the disable bonus holds, still a
 // watch item for once the package lands.
 const TOLL_SANCTIONS_DISABLE_BONUS=0.15;
+// Oct 12 2026: Kpler data cited by CNN shows over 80% of recent Hormuz transits
+// now cross via the Omani side of the channel under active US Navy protection,
+// not just the blockade's existing interception of defiant runners -- a nearby
+// escort now has a real chance of talking an IRGC fast boat out of firing.
+const ESCORT_DETER_CHANCE=0.4,ESCORT_DETER_RANGE=32;
 let coastDmgTimer=0;
-let fastBoats=[],dhows=[],mines=[],missiles=[],drones=[],particles=[],explosions=[],warships=[],convoys=[],lngTankers=[],saudiTankers=[],usvs=[];
+let fastBoats=[],dhows=[],mines=[],missiles=[],drones=[],particles=[],explosions=[],warships=[],convoys=[],lngTankers=[],saudiTankers=[],usvs=[],escorts=[];
 let tollsPaid=0,convoysAided=0,insurancePaid=0;
 let playerName='CAPTAIN', playerFlag='🏴';
 
@@ -2061,6 +2086,33 @@ function spawnUSV(){
   g.position.set(ex,0,cz+(Math.random()-.5)*hw*0.8);
   scene.add(g);
   usvs.push({g,spd:0.02+Math.random()*0.01,angle:Math.atan2(-(tPos.z-g.position.z),tPos.x-ex),hits:0});
+}
+
+// US Navy escort — added Oct 12 2026 after CNN/Kpler reported over 80% of
+// recent Hormuz transits now cross via the Omani side of the channel under
+// active US Navy protection, not just the blockade's existing interception
+// of defiant runners. Unarmed toward the player and non-collidable; its only
+// role is to occasionally talk a nearby IRGC fast boat out of opening fire —
+// see the fastBoats loop in update(dt). Closed-strait only, capped at one at
+// a time, and cruises straight down the lane rather than hunting anything.
+function spawnEscort(){
+  const g=new THREE.Group();
+  const body=new THREE.Mesh(new THREE.BoxGeometry(1.8,0.7,7),new THREE.MeshLambertMaterial({color:0x5a6878}));
+  body.position.y=0.3;g.add(body);
+  const sup=new THREE.Mesh(new THREE.BoxGeometry(1.3,1.0,2.4),new THREE.MeshLambertMaterial({color:0x8a9494}));
+  sup.position.set(0,1.0,0.3);g.add(sup);
+  const mast=new THREE.Mesh(new THREE.CylinderGeometry(0.06,0.06,2.2,5),new THREE.MeshLambertMaterial({color:0x555}));
+  mast.position.set(0,2.2,0.3);g.add(mast);
+  const halo=new THREE.Mesh(new THREE.RingGeometry(ESCORT_DETER_RANGE-0.5,ESCORT_DETER_RANGE,32),
+    new THREE.MeshBasicMaterial({color:0x2a7fff,transparent:true,opacity:0.12,side:THREE.DoubleSide}));
+  halo.rotation.x=-Math.PI/2;halo.position.y=0.15;g.add(halo);
+  const dir=(phase==='go_east')?1:-1;
+  const sx=tPos.x-dir*(20+Math.random()*20);
+  const cz=chanZ(sx),hw=chanHW(sx);
+  g.position.set(sx,0,cz+(Math.random()-.5)*hw*0.8);
+  g.rotation.y=-Math.PI/2+(dir>0?0:Math.PI);
+  scene.add(g);
+  escorts.push({g,spd:0.05+Math.random()*0.02,angle:dir>0?0:Math.PI});
 }
 
 function spawnDhow(){
@@ -2471,6 +2523,7 @@ function clearAll(){
   saudiTankers.forEach(v=>scene.remove(v.g));saudiTankers=[];
   warships.forEach(w=>scene.remove(w.g));warships=[];
   usvs.forEach(u=>scene.remove(u.g));usvs=[];
+  escorts.forEach(e=>scene.remove(e.g));escorts=[];
 }
 function resetGame(fresh){
   clearAll();
@@ -2478,7 +2531,7 @@ function resetGame(fresh){
   if(fresh){hull=100;profit=0;runCount=0;tollsPaid=0;convoysAided=0;insurancePaid=0;}
   speed=0;heading=0;invTimer=0;waveT=0;coastDmgTimer=0; // heading always reset to east
   tPos={x:-238,z:chanZ(-238)};
-  droneTimer=7;fastBoatTimer=10;dhowTimer=14;missileTimer=20;tollTimer=30;convoyTimer=40;openDroneTimer=18+Math.random()*14;lngTimer=100+Math.random()*60;saudiTankerTimer=130+Math.random()*70;usvTimer=45+Math.random()*40;
+  droneTimer=7;fastBoatTimer=10;dhowTimer=14;missileTimer=20;tollTimer=30;convoyTimer=40;openDroneTimer=18+Math.random()*14;lngTimer=100+Math.random()*60;saudiTankerTimer=130+Math.random()*70;usvTimer=45+Math.random()*40;escortTimer=60+Math.random()*50;
   immuneTimer=0;tollPending=false;tollCountdown=0;phase='go_east';aisOn=true;aisToggleCooldown=0;
   updateMissionBadge();scene.remove(tankerGroup);buildTanker();
   // Mine threat scales with how much of the strait remains contaminated:
@@ -2606,6 +2659,8 @@ function update(dt){
     batteries.forEach(b=>{if(b.cooldown>0)b.cooldown-=dt;});
     // US Navy scout USV — Sep 10-11 2026 addition, see spawnUSV() comment above.
     usvTimer-=dt;if(usvTimer<0&&usvs.length<1){spawnUSV();usvTimer=90+Math.random()*60;}
+    // US Navy escort — Oct 12 2026 addition, see spawnEscort() comment above.
+    escortTimer-=dt;if(escortTimer<0&&escorts.length<1){spawnEscort();escortTimer=100+Math.random()*60;}
     // Saudi VLCC supertankers — Sep 11-12 2026 addition. Previously spawnSaudiTanker()
     // only ran in the open/contested branch below, so it never appeared during a
     // closure that's now run 195 straight days. With Saudi Arabia's East-West bypass
@@ -2711,6 +2766,13 @@ function update(dt){
     if(straitClosed){
       b.fireTimer-=dt;
       if(b.fireTimer<0&&dist<=RANGE_BOAT_FIRE){
+        // Oct 12 2026: if a US Navy escort is near the player, it has a chance to
+        // talk the boat out of firing at all -- mirrors Kpler-tracked tankers
+        // increasingly surviving the crossing on the US-protected Omani side.
+        const nearEscort=escorts.some(e=>{const edx=tPos.x-e.g.position.x,edz=tPos.z-e.g.position.z;return Math.sqrt(edx*edx+edz*edz)<=ESCORT_DETER_RANGE;});
+        if(nearEscort&&Math.random()<ESCORT_DETER_CHANCE){
+          setMsg('🇺🇸 Nearby US Navy escort (Omani-route protection) deters IRGC fast boat — it breaks off',2.5);
+        }else{
         // Sep 10-11 2026: if a US Navy scout USV is also in range, the boat has a
         // chance to break off and shoot at it instead of the player -- mirrors the
         // IRGC's reported real-world priority target (hull #5838) on Sep 9-10.
@@ -2727,6 +2789,7 @@ function update(dt){
         }else{
           takeDamage(3.75,'🔫 IRGC FAST BOAT FIRE!');
           spawnExplosion(bp.x+Math.cos(b.angle)*2,bp.z-Math.sin(b.angle)*2,1,0xffcc00);
+        }
         }
         b.fireTimer=4+Math.random()*3;
       }
@@ -2747,6 +2810,14 @@ function update(dt){
     up.y=Math.sin(waveT*2+i)*.05;
     u.g.rotation.y=-Math.PI/2+u.angle;
     if((phase==='go_east'?tPos.x-up.x:up.x-tPos.x)>140){scene.remove(u.g);usvs.splice(i,1);}
+  }
+  // US Navy escort — unarmed toward the player, non-collidable; cruises the lane
+  // and can deter a nearby IRGC fast boat from firing (see fastBoats loop above).
+  for(let i=escorts.length-1;i>=0;i--){
+    const e=escorts[i],ep=e.g.position;
+    ep.x+=Math.cos(e.angle)*e.spd*60*dt;ep.z-=Math.sin(e.angle)*e.spd*60*dt;
+    ep.y=Math.sin(waveT*0.8+i)*.06;
+    if((phase==='go_east'?tPos.x-ep.x:ep.x-tPos.x)>140){scene.remove(e.g);escorts.splice(i,1);}
   }
   // ── US NAVY WARSHIPS — FULL BLOCKADE ────────────────────────────────────
   for(let i=warships.length-1;i>=0;i--){
@@ -3041,7 +3112,7 @@ async function boot(){
   renderNewsFeed();
   hull=100;profit=0;runCount=0;speed=0;heading=0;invTimer=0;waveT=0;coastDmgTimer=0;convoysAided=0;insurancePaid=0;
   tPos={x:-238,z:chanZ(-238)};
-  droneTimer=7;fastBoatTimer=10;dhowTimer=14;missileTimer=20;tollTimer=30;convoyTimer=40;openDroneTimer=18+Math.random()*14;lngTimer=100+Math.random()*60;saudiTankerTimer=130+Math.random()*70;usvTimer=45+Math.random()*40;
+  droneTimer=7;fastBoatTimer=10;dhowTimer=14;missileTimer=20;tollTimer=30;convoyTimer=40;openDroneTimer=18+Math.random()*14;lngTimer=100+Math.random()*60;saudiTankerTimer=130+Math.random()*70;usvTimer=45+Math.random()*40;escortTimer=60+Math.random()*50;
   immuneTimer=0;tollPending=false;tollCountdown=0;phase='go_east';aisOn=true;aisToggleCooldown=0;updateMissionBadge();buildTanker();
   requestAnimationFrame(t=>{lastT=t;animate(t);});
 }
@@ -3050,6 +3121,9 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"Independent tracker straits.live logs Day 225 of closure since the Feb 28 declaration; no fresh Brent settle confirmed past Friday's $104.72, so the price holds", src:"straits.live · Oct 12", color:"blue"},
+  {text:"CNN/Kpler: Iran is struggling to reassert its \"stranglehold\" on the strait as over 80% of recent transits shift onto the Omani side of the channel, with the US Navy now actively escorting vessels making that crossing", src:"CNN/Kpler · Oct 11", color:"green"},
+  {text:"Iran rejects a US response to its reopening conditions as \"insufficient\" and threatens US assets in the Gulf if fighting resumes", src:"Reuters/AP · Oct 11", color:"amber"},
   {text:"Independent tracker straits.live logs Day 224 of closure since the Feb 28 declaration, as Brent's confirmed Friday close lands at $104.72, up from $102.25 the week before", src:"straits.live · Oct 11", color:"blue"},
   {text:"UKMTO reports a fresh outbound tanker hit by an unknown projectile late Saturday night in the strait, sparking a fire; the crew is reported safe", src:"UKMTO/The National · Oct 11", color:"red"},
   {text:"CENTCOM says a US fighter jet disabled the Panama-flagged cargo ship Ocean Molica (aka Arika Sun) in the Gulf of Oman after it left an Iranian port and ignored repeated warnings to stop; the blockade's three-month tally since Jul 14 now stands at 4 vessels disabled, 135 turned back, and 10 IRGC-linked tankers destroyed", src:"CENTCOM/Al Jazeera · Oct 11", color:"amber"},
