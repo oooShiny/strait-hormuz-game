@@ -1626,6 +1626,19 @@ const LB_MAX=10;
 // a confirmed new attack, so it doesn't move straitClosed. No new
 // confirmed Brent settle found past Friday's $104.72, so oilPricePerBarrel
 // holds at $105. straits.live logs Day 225 of closure.
+// Oct 13 2026: Brent eases to roughly $105.60 intraday, off Monday's
+// near-two-week high around $106.19, as Trump's Russian-diesel-release
+// deal with Putin -- a Treasury OFAC general license letting about 22.5M
+// barrels of Russian diesel reach the global market -- offers relief to
+// tight distillate supply. That's a broad diesel-market/sanctions story
+// with no reported effect on in-strait transits, attacks, or blockade
+// enforcement, so it moves the backdrop price only, not any strait
+// mechanic. Nothing else surfaces beyond what's already logged through
+// Oct 11-12 (Iran's "insufficient" rejection, CENTCOM's blockade tally,
+// the Omani-corridor escort), so the arsenal and blockade mechanics are
+// unchanged. No confirmed Tuesday Brent settle is available as of
+// writing, so oilPricePerBarrel holds at $105 pending today's close.
+// straits.live logs Day 226 of closure.
 let straitClosed=true,oilPricePerBarrel=105;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
@@ -3121,6 +3134,8 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"Independent tracker straits.live logs Day 226 of closure since the Feb 28 declaration; no fresh Brent settle confirmed yet, with the price trading intraday near $105.60", src:"straits.live · Oct 13", color:"blue"},
+  {text:"Brent eases off Monday's near-two-week high after Trump's Russian-diesel-release deal with Putin — a Treasury license for roughly 22.5M barrels of Russian diesel exports — offers relief to tight global distillate supply; no reported effect on in-strait transits or the blockade", src:"Reuters/US Treasury · Oct 13", color:"amber"},
   {text:"Independent tracker straits.live logs Day 225 of closure since the Feb 28 declaration; no fresh Brent settle confirmed past Friday's $104.72, so the price holds", src:"straits.live · Oct 12", color:"blue"},
   {text:"CNN/Kpler: Iran is struggling to reassert its \"stranglehold\" on the strait as over 80% of recent transits shift onto the Omani side of the channel, with the US Navy now actively escorting vessels making that crossing", src:"CNN/Kpler · Oct 11", color:"green"},
   {text:"Iran rejects a US response to its reopening conditions as \"insufficient\" and threatens US assets in the Gulf if fighting resumes", src:"Reuters/AP · Oct 11", color:"amber"},
