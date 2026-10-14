@@ -1639,6 +1639,24 @@ const LB_MAX=10;
 // unchanged. No confirmed Tuesday Brent settle is available as of
 // writing, so oilPricePerBarrel holds at $105 pending today's close.
 // straits.live logs Day 226 of closure.
+// Oct 14 2026: Al Jazeera reports Iran's navy has deployed new dedicated
+// surveillance units to monitor Hormuz traffic, explicitly warning vessels
+// against switching off their AIS transponders -- the clearest evidence yet
+// that Iran is building detection capacity aimed specifically at dark
+// runners, not just threatening to hunt them, so the dark-running hail-dodge
+// chance tightens (see HAIL_DODGE_CHANCE_DARK below). Separately CENTCOM
+// publicly rejects the IRGC Navy commander's claim that the strait is under
+// IRGC control and that approaching US warships would be sunk, countering
+// that "the commander has no navy" and citing over 19M barrels moved through
+// the chokepoint with Gulf partners -- the same contested-status, hostile-
+// blockade posture already modeled, so no change there. Iran's navy
+// separately claims (Tasnim, one-sided, unconfirmed) a tanker caught fire
+// after going dark and entering its Sep-declared "prohibited zone," and the
+// IRGC claims a third strike in two days (Democracy Now) alongside a fresh
+// UKMTO-logged projectile hit on an outbound tanker, crew safe -- all the
+// same drone/mine/missile threat already modeled, not a new weapon category.
+// No confirmed Tuesday Brent settle found, so oilPricePerBarrel holds at
+// $105 pending today's close. straits.live logs Day 227 of closure.
 let straitClosed=true,oilPricePerBarrel=105;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
@@ -1753,7 +1771,12 @@ let aisOn=true,aisToggleCooldown=0;
 // empty off Musandam after going dark, and strait traffic nearly stopped
 // entirely that Monday morning. Dark running now eats noticeably harder mine
 // damage to reflect that ~50% hit rate.
-const MINE_DMG_DARK_MULT=1.5,HAIL_DODGE_CHANCE_DARK=0.6;
+// Oct 14 2026: Al Jazeera reports Iran's navy has stood up new dedicated
+// surveillance units specifically to monitor strait traffic and watch for
+// vessels running with transponders off -- a step up from past ad hoc
+// hunts for dark runners, so patrols now spot a dark-running player more
+// often (dodge chance 0.6 -> 0.5).
+const MINE_DMG_DARK_MULT=1.5,HAIL_DODGE_CHANCE_DARK=0.5;
 // Jul 14 2026: the IRGC struck the UAE-flagged tankers al-Bahiya and Mombasa with
 // missiles, saying they'd ignored warnings, run with navigation off, and crossed a
 // "mined route." Going dark on a closed strait now carries a real chance IRGC
@@ -3134,6 +3157,11 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"Independent tracker straits.live logs Day 227 of closure since the Feb 28 declaration; no confirmed Tuesday Brent settle found, so the price holds near $105", src:"straits.live · Oct 14", color:"blue"},
+  {text:"CENTCOM rejects a claim by Iran's IRGC Navy commander that the strait is under IRGC control and that approaching US warships would be sunk, countering that \"the commander has no navy\" and citing over 19M barrels of crude moved through the chokepoint with Gulf partners", src:"CENTCOM/Gulf News · Oct 13-14", color:"amber"},
+  {text:"Al Jazeera reports Iran's navy has deployed new dedicated surveillance units to monitor Strait of Hormuz traffic and is explicitly warning vessels against switching off their AIS transponders, even as tanker attacks soar and oil flows crash again after September's near-prewar recovery", src:"Al Jazeera · Oct 14", color:"red"},
+  {text:"Iran's navy says a tanker caught fire east of the strait after switching off its tracking and entering a \"prohibited zone\" — an Iranian military account only, not independently confirmed", src:"Tasnim News · Oct 14", color:"red"},
+  {text:"Iran's IRGC claims a third tanker strike in two days in the strait, as UKMTO separately logs an outbound tanker hit by a projectile while exiting the strait with its crew reported safe", src:"Democracy Now/UKMTO · Oct 13", color:"red"},
   {text:"Independent tracker straits.live logs Day 226 of closure since the Feb 28 declaration; no fresh Brent settle confirmed yet, with the price trading intraday near $105.60", src:"straits.live · Oct 13", color:"blue"},
   {text:"Brent eases off Monday's near-two-week high after Trump's Russian-diesel-release deal with Putin — a Treasury license for roughly 22.5M barrels of Russian diesel exports — offers relief to tight global distillate supply; no reported effect on in-strait transits or the blockade", src:"Reuters/US Treasury · Oct 13", color:"amber"},
   {text:"Independent tracker straits.live logs Day 225 of closure since the Feb 28 declaration; no fresh Brent settle confirmed past Friday's $104.72, so the price holds", src:"straits.live · Oct 12", color:"blue"},
