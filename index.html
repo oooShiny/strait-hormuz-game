@@ -1657,6 +1657,31 @@ const LB_MAX=10;
 // same drone/mine/missile threat already modeled, not a new weapon category.
 // No confirmed Tuesday Brent settle found, so oilPricePerBarrel holds at
 // $105 pending today's close. straits.live logs Day 227 of closure.
+// Oct 15 2026: Singapore confirms the Singapore-flagged container ship GFS
+// Pride sank after being struck in the strait -- the war's second confirmed
+// vessel loss since the Feb 28 declaration -- with all 21 crew rescued
+// safely. Iran's navy claims the ship hit a mine on an "unauthorized route";
+// Reuters/Singapore's own account points to a projectile strike instead, and
+// maritime security firm Marisks finds no independent evidence for the mine
+// claim, so cause stays contested per the standing rule, not confirmed.
+// Either way it's the same drone/mine/missile lethality already priced into
+// the existing hit/sink mechanic (confirmed working as calibrated -- a real
+// ship actually went down), not a new weapon category or damage tier. Sister
+// ship GFS Giselle is struck separately, takes hull damage, and reaches safe
+// anchorage under its own power with all 22 crew safe -- the same already-
+// modeled threat, surviving the hit rather than sinking, so still no change.
+// Separately, IRGC Navy commander Azmaei claims Iran now runs a permit
+// system for strait transit and repeats his threat to sink approaching US
+// warships -- the same contested-control, hostile-posture claim CENTCOM
+// already rejected yesterday, so the blockade/contested-status mechanics are
+// unchanged. Al Jazeera calls the current attack spate the worst since the
+// war began as oil flows crash again after September's recovery, but gives
+// no attack-rate figure to recalibrate against (unlike Oct 7's quantified
+// doubling), so it reads as confirmation of this week's already-tightened
+// and -widened spawn timers (Oct 7-8) and surveillance change (Oct 14), not
+// grounds for a further change. No confirmed Wednesday Brent settle found,
+// so oilPricePerBarrel holds at $105 pending today's close. straits.live
+// logs Day 228 of closure.
 let straitClosed=true,oilPricePerBarrel=105;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
@@ -3157,6 +3182,11 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"Independent tracker straits.live logs Day 228 of closure since the Feb 28 declaration; no confirmed Wednesday Brent settle found, so the price holds near $105", src:"straits.live · Oct 15", color:"blue"},
+  {text:"Singapore confirms the Singapore-flagged container ship GFS Pride sank after a strike in the Strait of Hormuz, the war's second confirmed vessel loss since the Feb 28 declaration; all 21 crew got off safely, and Iran's claim the ship hit a mine on an \"unauthorized route\" is unconfirmed, with maritime security firm Marisks finding no independent evidence for it", src:"Reuters/Seatrade Maritime · Oct 14-15", color:"red"},
+  {text:"Sister ship GFS Giselle is struck separately in the strait, sustaining hull damage but reaching safe anchorage under its own power with all 22 crew reported safe", src:"Seatrade Maritime · Oct 14", color:"red"},
+  {text:"IRGC Navy commander Rear Admiral Ali Azmaei says Iran now exercises \"smart control\" over the strait, issuing transit permits for vessels moving to and from Iranian ports, and repeats his threat to sink any US warship that approaches — the same contested-control, hostile-posture claim CENTCOM already rejected this week", src:"Yeni Safak/Morung Express · Oct 13", color:"amber"},
+  {text:"Al Jazeera describes the current spate of tanker attacks as the worst since the war began Feb 28, with oil flows crashing again after September's near-prewar recovery — a continuation of the elevated threat already reflected in this week's tightened and widened spawn timers, not a new rate to recalibrate against", src:"Al Jazeera · Oct 14-15", color:"amber"},
   {text:"Independent tracker straits.live logs Day 227 of closure since the Feb 28 declaration; no confirmed Tuesday Brent settle found, so the price holds near $105", src:"straits.live · Oct 14", color:"blue"},
   {text:"CENTCOM rejects a claim by Iran's IRGC Navy commander that the strait is under IRGC control and that approaching US warships would be sunk, countering that \"the commander has no navy\" and citing over 19M barrels of crude moved through the chokepoint with Gulf partners", src:"CENTCOM/Gulf News · Oct 13-14", color:"amber"},
   {text:"Al Jazeera reports Iran's navy has deployed new dedicated surveillance units to monitor Strait of Hormuz traffic and is explicitly warning vessels against switching off their AIS transponders, even as tanker attacks soar and oil flows crash again after September's near-prewar recovery", src:"Al Jazeera · Oct 14", color:"red"},
