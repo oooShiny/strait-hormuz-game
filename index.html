@@ -1682,6 +1682,24 @@ const LB_MAX=10;
 // grounds for a further change. No confirmed Wednesday Brent settle found,
 // so oilPricePerBarrel holds at $105 pending today's close. straits.live
 // logs Day 228 of closure.
+// Oct 16 2026: CNN reviews IMO data and confirms the bulk carrier Cape Dao --
+// torpedoed off Musandam Sep 23, already logged here as killing crewman
+// Suraj Yadav -- also ultimately sank, making it and the GFS Pride the war's
+// second and third confirmed vessel losses since the Feb 28 declaration.
+// Same torpedo/mine/drone lethality already priced into the hit/sink
+// mechanic; this is a belated-confirmation update to an incident already
+// modeled when it happened, not a new weapon category or damage tier, so no
+// change follows. CNN separately frames the current attack surge explicitly
+// around the Nov 3 US midterms -- Iran trying to regain leverage over the
+// strait as gas prices become a political liability for Trump -- the same
+// elevated-tempo posture already reflected in this month's tightened and
+// widened spawn timers (Oct 7-8), just a political motive attached to it,
+// not a new rate to recalibrate against. Kpler data cited in the same piece
+// puts Monday's successful transits at just 4.1M barrels, under a quarter of
+// the pre-war baseline -- in line with (not beyond) the traffic collapse
+// already modeled. No confirmed Thursday Brent settle found, so
+// oilPricePerBarrel holds at $105 pending today's close. straits.live logs
+// Day 229 of closure.
 let straitClosed=true,oilPricePerBarrel=105;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
@@ -3182,6 +3200,10 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"Independent tracker straits.live logs Day 229 of closure since the Feb 28 declaration; no confirmed Thursday Brent settle found, so the price holds near $105", src:"straits.live · Oct 16", color:"blue"},
+  {text:"CNN reviews IMO data confirming the bulk carrier Cape Dao, torpedoed off Musandam Sep 23, also ultimately sank — making it and the Singapore-flagged GFS Pride the war's second and third confirmed vessel losses since the Feb 28 declaration", src:"CNN · Oct 14-15", color:"red"},
+  {text:"CNN ties the current attack surge directly to the Nov 3 US midterms, reporting Iran is ramping up strikes and threats to try to regain leverage over the strait as gas prices and cost-of-living become a political liability for President Trump", src:"CNN · Oct 14-15", color:"amber"},
+  {text:"Kpler data cited by CNN show only about 4.1 million barrels of oil successfully transited the strait Monday — under a quarter of pre-war levels — in line with the traffic collapse already reflected in-game", src:"CNN/Kpler · Oct 13-15", color:"amber"},
   {text:"Independent tracker straits.live logs Day 228 of closure since the Feb 28 declaration; no confirmed Wednesday Brent settle found, so the price holds near $105", src:"straits.live · Oct 15", color:"blue"},
   {text:"Singapore confirms the Singapore-flagged container ship GFS Pride sank after a strike in the Strait of Hormuz, the war's second confirmed vessel loss since the Feb 28 declaration; all 21 crew got off safely, and Iran's claim the ship hit a mine on an \"unauthorized route\" is unconfirmed, with maritime security firm Marisks finding no independent evidence for it", src:"Reuters/Seatrade Maritime · Oct 14-15", color:"red"},
   {text:"Sister ship GFS Giselle is struck separately in the strait, sustaining hull damage but reaching safe anchorage under its own power with all 22 crew reported safe", src:"Seatrade Maritime · Oct 14", color:"red"},
