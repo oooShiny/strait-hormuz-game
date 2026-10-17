@@ -1700,7 +1700,26 @@ const LB_MAX=10;
 // already modeled. No confirmed Thursday Brent settle found, so
 // oilPricePerBarrel holds at $105 pending today's close. straits.live logs
 // Day 229 of closure.
-let straitClosed=true,oilPricePerBarrel=105;
+// Oct 17 2026: Brent settles Friday at $109.86 (CNBC/Nation Thailand), up
+// 3.7% and briefly touching $110 intraday for the first time since May, as
+// Iran's IRGC escalates Hormuz attacks and Ukraine separately vows to
+// strike Russian refineries. Unlike this week's string of unconfirmed-
+// settle holds, this is a confirmed, material close, so oilPricePerBarrel
+// updates from $105 to $110. Separately the IRGC claims (Shafaq News,
+// Euronews, Al Jazeera liveblog) a supertanker carrying over 2M barrels hit
+// a naval mine and caught fire after allegedly running the strait dark --
+// transponders and radar off -- on an "unauthorized route" with claimed US
+// backing; no vessel name, flag, casualties, or independent confirmation
+// surface, and it's exactly the dark-running mine risk already modeled
+// (MINE_DMG_DARK_MULT, HAIL_DODGE_CHANCE_DARK below), so no mechanic
+// change. CENTCOM/Shafaq separately say US-escorted Gulf partners moved
+// over 100M barrels in the past week alone -- a quantified confirmation
+// the Oct 12 escort mechanic is tracking the real posture, not grounds for
+// a new one. India's ports minister Sonowal confirms the crude tanker MT
+// ST 3 was struck by a projectile Oct 16 with all 15 Indian crew safe --
+// continued coverage of the same already-modeled drone/mine/missile
+// threat. straits.live logs Day 230 of closure.
+let straitClosed=true,oilPricePerBarrel=110;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
 const SESSION_TOKEN = Math.random().toString(36).slice(2) + Date.now().toString(36);
@@ -3200,6 +3219,11 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"Independent tracker straits.live logs Day 230 of closure since the Feb 28 declaration, as Brent settles at $109.86 — up 3.7% and briefly touching $110 intraday for the first time since May", src:"straits.live/CNBC · Oct 17", color:"blue"},
+  {text:"CNBC ties Brent's jump to Iran's IRGC escalating attacks in the strait, with Ukraine's separate vow to strike Russian refineries adding its own unrelated upward pressure on prices", src:"CNBC/Nation Thailand · Oct 16-17", color:"amber"},
+  {text:"The IRGC claims a supertanker carrying more than 2 million barrels of crude hit a naval mine and caught fire in the strait after allegedly running an \"unauthorized route\" with its tracking and radar switched off under claimed US military backing — an Iranian account only, with no vessel name or independent confirmation", src:"Shafaq News/Euronews · Oct 17", color:"red"},
+  {text:"CENTCOM says US-escorted Gulf partners moved more than 100 million barrels of crude through the strait in the past week alone", src:"CENTCOM/Shafaq News · Oct 17", color:"amber"},
+  {text:"India's ports minister confirms the crude tanker MT ST 3 was struck by a projectile while transiting the strait, with all 15 Indian crew members safe and uninjured", src:"PIB/The National · Oct 16", color:"red"},
   {text:"Independent tracker straits.live logs Day 229 of closure since the Feb 28 declaration; no confirmed Thursday Brent settle found, so the price holds near $105", src:"straits.live · Oct 16", color:"blue"},
   {text:"CNN reviews IMO data confirming the bulk carrier Cape Dao, torpedoed off Musandam Sep 23, also ultimately sank — making it and the Singapore-flagged GFS Pride the war's second and third confirmed vessel losses since the Feb 28 declaration", src:"CNN · Oct 14-15", color:"red"},
   {text:"CNN ties the current attack surge directly to the Nov 3 US midterms, reporting Iran is ramping up strikes and threats to try to regain leverage over the strait as gas prices and cost-of-living become a political liability for President Trump", src:"CNN · Oct 14-15", color:"amber"},
