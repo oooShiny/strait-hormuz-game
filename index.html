@@ -1719,6 +1719,28 @@ const LB_MAX=10;
 // ST 3 was struck by a projectile Oct 16 with all 15 Indian crew safe --
 // continued coverage of the same already-modeled drone/mine/missile
 // threat. straits.live logs Day 230 of closure.
+// Oct 18 2026: Saturday brings no fresh Brent settle, so oilPricePerBarrel
+// holds at $110 pending Monday's open. CENTCOM takes to X to call three
+// Iranian claims "FALSE," insisting the US and regional partners control
+// the strait as commercial vessels keep transiting despite "unwarranted
+// IRGC aggression," and disputes Iran's mine account for last week's GFS
+// Pride sinking -- CENTCOM says its own assessment points to an IRGC
+// projectile strike, with the ship going down under tow, not a mine. A
+// gCaptain numbers check run alongside the dispute puts the four-day JMIC
+// transit average at only ~22% of the pre-war benchmark even as CENTCOM
+// touts 40+ transits in the past 24 hours -- the same high-transit-count-
+// vs-low-volume pattern already treated as dueling, unverifiable metrics,
+// not grounds for a new one. UKMTO's own weekly tally for the week ending
+// Oct 16 counts at least 12 vessel attacks, matching (not exceeding) the
+// comparable high-tempo week already reflected in the Oct 7-8 spawn-timer
+// tightening. Iran's FM Araghchi sharpens the reopening offer to a
+// specific sixth-day-reopening/seventh-day-talks framework conditioned on
+// the US lifting its naval blockade -- still no US acceptance and nothing
+// has actually reopened, so straitClosed stays true. Every thread here
+// restates a dynamic already modeled (contested cause-of-loss, elevated
+// attack tempo, dueling traffic claims, unmet reopening conditions), not a
+// new weapon, mechanic, or threshold, so no mechanic change follows.
+// straits.live logs Day 231 of closure.
 let straitClosed=true,oilPricePerBarrel=110;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
@@ -3219,6 +3241,11 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"Independent tracker straits.live logs Day 231 of closure since the Feb 28 declaration; no fresh weekend Brent settle found, so the price holds at $110", src:"straits.live · Oct 18", color:"blue"},
+  {text:"CENTCOM calls three Iranian claims \"FALSE\" on X, saying the US and regional partners control the strait as commercial vessels keep transiting despite \"unwarranted IRGC aggression,\" and crediting over 40 vessel transits in the past 24 hours", src:"CENTCOM (X) · Oct 17-18", color:"amber"},
+  {text:"CENTCOM disputes the IRGC's mine account for the Singapore-flagged GFS Pride's sinking, saying its own assessment points to an Iranian projectile strike instead, with the vessel going down under tow", src:"CENTCOM/Gulf News · Oct 17", color:"red"},
+  {text:"A gCaptain analysis finds the four-day JMIC transit average running near 22% of the pre-war benchmark even as CENTCOM touts record 24-hour transit counts, while UKMTO tallies at least 12 vessel attacks in the week ending Oct 16 — among the highest weekly totals since the Feb 28 declaration", src:"gCaptain/UKMTO · Oct 17", color:"amber"},
+  {text:"Iran's FM Araghchi offers a sharper reopening framework — a sixth-day reopening and seventh-day talks, conditioned on the US lifting its naval blockade — with no US acceptance yet", src:"Reuters/CBS · Oct 17-18", color:"blue"},
   {text:"Independent tracker straits.live logs Day 230 of closure since the Feb 28 declaration, as Brent settles at $109.86 — up 3.7% and briefly touching $110 intraday for the first time since May", src:"straits.live/CNBC · Oct 17", color:"blue"},
   {text:"CNBC ties Brent's jump to Iran's IRGC escalating attacks in the strait, with Ukraine's separate vow to strike Russian refineries adding its own unrelated upward pressure on prices", src:"CNBC/Nation Thailand · Oct 16-17", color:"amber"},
   {text:"The IRGC claims a supertanker carrying more than 2 million barrels of crude hit a naval mine and caught fire in the strait after allegedly running an \"unauthorized route\" with its tracking and radar switched off under claimed US military backing — an Iranian account only, with no vessel name or independent confirmation", src:"Shafaq News/Euronews · Oct 17", color:"red"},
