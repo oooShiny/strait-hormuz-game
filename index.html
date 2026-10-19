@@ -1741,6 +1741,26 @@ const LB_MAX=10;
 // attack tempo, dueling traffic claims, unmet reopening conditions), not a
 // new weapon, mechanic, or threshold, so no mechanic change follows.
 // straits.live logs Day 231 of closure.
+// Oct 19 2026: No Monday Brent settle confirmed yet, so oilPricePerBarrel
+// holds at $110. Iran's IRGC reports a third tanker mine/fire incident in
+// three days -- a vessel it says struck a naval mine south of the strait
+// and caught fire in its engine room after running an "unauthorized"
+// southern route with its positioning and navigation systems switched
+// off; no vessel name, flag, casualties, or independent confirmation
+// surface, and it's the same unconfirmed dark-running mine claim already
+// modeled (MINE_DMG_DARK_MULT, HAIL_DODGE_CHANCE_DARK below), not a new
+// weapon or damage tier. IRGC Navy commander Adm. Ozmaei's warning that
+// any vessel deactivating its navigation systems will be treated as
+// "hostile" gets repeated again in today's coverage, but it's the same
+// dark-running detection policy already tightened Oct 14, not a new
+// threshold. Araghchi's sixth-day-reopening/seventh-day-talks framework
+// also resurfaces unchanged from Oct 17-18 -- still no US acceptance and
+// nothing has actually reopened, so straitClosed stays true. Coverage
+// also recaps the standing US counter-blockade on Iranian oil exports,
+// which has been running (and modeled via blockade-runner interception)
+// since mid-July, not a new posture. Every thread here restates an
+// already-modeled dynamic, so no gameplay mechanic change follows.
+// straits.live logs Day 232 of closure.
 let straitClosed=true,oilPricePerBarrel=110;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
@@ -3241,6 +3261,9 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"Independent tracker straits.live logs Day 232 of closure since the Feb 28 declaration; no Monday Brent settle confirmed yet, so the price holds at $110", src:"straits.live · Oct 19", color:"blue"},
+  {text:"Iran's IRGC reports a third tanker fire in three days after an alleged mine strike south of the strait, saying the vessel was running an unauthorized southern route with its positioning and navigation systems switched off — no vessel name, flag, or casualties disclosed, and no independent confirmation", src:"Reuters/NZ Herald · Oct 19", color:"red"},
+  {text:"IRGC Navy commander Adm. Ali Ozmaei reiterates that any vessel switching off its navigation and identification systems in the strait will be treated as hostile, restating the policy first issued earlier this month", src:"Tehran Times/Newsquawk · Oct 19", color:"amber"},
   {text:"Independent tracker straits.live logs Day 231 of closure since the Feb 28 declaration; no fresh weekend Brent settle found, so the price holds at $110", src:"straits.live · Oct 18", color:"blue"},
   {text:"CENTCOM calls three Iranian claims \"FALSE\" on X, saying the US and regional partners control the strait as commercial vessels keep transiting despite \"unwarranted IRGC aggression,\" and crediting over 40 vessel transits in the past 24 hours", src:"CENTCOM (X) · Oct 17-18", color:"amber"},
   {text:"CENTCOM disputes the IRGC's mine account for the Singapore-flagged GFS Pride's sinking, saying its own assessment points to an Iranian projectile strike instead, with the vessel going down under tow", src:"CENTCOM/Gulf News · Oct 17", color:"red"},
