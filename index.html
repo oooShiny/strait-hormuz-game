@@ -1761,6 +1761,25 @@ const LB_MAX=10;
 // since mid-July, not a new posture. Every thread here restates an
 // already-modeled dynamic, so no gameplay mechanic change follows.
 // straits.live logs Day 232 of closure.
+// Oct 20 2026: No confirmed Monday Brent settle surfaces, so
+// oilPricePerBarrel holds at $110. Iran's IRGC/Sepah News claims mines
+// halted and set ablaze two more tankers at an "illegal crossing point"
+// in the southern strait -- a fourth straight day of mine/fire claims
+// (Oct 17 one tanker, Oct 18 two, Oct 19 a third), with no vessel names,
+// flags, casualties, or independent confirmation disclosed. It's the
+// same unconfirmed dark-running mine claim already modeled
+// (MINE_DMG_DARK_MULT, HAIL_DODGE_CHANCE_DARK below), not a new weapon
+// or damage tier. CNN/ABC separately report the US has drawn up
+// contingency strike options against Iran -- including the GBU-43/B
+// "mother of all bombs" against energy and nuclear sites -- if combat
+// resumes; the White House says Trump is keeping "all options on the
+// table," while Trump himself has said no attack comes before the Nov 3
+// midterms. That's planning for a possible future strike on Iranian
+// soil, not a weapon or posture change inside the strait itself, so it
+// doesn't touch any in-game mechanic. Nothing has actually reopened, so
+// straitClosed stays true. Every thread here restates an already-modeled
+// dynamic or concerns a strike that hasn't happened, so no gameplay
+// mechanic change follows. straits.live logs Day 233 of closure.
 let straitClosed=true,oilPricePerBarrel=110;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
@@ -3261,6 +3280,9 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"Independent tracker straits.live logs Day 233 of closure since the Feb 28 declaration; no confirmed Monday Brent settle surfaces, so the price holds at $110", src:"straits.live · Oct 20", color:"blue"},
+  {text:"Iran's IRGC says mines halted and set ablaze two more tankers at an \"illegal crossing point\" in the southern strait, per Sepah News — a fourth straight day of mine/fire claims, with no vessel names, flags, casualties, or independent confirmation disclosed", src:"Sepah News/Free Malaysia Today · Oct 20", color:"red"},
+  {text:"CNN and ABC News report the US has drawn up contingency strike options against Iran, including the GBU-43/B \"mother of all bombs\" against energy and nuclear sites, if combat resumes; the White House says Trump is keeping \"all options on the table,\" while Trump himself has said no attack comes before the Nov 3 midterms", src:"CNN/ABC News · Oct 19-20", color:"amber"},
   {text:"Independent tracker straits.live logs Day 232 of closure since the Feb 28 declaration; no Monday Brent settle confirmed yet, so the price holds at $110", src:"straits.live · Oct 19", color:"blue"},
   {text:"Iran's IRGC reports a third tanker fire in three days after an alleged mine strike south of the strait, saying the vessel was running an unauthorized southern route with its positioning and navigation systems switched off — no vessel name, flag, or casualties disclosed, and no independent confirmation", src:"Reuters/NZ Herald · Oct 19", color:"red"},
   {text:"IRGC Navy commander Adm. Ali Ozmaei reiterates that any vessel switching off its navigation and identification systems in the strait will be treated as hostile, restating the policy first issued earlier this month", src:"Tehran Times/Newsquawk · Oct 19", color:"amber"},
