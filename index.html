@@ -1780,7 +1780,34 @@ const LB_MAX=10;
 // straitClosed stays true. Every thread here restates an already-modeled
 // dynamic or concerns a strike that hasn't happened, so no gameplay
 // mechanic change follows. straits.live logs Day 233 of closure.
-let straitClosed=true,oilPricePerBarrel=110;
+// Oct 21 2026: Brent settles Tuesday at $108.79 (CNBC), down 0.7% after
+// touching $111.05 intraday -- a five-month high -- then reversing on
+// report of a Pakistan-mediated US-Iran proposal; this is a confirmed,
+// material close, so oilPricePerBarrel updates from $110 to $109. The
+// proposal itself (Pakistan's army chief presenting terms in Tehran,
+// reportedly a secret IAEA inspection visit plus interest on $6B in
+// Qatar-held Iranian funds, with one outline floating a sixth-day
+// reopening/seventh-day-talks sequence) has only preliminary, unofficial
+// acceptance from both sides -- the same conditional-offer-no-signed-deal
+// posture already modeled, so straitClosed stays true. CENTCOM flatly
+// calls Iran's Oct 19-20 tanker mine claims false, saying it has cleared
+// the strait's international waterways of mines and that Iran is using
+// missiles and drones instead -- the same dispute-the-cause pattern
+// already modeled (CENTCOM's Oct 18 GFS Pride/Aug 31 denials), not a new
+// mechanic, and it doesn't touch MINE_DMG_DARK_MULT/HAIL_DODGE_CHANCE_DARK
+// either way since those model the claimed dark-running risk regardless
+// of who's right. An IRGC spokesman threatens to sever seven undersea
+// internet cables running beneath the strait "if attacked again" by the
+// US/Israel, vowing unspecified new targets and weapons -- a conditional
+// threat against infrastructure outside ship-to-ship combat, not a
+// realized attack or a mechanic the player's ship encounters, so no
+// gameplay change follows (same contingent-future-threat treatment as
+// Oct 20's MOAB reporting). The IRGC also claims downing a US MQ-9 drone,
+// which a US official calls untrue -- the same claimed/denied-attack-on-
+// a-Navy-asset pattern already modeled via the fast-boat break-off
+// mechanic, not a new weapon category. straits.live logs Day 234 of
+// closure.
+let straitClosed=true,oilPricePerBarrel=109;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
 const SESSION_TOKEN = Math.random().toString(36).slice(2) + Date.now().toString(36);
@@ -3280,6 +3307,11 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"Independent tracker straits.live logs Day 234 of closure since the Feb 28 declaration; Brent settles Tuesday at $108.79, down 0.7% after touching a five-month intraday high of $111.05, so the price eases to $109", src:"straits.live/CNBC · Oct 21", color:"blue"},
+  {text:"Pakistan's army chief presents a mediation proposal in Tehran — reportedly a secret IAEA inspection visit plus interest on $6B in Iranian funds held in Qatar — that the US has reportedly approved and Iran has given only preliminary, unofficial acceptance; one account floats a sixth-day strait reopening and seventh-day nuclear talks, but no side has signed anything", src:"Al-Araby Al-Jadeed/Channel 12 · Oct 20-21", color:"amber"},
+  {text:"A US CENTCOM spokesman calls Iran's tanker mine claims from the past several days false, saying the US has cleared the strait's international waterways of mines and that Iran is instead using missiles and drones", src:"Newsquawk/Kurdistan24 · Oct 20", color:"amber"},
+  {text:"An IRGC spokesman threatens to sever seven undersea internet cables running beneath the Strait of Hormuz if the US or Israel attacks Iran again, vowing unspecified \"new targets\" and \"new weapons\" would be unveiled; Iran's foreign ministry separately warns Washington it will retaliate against any strike", src:"Daily Sun/Türkiye Today · Oct 20", color:"red"},
+  {text:"Iran's IRGC claims it shot down a US MQ-9 drone over the Gulf; a US official calls the claim untrue", src:"Gulf wire reports · Oct 20", color:"red"},
   {text:"Independent tracker straits.live logs Day 233 of closure since the Feb 28 declaration; no confirmed Monday Brent settle surfaces, so the price holds at $110", src:"straits.live · Oct 20", color:"blue"},
   {text:"Iran's IRGC says mines halted and set ablaze two more tankers at an \"illegal crossing point\" in the southern strait, per Sepah News — a fourth straight day of mine/fire claims, with no vessel names, flags, casualties, or independent confirmation disclosed", src:"Sepah News/Free Malaysia Today · Oct 20", color:"red"},
   {text:"CNN and ABC News report the US has drawn up contingency strike options against Iran, including the GBU-43/B \"mother of all bombs\" against energy and nuclear sites, if combat resumes; the White House says Trump is keeping \"all options on the table,\" while Trump himself has said no attack comes before the Nov 3 midterms", src:"CNN/ABC News · Oct 19-20", color:"amber"},
