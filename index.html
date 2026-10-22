@@ -1807,6 +1807,28 @@ const LB_MAX=10;
 // a-Navy-asset pattern already modeled via the fast-boat break-off
 // mechanic, not a new weapon category. straits.live logs Day 234 of
 // closure.
+// Oct 22 2026: Brent settles Wednesday at $108.82, essentially flat (+3
+// cents, +0.03%) versus Tuesday's $108.79 after another intraday push
+// toward $110-111 -- an immaterial move, so oilPricePerBarrel holds at
+// $109. UKMTO reports a Kuwait-flagged tanker carrying 21 Indian
+// seafarers was hit by an unknown projectile about 11 nautical miles off
+// Bukha, Oman, catching fire before it anchored; all crew are reported
+// safe -- the same unconfirmed-attacker, no-casualty tanker-strike
+// pattern already modeled via the mine/drone/hail mechanics below, not a
+// new weapon or damage tier. Kpler data cited in market reports says
+// Middle East oil exports are holding near pre-war levels despite the
+// attacks, with rerouting and ship-to-ship transfers in the Gulf of Oman
+// absorbing the disruption -- a market-adaptation narrative, not a
+// confirmed Brent settle or a change to straitClosed. An unverified
+// Channel 12 report via Newsquawk says explosions were heard at Sirik,
+// Iran, with a claim that US forces struck an anti-ship missile
+// launcher -- the same claimed/denied-strike pattern already modeled,
+// single-source and unconfirmed. IMF PortWatch logs just 4 transits on
+// Oct 18 against an 85/day pre-crisis baseline, underscoring the
+// existing closure rather than changing it. Nothing here is a signed
+// reopening deal or a new weapon/posture inside the strait, so
+// straitClosed stays true and no gameplay mechanic change follows.
+// straits.live logs Day 235 of closure.
 let straitClosed=true,oilPricePerBarrel=109;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
@@ -3307,6 +3329,11 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"Independent tracker straits.live logs Day 235 of closure since the Feb 28 declaration; Brent settles Wednesday at $108.82, essentially flat (+0.03%) after another push toward $110-111 intraday, so the price holds at $109", src:"straits.live/market wire reports · Oct 22", color:"blue"},
+  {text:"UKMTO reports a Kuwait-flagged tanker carrying 21 Indian seafarers was hit by an unknown projectile about 11 nautical miles off Bukha, Oman, catching fire before it anchored; all crew are reported safe", src:"UKMTO/Hellenic Shipping News · Oct 21-22", color:"red"},
+  {text:"Kpler shipping data cited in market reports shows Middle East oil exports holding near pre-war levels despite the attacks, with rerouting and ship-to-ship transfers in the Gulf of Oman absorbing much of the disruption", src:"Kpler/market wire reports · Oct 22", color:"amber"},
+  {text:"Israel's Channel 12 reports explosions heard in the Iranian port city of Sirik, claiming US forces struck an anti-ship missile launcher there; the report is single-source and independently unconfirmed", src:"Channel 12/Newsquawk · Oct 21-22", color:"amber"},
+  {text:"IMF PortWatch logs just 4 vessel transits through the strait on Oct 18, against an 85-per-day pre-crisis baseline, as the closure grinds on", src:"IMF PortWatch/straits.live · Oct 18-22", color:"blue"},
   {text:"Independent tracker straits.live logs Day 234 of closure since the Feb 28 declaration; Brent settles Tuesday at $108.79, down 0.7% after touching a five-month intraday high of $111.05, so the price eases to $109", src:"straits.live/CNBC · Oct 21", color:"blue"},
   {text:"Pakistan's army chief presents a mediation proposal in Tehran — reportedly a secret IAEA inspection visit plus interest on $6B in Iranian funds held in Qatar — that the US has reportedly approved and Iran has given only preliminary, unofficial acceptance; one account floats a sixth-day strait reopening and seventh-day nuclear talks, but no side has signed anything", src:"Al-Araby Al-Jadeed/Channel 12 · Oct 20-21", color:"amber"},
   {text:"A US CENTCOM spokesman calls Iran's tanker mine claims from the past several days false, saying the US has cleared the strait's international waterways of mines and that Iran is instead using missiles and drones", src:"Newsquawk/Kurdistan24 · Oct 20", color:"amber"},
