@@ -1829,6 +1829,27 @@ const LB_MAX=10;
 // reopening deal or a new weapon/posture inside the strait, so
 // straitClosed stays true and no gameplay mechanic change follows.
 // straits.live logs Day 235 of closure.
+// Oct 23 2026: Iran's government claims IRGC naval forces and mines hit
+// seven oil tankers in a single overnight assault -- four tankers struck
+// directly while conducting ship-to-ship transfers, three more
+// immobilized by mines -- which, if confirmed, would be the largest
+// single-day toll on strait shipping since the Feb 28 declaration.
+// Independently unverified and no casualties reported, but the
+// coordinated *volume* in one night (naval strikes and mines landing
+// together, not another isolated single-ship claim) is a genuine step
+// up from the drip-feed modeled so far, in the same vein as Oct 7's
+// confirmed-rate-increase tightening -- see dhowTimer/fastBoatTimer
+// below. Lloyd's List Intelligence says tankers are still transiting
+// under US military escort despite the surge, and the IRGC warns
+// continued escorted traffic could draw a response against US bases in
+// the region -- a conditional future threat, not a realized strike, so
+// no further mechanic follows from that part. UN spokesman Stephane
+// Dujarric calls for an end to attacks on commercial shipping and
+// renewed US-Iran diplomacy -- a statement, not a deal, so straitClosed
+// stays true. No confirmed Thursday Brent settle is available (wire
+// reports cite only an intraday push above $111, not a close), so
+// oilPricePerBarrel holds at $109 pending the next confirmed close.
+// straits.live logs Day 236 of closure.
 let straitClosed=true,oilPricePerBarrel=109;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
@@ -2857,7 +2878,12 @@ function update(dt){
     // today's change widens the random spread instead of the average --
     // same mean cadence as Oct 7 (7s/14s), less predictable timing.
     droneTimer-=dt;if(droneTimer<0){spawnDrone();droneTimer=4+Math.random()*6;}
-    dhowTimer-=dt;if(dhowTimer<0&&dhows.length<3){spawnDhow();dhowTimer=13+Math.random()*8;}
+    // Oct 23 2026: a reported single-night toll of 7 tankers hit by mines
+    // and direct naval strikes (largest since the war began) -- mine-laying
+    // dhow cap/cadence tighten (3->4 dhows, 13-21s->11-18s) to put more
+    // simultaneous mine threats on the board, same style as the Jul 7-8
+    // fast-boat intensification below.
+    dhowTimer-=dt;if(dhowTimer<0&&dhows.length<4){spawnDhow();dhowTimer=11+Math.random()*7;}
     missileTimer-=dt;
     if(missileTimer<0){
       const near=batteries.filter(b=>Math.abs(b.x-tPos.x)<130&&b.cooldown<=0&&!b.suppressed);
@@ -2914,7 +2940,9 @@ function update(dt){
   }
   fastBoatTimer-=dt;
   // Jul 7-8: IRGC fast-boat patrols intensified (cap raised 2→3, interval tightened 16→12s)
-  if(fastBoatTimer<0&&fastBoats.length<(straitClosed?4:3)){spawnFastBoat();fastBoatTimer=(straitClosed?8:12)+Math.random()*6;}
+  // Oct 23 2026: reported 7-tanker single-night toll (4 of them direct naval
+  // strikes) is the largest since the war began -- closed-strait cap raised 4→5.
+  if(fastBoatTimer<0&&fastBoats.length<(straitClosed?5:3)){spawnFastBoat();fastBoatTimer=(straitClosed?8:12)+Math.random()*6;}
   // US Navy presence in both modes — hostile blockade while closed (war footing).
   // Jul 14 2026: Washington reinstated its naval blockade of Iranian ports (fourth
   // time this war) after the al-Bahiya/Mombasa strikes — it targets Iranian-flagged
@@ -3329,6 +3357,10 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"Iran's government says IRGC naval forces and mines hit seven oil tankers in a single overnight assault -- four struck directly during ship-to-ship transfers, three more immobilized by mines -- which would be the largest single-day shipping toll in the strait since the Feb 28 declaration if confirmed; no casualties reported and the claim is independently unverified", src:"AP/NBC News/Washington Post · Oct 22-23", color:"red"},
+  {text:"Lloyd's List Intelligence says tankers are still transiting the strait under US military escort despite the surge in attacks, even as the IRGC warns that continued escorted traffic could draw a response against American bases in the region", src:"Lloyd's List/AP · Oct 22-23", color:"amber"},
+  {text:"UN spokesman Stephane Dujarric says no commercial vessels should be attacked and calls for renewed US-Iran diplomacy to reopen the strait", src:"UN/AP · Oct 22-23", color:"blue"},
+  {text:"Independent tracker straits.live logs Day 236 of closure since the Feb 28 declaration; no confirmed Thursday Brent settle is available, with wire reports citing only an intraday push above $111, so the price holds at $109 pending the next close", src:"straits.live/wire reports · Oct 23", color:"blue"},
   {text:"Independent tracker straits.live logs Day 235 of closure since the Feb 28 declaration; Brent settles Wednesday at $108.82, essentially flat (+0.03%) after another push toward $110-111 intraday, so the price holds at $109", src:"straits.live/market wire reports · Oct 22", color:"blue"},
   {text:"UKMTO reports a Kuwait-flagged tanker carrying 21 Indian seafarers was hit by an unknown projectile about 11 nautical miles off Bukha, Oman, catching fire before it anchored; all crew are reported safe", src:"UKMTO/Hellenic Shipping News · Oct 21-22", color:"red"},
   {text:"Kpler shipping data cited in market reports shows Middle East oil exports holding near pre-war levels despite the attacks, with rerouting and ship-to-ship transfers in the Gulf of Oman absorbing much of the disruption", src:"Kpler/market wire reports · Oct 22", color:"amber"},
