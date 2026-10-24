@@ -1850,6 +1850,20 @@ const LB_MAX=10;
 // reports cite only an intraday push above $111, not a close), so
 // oilPricePerBarrel holds at $109 pending the next confirmed close.
 // straits.live logs Day 236 of closure.
+// Oct 24 2026: Saturday brings no fresh Brent settle, so
+// oilPricePerBarrel holds at $109 pending Monday's open. Independent
+// trackers and wire services still haven't corroborated Iran's claimed
+// seven-tanker single-night toll beyond the UKMTO-confirmed Bukha-area
+// projectile hit already modeled, even as market wires keep describing
+// October's overall attack tempo as a wartime high -- consistent with
+// (not exceeding) the Oct 23 spawn-rate tightening, so no further
+// mechanic follows. The IRGC's warning that continued US-escorted
+// transits could draw a strike on American bases remains a conditional
+// future threat with nothing realized, and Lloyd's List reports
+// escorted tankers continuing to transit regardless -- the same
+// claimed/denied, threat-not-yet-struck pattern already modeled, not a
+// new weapon, posture, or confirmed deal. straitClosed stays true.
+// straits.live logs Day 237 of closure.
 let straitClosed=true,oilPricePerBarrel=109;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
@@ -3357,6 +3371,9 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"Independent tracker straits.live logs Day 237 of closure since the Feb 28 declaration; no fresh weekend Brent settle is available, so the price holds at $109 pending Monday's open", src:"straits.live · Oct 24", color:"blue"},
+  {text:"Independent trackers and wire services still haven't corroborated Iran's claimed seven-tanker single-night toll beyond the UKMTO-confirmed Bukha-area projectile strike already reported, even as market wires continue to describe October's attack tempo as a wartime high", src:"UKMTO/wire reports · Oct 23-24", color:"amber"},
+  {text:"The IRGC's warning that continued US-escorted tanker transits could draw a strike on American regional bases remains unrealized, with Lloyd's List Intelligence reporting escorted tankers continuing to transit the strait regardless", src:"Lloyd's List · Oct 23-24", color:"amber"},
   {text:"Iran's government says IRGC naval forces and mines hit seven oil tankers in a single overnight assault -- four struck directly during ship-to-ship transfers, three more immobilized by mines -- which would be the largest single-day shipping toll in the strait since the Feb 28 declaration if confirmed; no casualties reported and the claim is independently unverified", src:"AP/NBC News/Washington Post · Oct 22-23", color:"red"},
   {text:"Lloyd's List Intelligence says tankers are still transiting the strait under US military escort despite the surge in attacks, even as the IRGC warns that continued escorted traffic could draw a response against American bases in the region", src:"Lloyd's List/AP · Oct 22-23", color:"amber"},
   {text:"UN spokesman Stephane Dujarric says no commercial vessels should be attacked and calls for renewed US-Iran diplomacy to reopen the strait", src:"UN/AP · Oct 22-23", color:"blue"},
