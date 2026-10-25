@@ -1864,7 +1864,27 @@ const LB_MAX=10;
 // claimed/denied, threat-not-yet-struck pattern already modeled, not a
 // new weapon, posture, or confirmed deal. straitClosed stays true.
 // straits.live logs Day 237 of closure.
-let straitClosed=true,oilPricePerBarrel=109;
+// Oct 25 2026: Friday's Brent settle is now confirmed at $116.72 (Reuters)
+// -- up $3.55/3.14%, the highest close since Apr 29 and roughly 6% higher
+// on the week -- driven by Houthi strikes inside Saudi Arabia, Iran's
+// still-unverified seven-tanker mine/strike claim, and growing
+// expectations of renewed US strikes on Iran. That's a confirmed,
+// material close missed by yesterday's update (which had only an
+// unconfirmed intraday push above $111), so oilPricePerBarrel updates
+// from $109 to $117. Sunday itself brings no fresh settle, so the price
+// holds at $117 pending Monday's open. FM Araghchi says Iran's Hormuz
+// policy "will not change" whether the war with the US/Israel resumes or
+// not, and separately says the strait's management -- its shipping
+// routes included -- will never return to the pre-war model; Tehran also
+// dismisses reports it offered to reopen the strait in exchange for
+// lifting the US naval blockade. Trump says Washington "may do another
+// little Epic Fury" strike on Iran. All of this restates postures already
+// modeled (closure-conditioned-on-unmet-demands, a threatened-not-
+// realized US strike), not a signed deal or a new weapon/posture inside
+// the strait, so straitClosed stays true and no gameplay mechanic change
+// follows beyond the confirmed price update above. straits.live logs
+// Day 238 of closure.
+let straitClosed=true,oilPricePerBarrel=117;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
 const SESSION_TOKEN = Math.random().toString(36).slice(2) + Date.now().toString(36);
@@ -3371,6 +3391,9 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"Independent tracker straits.live logs Day 238 of closure since the Feb 28 declaration; Friday's Brent settle is confirmed at $116.72 — up 3.14%, the highest close since Apr 29 — so the price updates to $117 and holds there over the weekend", src:"straits.live/Reuters · Oct 25", color:"blue"},
+  {text:"FM Araghchi says Iran's Hormuz policy \"will not change\" whether the war with the US and Israel resumes or not, and that the strait's management and shipping routes will never return to the pre-war model", src:"Press TV/ABC News · Oct 25", color:"amber"},
+  {text:"Trump says Washington \"may do another little Epic Fury\" strike on Iran, as Tehran separately dismisses reports it offered to reopen the strait in exchange for lifting the US naval blockade", src:"wire reports · Oct 25", color:"amber"},
   {text:"Independent tracker straits.live logs Day 237 of closure since the Feb 28 declaration; no fresh weekend Brent settle is available, so the price holds at $109 pending Monday's open", src:"straits.live · Oct 24", color:"blue"},
   {text:"Independent trackers and wire services still haven't corroborated Iran's claimed seven-tanker single-night toll beyond the UKMTO-confirmed Bukha-area projectile strike already reported, even as market wires continue to describe October's attack tempo as a wartime high", src:"UKMTO/wire reports · Oct 23-24", color:"amber"},
   {text:"The IRGC's warning that continued US-escorted tanker transits could draw a strike on American regional bases remains unrealized, with Lloyd's List Intelligence reporting escorted tankers continuing to transit the strait regardless", src:"Lloyd's List · Oct 23-24", color:"amber"},
