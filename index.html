@@ -1884,6 +1884,27 @@ const LB_MAX=10;
 // the strait, so straitClosed stays true and no gameplay mechanic change
 // follows beyond the confirmed price update above. straits.live logs
 // Day 238 of closure.
+// Oct 26 2026: UKMTO issues a time-late warning confirming a previously
+// unreported strike -- an outbound tanker hit by an unknown projectile
+// and left disabled at 0839 UTC Friday Oct 23, crew reported safe, with
+// no vessel name, flag, or environmental impact disclosed (Arab Times).
+// It's a fourth confirmed Hormuz-area hit in the same stretch as Al
+// Dasma (Oct 21) and Soyia (Oct 20) already logged, but the same
+// drone/mine/missile threat already modeled, not a new weapon or damage
+// tier, and it predates rather than exceeds the Oct 23 spawn-rate
+// tightening already applied. Separately, Reuters-cited satellite
+// imagery from Saturday shows the oil slick from the tanker Gem No.2 --
+// struck by an unidentified projectile last month, not the naval mine
+// Al Jazeera's sourcing claims -- has widened toward the UAE coast,
+// prompting Umm Al Quwain and Ras Al Khaimah to close all their beaches
+// and Sharjah to shut Al-Hamriyah Beach as a precaution; authorities say
+// the odor poses no health risk. That's environmental fallout from an
+// already-modeled strike, not a new combat mechanic, so no gameplay
+// change follows from it either. No confirmed Monday Brent settle is
+// available yet, so oilPricePerBarrel holds at $117 pending today's
+// close. Nothing here is a signed reopening deal or a new weapon/posture
+// inside the strait, so straitClosed stays true and no gameplay
+// mechanic change follows. straits.live logs Day 239 of closure.
 let straitClosed=true,oilPricePerBarrel=117;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
@@ -3391,6 +3412,9 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"UKMTO issues a time-late warning confirming an outbound tanker was hit by an unknown projectile and left disabled at 0839 UTC Friday — no vessel name, flag, or environmental impact disclosed, crew reported safe", src:"UKMTO/Arab Times · Oct 23-26", color:"red"},
+  {text:"Satellite imagery shows the oil slick from the tanker Gem No.2 — struck by an unidentified projectile last month — widening toward the UAE coast; Umm Al Quwain and Ras Al Khaimah close all their beaches and Sharjah shuts Al-Hamriyah Beach as a precaution", src:"Reuters/Khaleej Times · Oct 24-26", color:"amber"},
+  {text:"Independent tracker straits.live logs Day 239 of closure since the Feb 28 declaration; no confirmed Monday Brent settle is available yet, so the price holds at $117 pending today's close", src:"straits.live · Oct 26", color:"blue"},
   {text:"Independent tracker straits.live logs Day 238 of closure since the Feb 28 declaration; Friday's Brent settle is confirmed at $116.72 — up 3.14%, the highest close since Apr 29 — so the price updates to $117 and holds there over the weekend", src:"straits.live/Reuters · Oct 25", color:"blue"},
   {text:"FM Araghchi says Iran's Hormuz policy \"will not change\" whether the war with the US and Israel resumes or not, and that the strait's management and shipping routes will never return to the pre-war model", src:"Press TV/ABC News · Oct 25", color:"amber"},
   {text:"Trump says Washington \"may do another little Epic Fury\" strike on Iran, as Tehran separately dismisses reports it offered to reopen the strait in exchange for lifting the US naval blockade", src:"wire reports · Oct 25", color:"amber"},
