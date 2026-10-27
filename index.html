@@ -1905,7 +1905,29 @@ const LB_MAX=10;
 // close. Nothing here is a signed reopening deal or a new weapon/posture
 // inside the strait, so straitClosed stays true and no gameplay
 // mechanic change follows. straits.live logs Day 239 of closure.
-let straitClosed=true,oilPricePerBarrel=117;
+// Oct 27 2026: Monday's Brent settle is now confirmed at $115.81 (Reuters),
+// down 91 cents/0.78% from Friday's $116.72 six-month-high close, as
+// US-Iran diplomatic signals offset the Houthi strikes on Saudi Arabia
+// that had been pushing crude higher -- so oilPricePerBarrel eases from
+// $117 to $116. JMIC's Oct 25 advisory keeps its SEVERE threat rating for
+// the strait and warns further deliberate attacks are highly likely, the
+// same elevated-threat posture already reflected in the Oct 23 spawn-rate
+// tightening, not an escalation past it. A tanker is reportedly disabled
+// in the strait Monday with the attacker unidentified, while UKMTO
+// classifies a separate report as suspicious activity rather than a
+// confirmed attack -- still the same drone/mine/missile threat category
+// already modeled, including the existing chance a contact turns out to
+// be a false alarm. Iran's armed forces chief claims the strait is
+// "completely closed" with no violating vessel safe, a restatement of the
+// closure CENTCOM has repeatedly disputed, not a new posture. Al Jazeera
+// relays Iran's claim the US isn't serious about negotiations, alongside
+// an unconfirmed Iranian claim the strait could reopen in four to five
+// days if conditions are met -- a shorter headline number than the
+// previously floated sixth/seventh-day framework, but still no signed
+// deal from either side, so straitClosed stays true and no gameplay
+// mechanic change follows beyond the confirmed price update above.
+// straits.live logs Day 240 of closure.
+let straitClosed=true,oilPricePerBarrel=116;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
 const SESSION_TOKEN = Math.random().toString(36).slice(2) + Date.now().toString(36);
@@ -3412,6 +3434,9 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"Independent tracker straits.live logs Day 240 of closure since the Feb 28 declaration; Monday's Brent settle is confirmed at $115.81 — down 0.78% from Friday's six-month-high close — as US-Iran diplomatic signals offset Houthi strikes on Saudi Arabia, so the price eases to $116", src:"straits.live/Reuters · Oct 27", color:"blue"},
+  {text:"JMIC's Oct 25 advisory keeps a SEVERE threat rating for the strait, warning further deliberate attacks on shipping are highly likely; a tanker is reportedly disabled in the strait Monday with the attacker unidentified, while UKMTO classifies a separate report as suspicious activity rather than a confirmed attack", src:"JMIC/gCaptain · Oct 25-26", color:"red"},
+  {text:"Iran's armed forces chief claims the Strait of Hormuz is \"completely closed\" with no violating vessel safe — a restatement of the closure claim CENTCOM has repeatedly called false — as Al Jazeera relays Iran's separate claim that the US isn't serious about negotiations and an unconfirmed Iranian claim the strait could reopen in four to five days if conditions are met", src:"Al Jazeera/wire reports · Oct 26-27", color:"amber"},
   {text:"UKMTO issues a time-late warning confirming an outbound tanker was hit by an unknown projectile and left disabled at 0839 UTC Friday — no vessel name, flag, or environmental impact disclosed, crew reported safe", src:"UKMTO/Arab Times · Oct 23-26", color:"red"},
   {text:"Satellite imagery shows the oil slick from the tanker Gem No.2 — struck by an unidentified projectile last month — widening toward the UAE coast; Umm Al Quwain and Ras Al Khaimah close all their beaches and Sharjah shuts Al-Hamriyah Beach as a precaution", src:"Reuters/Khaleej Times · Oct 24-26", color:"amber"},
   {text:"Independent tracker straits.live logs Day 239 of closure since the Feb 28 declaration; no confirmed Monday Brent settle is available yet, so the price holds at $117 pending today's close", src:"straits.live · Oct 26", color:"blue"},
