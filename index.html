@@ -1927,6 +1927,17 @@ const LB_MAX=10;
 // deal from either side, so straitClosed stays true and no gameplay
 // mechanic change follows beyond the confirmed price update above.
 // straits.live logs Day 240 of closure.
+// Oct 28 2026: No fresh Tuesday Brent settle has been confirmed yet, so
+// oilPricePerBarrel holds at $116 pending today's close. The JMIC
+// advisory covering Mar 1-Oct 25 (reported via Gulf News) adds confirmed
+// scale detail to the SEVERE rating already modeled: an estimated 492
+// vessels are now waiting outside the strait and visible AIS transits
+// remain in the single-to-low-double digits against an ~138/day
+// pre-crisis baseline -- a harder backlog number than the Oct 18 "4
+// transits/day" figure already logged, but still the same severe-threat,
+// low-traffic closure already modeled, not a new weapon, posture, or
+// signed reopening deal, so no gameplay mechanic change follows.
+// straitClosed stays true. straits.live logs Day 241 of closure.
 let straitClosed=true,oilPricePerBarrel=116;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
@@ -3434,6 +3445,8 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"Independent tracker straits.live logs Day 241 of closure since the Feb 28 declaration; no confirmed Tuesday Brent settle is available yet, so the price holds at $116 pending today's close", src:"straits.live · Oct 28", color:"blue"},
+  {text:"JMIC's advisory covering Mar 1-Oct 25 estimates roughly 492 vessels are now waiting outside the strait, with visible AIS transits down to the single-to-low-double digits against an approximately 138-per-day pre-crisis baseline — the same SEVERE-rated, low-traffic closure already modeled, now with harder backlog numbers attached", src:"JMIC/Gulf News · Oct 25-28", color:"amber"},
   {text:"Independent tracker straits.live logs Day 240 of closure since the Feb 28 declaration; Monday's Brent settle is confirmed at $115.81 — down 0.78% from Friday's six-month-high close — as US-Iran diplomatic signals offset Houthi strikes on Saudi Arabia, so the price eases to $116", src:"straits.live/Reuters · Oct 27", color:"blue"},
   {text:"JMIC's Oct 25 advisory keeps a SEVERE threat rating for the strait, warning further deliberate attacks on shipping are highly likely; a tanker is reportedly disabled in the strait Monday with the attacker unidentified, while UKMTO classifies a separate report as suspicious activity rather than a confirmed attack", src:"JMIC/gCaptain · Oct 25-26", color:"red"},
   {text:"Iran's armed forces chief claims the Strait of Hormuz is \"completely closed\" with no violating vessel safe — a restatement of the closure claim CENTCOM has repeatedly called false — as Al Jazeera relays Iran's separate claim that the US isn't serious about negotiations and an unconfirmed Iranian claim the strait could reopen in four to five days if conditions are met", src:"Al Jazeera/wire reports · Oct 26-27", color:"amber"},
