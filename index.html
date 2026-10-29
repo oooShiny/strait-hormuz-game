@@ -1938,6 +1938,23 @@ const LB_MAX=10;
 // low-traffic closure already modeled, not a new weapon, posture, or
 // signed reopening deal, so no gameplay mechanic change follows.
 // straitClosed stays true. straits.live logs Day 241 of closure.
+// Oct 29 2026: Iran's IRGC says three oil tankers caught fire after hitting
+// mines over the past 24 hours while using what it calls the "unauthorized
+// southern route" through the strait -- the same US-encouraged southern lane
+// Trump declared mine-free in late August -- claiming the vessels ran dark
+// (no AIS/nav) and ignored IRGC warnings; no ship names, flags, or casualty
+// details given, and AP/Western outlets can't independently confirm the
+// mine cause. Separately, UKMTO confirms (without attributing a cause) a
+// tanker burning ~9nm north of Khasab, Oman, off the Musandam Peninsula;
+// crew status unknown. This follows a day after the US military said it had
+// demined the key transit routes, and Qatar is separately pressing Iran to
+// reopen the strait -- diplomatic noise, not a signed deal. All of this is
+// the same mine/drone/missile threat category already modeled at the Oct 23
+// SEVERE spawn-rate tightening, not a new weapon, damage tier, or escalation
+// past it, so no gameplay mechanic change follows. No fresh Wednesday Brent
+// settle is confirmed yet (only unverified ~$114-115 chatter), so
+// oilPricePerBarrel holds at $116 pending a confirmed close. straitClosed
+// stays true. straits.live logs Day 242 of closure.
 let straitClosed=true,oilPricePerBarrel=116;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
@@ -3445,6 +3462,9 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"Independent tracker straits.live logs Day 242 of closure since the Feb 28 declaration; only unverified ~$114-115 chatter exists for Wednesday, so the default cargo price holds at $116 pending a confirmed settle", src:"straits.live · Oct 29", color:"blue"},
+  {text:"Iran's IRGC says three oil tankers caught fire after hitting mines on the \"unauthorized southern route\" through Hormuz — the same US-encouraged lane Trump called mine-free in August — while UKMTO separately confirms a tanker burning off the Musandam Peninsula near Khasab, Oman, without attributing a cause; no vessel names or Western confirmation of the mine claim yet", src:"IRGC/UKMTO/AP · Oct 29", color:"red"},
+  {text:"The mine claim follows a day after US Central Command said it had demined the strait's key transit routes, while Qatar separately presses Iran to reopen the waterway — competing claims, not a signed deal, so the SEVERE threat rating and existing spawn tightening hold unchanged", src:"CENTCOM/Qatar · Oct 28-29", color:"amber"},
   {text:"Independent tracker straits.live logs Day 241 of closure since the Feb 28 declaration; no confirmed Tuesday Brent settle is available yet, so the price holds at $116 pending today's close", src:"straits.live · Oct 28", color:"blue"},
   {text:"JMIC's advisory covering Mar 1-Oct 25 estimates roughly 492 vessels are now waiting outside the strait, with visible AIS transits down to the single-to-low-double digits against an approximately 138-per-day pre-crisis baseline — the same SEVERE-rated, low-traffic closure already modeled, now with harder backlog numbers attached", src:"JMIC/Gulf News · Oct 25-28", color:"amber"},
   {text:"Independent tracker straits.live logs Day 240 of closure since the Feb 28 declaration; Monday's Brent settle is confirmed at $115.81 — down 0.78% from Friday's six-month-high close — as US-Iran diplomatic signals offset Houthi strikes on Saudi Arabia, so the price eases to $116", src:"straits.live/Reuters · Oct 27", color:"blue"},
