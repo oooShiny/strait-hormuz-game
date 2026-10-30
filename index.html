@@ -1955,7 +1955,32 @@ const LB_MAX=10;
 // settle is confirmed yet (only unverified ~$114-115 chatter), so
 // oilPricePerBarrel holds at $116 pending a confirmed close. straitClosed
 // stays true. straits.live logs Day 242 of closure.
-let straitClosed=true,oilPricePerBarrel=116;
+// Oct 30 2026: Two confirmed Brent settles land at once, catching up
+// Wednesday and Thursday. Wednesday Oct 28 settled at $115.32 (+1.3%) and
+// Thursday Oct 29 settled at $114.88 (-44c/-0.38%, per Reuters-sourced wire
+// coverage) as a Vance-led push to restart US-Iran talks eased supply
+// fears, even as Houthi attacks on Saudi Arabia and fears of a post-
+// midterm (Nov 3) US strike on Iran limited the drop -- Rigzone separately
+// reports a WSJ story that a top US commander briefed Trump on Iran
+// military options, a reported-not-executed step consistent with the
+// threatened/not-realized strike pattern already modeled. Together these
+// move oilPricePerBarrel down from $116 to $115. Separately, Iran's IRGC
+// now claims three tankers are burning after hitting mines on the
+// "unauthorized southern route" near the Omani coast, with Iran's army
+// adding a claimed fourth tanker burning east of the strait -- still no
+// vessel names given, and UKMTO says it can't confirm whether the burning
+// vessel it's tracking is one of the IRGC-cited ships. Tehran also now
+// explicitly disputes CENTCOM's mine-clearing claim, demanding independent
+// evidence rather than take Washington's statement at its word -- a harder
+// denial than the "competing claims" framing already logged Oct 29, but
+// still the same claimed/disputed, no-independent-confirmation pattern,
+// not a new weapon or damage tier past the Oct 23 SEVERE spawn-rate
+// tightening. Today's intraday Brent trading pushes toward $117-120 on the
+// fresh mine claims and strike fears, but that's pre-settle chatter, not a
+// confirmed close, so oilPricePerBarrel holds at the updated $115 pending
+// Friday's settle. straitClosed stays true. straits.live logs Day 243 of
+// closure.
+let straitClosed=true,oilPricePerBarrel=115;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
 const SESSION_TOKEN = Math.random().toString(36).slice(2) + Date.now().toString(36);
@@ -3462,6 +3487,9 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"Independent tracker straits.live logs Day 243 of closure since the Feb 28 declaration; Wednesday's Brent settle is confirmed at $115.32 (+1.3%) and Thursday's at $114.88 (-0.38%) as US-Iran diplomacy eased supply fears, moving the cargo price down from $116 to $115", src:"straits.live/Reuters · Oct 30", color:"blue"},
+  {text:"Iran's IRGC says three tankers are burning after hitting mines on the \"unauthorized southern route\" near the Omani coast, and Iran's army separately claims a fourth tanker burning east of the strait — still no vessel names given, and UKMTO can't confirm whether a burning vessel it's tracking is among the IRGC-cited ships", src:"IRGC/UKMTO/CNBC · Oct 30", color:"red"},
+  {text:"Tehran explicitly disputes US Central Command's claim that mines were cleared from the strait's main transit routes, demanding independent evidence; intraday Brent trading pushes toward $117-120 on the fresh mine claims and fears of a US strike on Iran after the Nov 3 midterms, but no settle has confirmed that move yet", src:"CENTCOM/wire reports · Oct 30", color:"amber"},
   {text:"Independent tracker straits.live logs Day 242 of closure since the Feb 28 declaration; only unverified ~$114-115 chatter exists for Wednesday, so the default cargo price holds at $116 pending a confirmed settle", src:"straits.live · Oct 29", color:"blue"},
   {text:"Iran's IRGC says three oil tankers caught fire after hitting mines on the \"unauthorized southern route\" through Hormuz — the same US-encouraged lane Trump called mine-free in August — while UKMTO separately confirms a tanker burning off the Musandam Peninsula near Khasab, Oman, without attributing a cause; no vessel names or Western confirmation of the mine claim yet", src:"IRGC/UKMTO/AP · Oct 29", color:"red"},
   {text:"The mine claim follows a day after US Central Command said it had demined the strait's key transit routes, while Qatar separately presses Iran to reopen the waterway — competing claims, not a signed deal, so the SEVERE threat rating and existing spawn tightening hold unchanged", src:"CENTCOM/Qatar · Oct 28-29", color:"amber"},
