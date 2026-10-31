@@ -1980,7 +1980,24 @@ const LB_MAX=10;
 // confirmed close, so oilPricePerBarrel holds at the updated $115 pending
 // Friday's settle. straitClosed stays true. straits.live logs Day 243 of
 // closure.
-let straitClosed=true,oilPricePerBarrel=115;
+// Oct 31 2026: UKMTO says a small boat approached an outbound tanker about
+// 25 nautical miles northeast of Khasab, Oman and attached two explosive
+// devices to its hull; the blast started an engine-room fire that the crew
+// extinguished, all hands safe, and the ship continued its voyage with no
+// attacker identified. Iran's IRGC gives a competing account, saying a
+// tanker hit a naval mine on an "unauthorized route" and claiming several
+// tankers struck mines; the US disputes the mine claims and neither
+// version is independently confirmed -- the same drone/mine/projectile
+// threat already modeled, not a new weapon category. Houthi strikes on
+// Saudi infrastructure add to the week's supply worries even as Gulf
+// crude exports recover to an average 15.7M bpd in the week through Oct
+// 26 -- the same Red Sea-front pressure and partial-recovery pattern
+// already reflected in-game, so no mechanic (spawn/difficulty/insurance)
+// changes. Brent settles $117.64 Friday (+2.4%), the highest close since
+// late April and a 13.6% monthly gain (WTI +15.2%) as the war enters its
+// eighth month; the default cargo price updates from $115 to $118.
+// straits.live logs Day 244 of closure.
+let straitClosed=true,oilPricePerBarrel=118;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
 const SESSION_TOKEN = Math.random().toString(36).slice(2) + Date.now().toString(36);
@@ -3487,6 +3504,10 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"Independent tracker straits.live logs Day 244 of closure since the Feb 28 declaration; Friday's Brent settle is confirmed at $117.64 (+2.4%) — the highest close since late April and a 13.6% monthly gain, the steepest since the war began — so the default cargo price updates from $115 to $118", src:"straits.live/Reuters · Oct 31", color:"blue"},
+  {text:"UKMTO says a small boat approached an outbound tanker about 25 nautical miles northeast of Khasab, Oman and attached two explosive devices to its hull; the blast started an engine-room fire that was extinguished, the crew is safe, and the ship continued its voyage — no attacker identified", src:"UKMTO/The National · Oct 31", color:"red"},
+  {text:"Iran's IRGC gives a competing account of Friday's attack, saying a tanker hit a naval mine on an \"unauthorized route\" and claiming several tankers struck mines; the US disputes the mine claims and neither side's version is independently confirmed", src:"IRGC/wire reports · Oct 31", color:"amber"},
+  {text:"Houthi strikes on Saudi infrastructure add to the week's supply worries even as Gulf crude exports recover to an average 15.7 million bpd in the week through Oct 26 — the same Red Sea-front pressure and partial-recovery pattern already reflected in-game, not a new threat category", src:"CNBC/Kpler · Oct 26-31", color:"amber"},
   {text:"Independent tracker straits.live logs Day 243 of closure since the Feb 28 declaration; Wednesday's Brent settle is confirmed at $115.32 (+1.3%) and Thursday's at $114.88 (-0.38%) as US-Iran diplomacy eased supply fears, moving the cargo price down from $116 to $115", src:"straits.live/Reuters · Oct 30", color:"blue"},
   {text:"Iran's IRGC says three tankers are burning after hitting mines on the \"unauthorized southern route\" near the Omani coast, and Iran's army separately claims a fourth tanker burning east of the strait — still no vessel names given, and UKMTO can't confirm whether a burning vessel it's tracking is among the IRGC-cited ships", src:"IRGC/UKMTO/CNBC · Oct 30", color:"red"},
   {text:"Tehran explicitly disputes US Central Command's claim that mines were cleared from the strait's main transit routes, demanding independent evidence; intraday Brent trading pushes toward $117-120 on the fresh mine claims and fears of a US strike on Iran after the Nov 3 midterms, but no settle has confirmed that move yet", src:"CENTCOM/wire reports · Oct 30", color:"amber"},
