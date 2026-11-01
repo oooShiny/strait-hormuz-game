@@ -1997,6 +1997,30 @@ const LB_MAX=10;
 // late April and a 13.6% monthly gain (WTI +15.2%) as the war enters its
 // eighth month; the default cargo price updates from $115 to $118.
 // straits.live logs Day 244 of closure.
+// Nov 1 2026: Oman's navy says it rescued 25 sailors from a merchant ship
+// set ablaze in an attack near the strait; no vessel name or attacker has
+// been confirmed. Iran's IRGC separately says three oil tankers were
+// halted after mine strikes while crossing the strait, including a
+// supertanker carrying about 2 million barrels of oil that stopped after
+// an explosion the IRGC blames on a naval mine on an "unauthorized
+// route" -- maritime security officials repeat they have no evidence of
+// mines in the strait, and CENTCOM says the primary lanes remain cleared
+// with thousands of vessels passing safely, so the claims stay
+// unconfirmed -- still the same mine/drone/projectile threat category
+// already modeled, not a new weapon tier. CENTCOM also disputes a
+// separate Iranian claim that it destroyed a US sea drone, saying its
+// unmanned surface vessels continue patrols in the strait -- the same
+// Navy blockade/escort presence already reflected in-game. IMF PortWatch
+// data confirm just 2 transits through the strait on Oct 25 against an
+// 85/day pre-crisis baseline, a harder number than the Oct 28 492-vessel
+// backlog figure but the same severe-closure state already modeled. A
+// senior Iranian official says there will be no nuclear talks or Hormuz
+// reopening until Washington accepts Tehran's demands, as Trump suggests
+// more strikes on Iran after Iran's Supreme Leader warned against
+// resuming the war -- diplomatic noise, not a signed deal, so
+// straitClosed stays true and no gameplay mechanic change follows. No
+// fresh Sunday Brent settle is available, so oilPricePerBarrel holds at
+// $118. straits.live logs Day 245 of closure.
 let straitClosed=true,oilPricePerBarrel=118;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
@@ -3504,6 +3528,11 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"Independent tracker straits.live logs Day 245 of closure since the Feb 28 declaration; no fresh Sunday Brent settle is available so the default cargo price holds at $118, while IMF PortWatch data confirm just 2 transits through the strait on Oct 25 against an 85-vessel/day pre-crisis baseline", src:"straits.live/IMF PortWatch · Nov 1", color:"blue"},
+  {text:"Oman's navy says it rescued 25 sailors from a merchant ship set ablaze in an attack near the strait; no vessel name or attacker has been confirmed", src:"Oman Navy/wire reports · Oct 31-Nov 1", color:"red"},
+  {text:"Iran's IRGC says three oil tankers were halted after separate mine strikes crossing the strait, including a supertanker carrying about 2 million barrels of oil that stopped after an explosion it blames on a naval mine on an \"unauthorized route\"; maritime security officials repeat they have no evidence of mines in the strait and CENTCOM says the primary lanes remain cleared, so the claims stay unconfirmed", src:"IRGC/CENTCOM · Nov 1", color:"amber"},
+  {text:"CENTCOM disputes a separate Iranian claim that it destroyed a US sea drone, saying its unmanned surface vessels — including a squadron of advanced sea drones — are continuing patrols in the strait, the same Navy presence already reflected in-game", src:"CENTCOM · Nov 1", color:"amber"},
+  {text:"A senior Iranian official says there will be no nuclear talks or Hormuz reopening until Washington accepts Tehran's demands, as Trump suggests more strikes on Iran after Iran's Supreme Leader warned against resuming the war — diplomatic noise, not a signed deal", src:"Times of Israel/CBS News · Oct 31-Nov 1", color:"blue"},
   {text:"Independent tracker straits.live logs Day 244 of closure since the Feb 28 declaration; Friday's Brent settle is confirmed at $117.64 (+2.4%) — the highest close since late April and a 13.6% monthly gain, the steepest since the war began — so the default cargo price updates from $115 to $118", src:"straits.live/Reuters · Oct 31", color:"blue"},
   {text:"UKMTO says a small boat approached an outbound tanker about 25 nautical miles northeast of Khasab, Oman and attached two explosive devices to its hull; the blast started an engine-room fire that was extinguished, the crew is safe, and the ship continued its voyage — no attacker identified", src:"UKMTO/The National · Oct 31", color:"red"},
   {text:"Iran's IRGC gives a competing account of Friday's attack, saying a tanker hit a naval mine on an \"unauthorized route\" and claiming several tankers struck mines; the US disputes the mine claims and neither side's version is independently confirmed", src:"IRGC/wire reports · Oct 31", color:"amber"},
