@@ -2021,6 +2021,23 @@ const LB_MAX=10;
 // straitClosed stays true and no gameplay mechanic change follows. No
 // fresh Sunday Brent settle is available, so oilPricePerBarrel holds at
 // $118. straits.live logs Day 245 of closure.
+// Nov 2 2026: Iran's IRGC Navy now gives a cumulative tally, saying 11
+// tankers it accuses of violating Hormuz passage rules have caught fire
+// since Oct 25, with some of those vessels reported sunk -- a rolling
+// total consistent with its individual daily claims that week (3 on Oct
+// 29, 4 on Oct 30, 3 on Nov 1), not a new weapon or damage category.
+// CENTCOM's top commander, Adm. Brad Cooper, again says he sees no sign
+// of IRGC naval forces operating in the strait and describes Iran's navy
+// as effectively destroyed, restating the same cleared-strike/escort
+// posture CENTCOM has held since its Oct 25 mine-free flyover claim, not
+// a new mechanic. Saudi Arabia and the UAE condemn the attacks on
+// maritime targets, and Iran repeats that any Hormuz deal requires an end
+// to the US naval blockade even as Qatar-mediated talks continue --
+// still the same demanded-precondition/no-signed-deal posture already
+// modeled, so straitClosed stays true and no spawn/difficulty/insurance
+// mechanic change follows. Monday's Brent settle isn't in yet, so
+// oilPricePerBarrel holds at $118 pending that close. straits.live logs
+// Day 246 of closure.
 let straitClosed=true,oilPricePerBarrel=118;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
@@ -3528,6 +3545,10 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"Independent tracker straits.live logs Day 246 of closure since the Feb 28 declaration; Monday's Brent settle isn't in yet, so the default cargo price holds at $118 pending that close", src:"straits.live · Nov 2", color:"blue"},
+  {text:"Iran's IRGC Navy says 11 tankers it accuses of violating Hormuz passage rules have caught fire since Oct 25, with some of the vessels reported sunk — a rolling tally consistent with its individual daily claims that week, not a new weapon or damage category", src:"IRGC Navy/TASS · Nov 2", color:"red"},
+  {text:"CENTCOM commander Adm. Brad Cooper again says he sees no sign of IRGC naval forces operating in the strait and describes Iran's navy as effectively destroyed, restating the same cleared-strait/escort posture held since its Oct 25 mine-free flyover claim", src:"CENTCOM · Oct 31-Nov 2", color:"amber"},
+  {text:"Saudi Arabia and the UAE condemn the attacks on maritime targets near the strait, while Iran repeats that any Hormuz deal requires an end to the US naval blockade even as Qatar-mediated talks continue — a demanded precondition, not a signed deal", src:"Gulf officials/Qatar mediation · Nov 2", color:"blue"},
   {text:"Independent tracker straits.live logs Day 245 of closure since the Feb 28 declaration; no fresh Sunday Brent settle is available so the default cargo price holds at $118, while IMF PortWatch data confirm just 2 transits through the strait on Oct 25 against an 85-vessel/day pre-crisis baseline", src:"straits.live/IMF PortWatch · Nov 1", color:"blue"},
   {text:"Oman's navy says it rescued 25 sailors from a merchant ship set ablaze in an attack near the strait; no vessel name or attacker has been confirmed", src:"Oman Navy/wire reports · Oct 31-Nov 1", color:"red"},
   {text:"Iran's IRGC says three oil tankers were halted after separate mine strikes crossing the strait, including a supertanker carrying about 2 million barrels of oil that stopped after an explosion it blames on a naval mine on an \"unauthorized route\"; maritime security officials repeat they have no evidence of mines in the strait and CENTCOM says the primary lanes remain cleared, so the claims stay unconfirmed", src:"IRGC/CENTCOM · Nov 1", color:"amber"},
