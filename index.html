@@ -2038,7 +2038,31 @@ const LB_MAX=10;
 // mechanic change follows. Monday's Brent settle isn't in yet, so
 // oilPricePerBarrel holds at $118 pending that close. straits.live logs
 // Day 246 of closure.
-let straitClosed=true,oilPricePerBarrel=118;
+// Nov 3 2026: Iran's Khamenei grants Pezeshkian's government "certain
+// authorities" to pursue direct US talks; VP Vance says "we've certainly
+// made some progress" and he and Trump "feel pretty good about the
+// prospects" of a negotiated settlement, though a firm, verifiable
+// nuclear commitment is still required, while Trump says a deal "could
+// happen" and rules out resuming strikes after the midterms -- real
+// diplomatic momentum, still no signed deal. Qatari mediators study
+// dueling US/Iran proposals; Iran's Araghchi floats a two-day sequencing
+// plan (US acts day one, strait reopens day two), but a senior Iranian
+// official denies Qatar presented any new formal proposal and calls the
+// ideas unacceptable -- an unconfirmed, disputed offer, not an agreement.
+// Hardliner Mojtaba Khamenei separately orders Iran's armed forces to
+// prepare for renewed confrontation and expand the target list -- a
+// threat to widen the war, not a realized attack. Iran's IRGC keeps
+// adding to its mine-strike tally, claiming three more tankers exploded
+// on the same unauthorized southern route, and separately claims
+// shooting down two US "Lucas"-type drones over Bandar Khamir -- the
+// same disputed mine/drone threat categories already modeled, not a new
+// weapon class, so straitClosed stays true and no spawn/difficulty/
+// insurance mechanic change follows. Monday's Brent settle is confirmed
+// at $104.77, down 7.6% -- the steepest single-session drop since the
+// war began -- as the Khamenei-authorizes-talks headline eased supply
+// fears, so the default cargo price falls from $118 to $105. straits.live
+// logs Day 247 of closure.
+let straitClosed=true,oilPricePerBarrel=105;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
 const SESSION_TOKEN = Math.random().toString(36).slice(2) + Date.now().toString(36);
@@ -3545,6 +3569,11 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"Independent tracker straits.live logs Day 247 of closure since the Feb 28 declaration; Monday's Brent settle is confirmed at $104.77, down 7.6% — the steepest single-session drop since the war began — as the Khamenei-authorizes-talks headline eased supply fears, so the default cargo price falls from $118 to $105", src:"straits.live/CNBC · Nov 3", color:"blue"},
+  {text:"Iran's Khamenei grants Pezeshkian's government \"certain authorities\" to pursue direct talks with Washington; US VP Vance says \"we've certainly made some progress\" and he and Trump \"feel pretty good about the prospects\" of a negotiated settlement, though a firm, verifiable nuclear commitment is still required", src:"Bloomberg/Fox News · Nov 2-3", color:"blue"},
+  {text:"Qatari mediators study dueling US-Iran proposals; Iran's FM Araghchi floats a two-day sequencing plan where the US acts first and the strait reopens the next day, but a senior Iranian official denies Qatar presented any new formal proposal and calls the ideas unacceptable — a disputed, unconfirmed offer, not a signed deal", src:"CBS News/Qatar mediation · Nov 3", color:"amber"},
+  {text:"Hardliner Mojtaba Khamenei reportedly orders Iran's armed forces to respond immediately to any threat and expand the target list, preparing for renewed confrontation with the US and Israel — a threat to widen the war, not a realized attack", src:"Fox News · Nov 2-3", color:"red"},
+  {text:"Iran's IRGC says three more tankers exploded after hitting mines on the same unauthorized southern route, extending its rolling tally since Oct 25, and separately claims shooting down two US \"Lucas\"-type drones over Bandar Khamir — the same disputed mine/drone threat categories already modeled, not independently confirmed", src:"IRGC Navy/wire reports · Nov 3", color:"amber"},
   {text:"Independent tracker straits.live logs Day 246 of closure since the Feb 28 declaration; Monday's Brent settle isn't in yet, so the default cargo price holds at $118 pending that close", src:"straits.live · Nov 2", color:"blue"},
   {text:"Iran's IRGC Navy says 11 tankers it accuses of violating Hormuz passage rules have caught fire since Oct 25, with some of the vessels reported sunk — a rolling tally consistent with its individual daily claims that week, not a new weapon or damage category", src:"IRGC Navy/TASS · Nov 2", color:"red"},
   {text:"CENTCOM commander Adm. Brad Cooper again says he sees no sign of IRGC naval forces operating in the strait and describes Iran's navy as effectively destroyed, restating the same cleared-strait/escort posture held since its Oct 25 mine-free flyover claim", src:"CENTCOM · Oct 31-Nov 2", color:"amber"},
