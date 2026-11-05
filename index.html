@@ -2087,7 +2087,23 @@ const LB_MAX=10;
 // markets weighed the Qeshm strikes against lingering talk optimism, so
 // the default cargo price eases from $105 to $104. straits.live logs Day
 // 248 of closure.
-let straitClosed=true,oilPricePerBarrel=104;
+// Nov 5 2026: Democrats sweep the Nov 3 US midterms, winning control of
+// both the House and Senate in what networks call their largest House
+// majority in nearly two decades; VP Vance and multiple outlets tie the
+// GOP defeat directly to the war's unpopularity, and Trump says he'll
+// accept the results -- a major US political development, but it targets
+// Washington's Congress, not the player's tanker or the strait's mine/
+// drone/missile threat model, so no spawn/difficulty mechanic follows.
+// Wednesday's Brent settle is confirmed at $94.62 (Reuters), down 8.7% --
+// the steepest single-session drop yet, surpassing Monday's 7.6% --
+// with WTI down 8.3% to $88.12, as the election result fuels a "peace
+// trade" bet that a chastened Trump will move faster toward ending the
+// war. Analysts caution the rally is pricing in hope, not a signed deal:
+// Iran's preconditions are still unmet, no reopening has been announced,
+// and the physical crude market stays tight even as paper futures crater
+// -- so straitClosed stays true and the default cargo price falls from
+// $104 to $95. straits.live logs Day 249 of closure.
+let straitClosed=true,oilPricePerBarrel=95;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
 const SESSION_TOKEN = Math.random().toString(36).slice(2) + Date.now().toString(36);
@@ -3594,6 +3610,9 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"Independent tracker straits.live logs Day 249 of closure since the Feb 28 declaration; Wednesday's Brent settle is confirmed at $94.62 (Reuters), down 8.7% — the steepest single-session drop since the war began, topping Monday's 7.6% — with WTI off 8.3% to $88.12 and Brent below $100 for the first time in about a month, so the default cargo price falls from $104 to $95", src:"straits.live/Reuters · Nov 5", color:"blue"},
+  {text:"Democrats sweep the Nov 3 US midterms, winning control of both the House and Senate in what networks call their largest House majority in nearly two decades; VP Vance and other officials tie the scale of the GOP defeat directly to the Iran war's unpopularity with voters, and Trump says he'll accept the results", src:"CNBC/NBC News/Variety · Nov 3-4", color:"blue"},
+  {text:"Oil traders put on a \"peace trade\" after the election results, betting a chastened White House moves faster to end the war, but analysts warn it's pricing in hope rather than a signed deal: Iran's preconditions remain unmet, no reopening has been announced, and the physical crude market stays tight even as paper futures crater — the same demanded-precondition standoff already modeled, so straitClosed holds true", src:"market analysts/wire reports · Nov 4-5", color:"amber"},
   {text:"Independent tracker straits.live logs Day 248 of closure since the Feb 28 declaration; Tuesday's Brent settle is confirmed at $103.60, down $1.17 (-1.1%) as markets weighed the Qeshm Island strikes against lingering talk optimism, so the default cargo price eases from $105 to $104", src:"straits.live/CNBC · Nov 4", color:"blue"},
   {text:"US forces carry out \"limited,\" defensive strikes on Iran's Qeshm Island near the strait's mouth after the IRGC fired on an American fighter jet and the US returned fire with a surface-to-air missile; officials say it isn't a resumption of major combat, and the WSJ reports Washington has been running small-scale strikes on Iran for weeks, purposefully kept quiet", src:"CBS News/WSJ/CNN · Nov 2-3", color:"red"},
   {text:"Iran's IRGC says four more oil tankers were destroyed after hitting mines on the same unauthorized southern route, extending its rolling tally, and separately claims shooting down a US drone near Qeshm — the same disputed mine/drone threat categories already modeled, not independently confirmed", src:"IRGC Navy/wire reports · Nov 4", color:"amber"},
