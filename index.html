@@ -2103,7 +2103,27 @@ const LB_MAX=10;
 // and the physical crude market stays tight even as paper futures crater
 // -- so straitClosed stays true and the default cargo price falls from
 // $104 to $95. straits.live logs Day 249 of closure.
-let straitClosed=true,oilPricePerBarrel=95;
+// Nov 6 2026: Iran's IRGC claims a fresh wave of Nov 5 tanker incidents --
+// two oil tankers and a tugboat catching fire after hitting mines on the
+// same unauthorized southern route, plus three more tankers separately
+// attacked (five vessel claims in one day, still short of the Oct 23
+// 7-tanker single-night peak) -- so the existing SEVERE-tier mine/drone/
+// missile spawn rates already cover it and hold unchanged, not a new
+// weapon or damage tier. CENTCOM is separately reported to have drafted
+// new Iran strike options for Trump to consider now that the midterms
+// are over, and Trump keeps signaling he may resume the air campaign --
+// a strike-planning story, not a realized attack, so no spawn/difficulty
+// mechanic changes yet; worth revisiting if strikes actually resume.
+// Oman says it's still negotiating a joint strait-control framework with
+// Iran, and Tehran's Rezaei repeats the strait stays shut until all seven
+// of Iran's conditions are met -- the same demanded-precondition standoff
+// already modeled, so straitClosed stays true. Thursday's Brent settle is
+// confirmed at $98.29 (Reuters), up $3.67 (+3.88%) on the renewed-attack
+// headlines and lingering midterm uncertainty, with WTI up $2.40 (+2.72%)
+// to $90.52 -- a rebound off Wednesday's crash, but Brent is still down
+// roughly 12% on the week -- so the default cargo price rises from $95 to
+// $98. straits.live logs Day 250 of closure.
+let straitClosed=true,oilPricePerBarrel=98;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
 const SESSION_TOKEN = Math.random().toString(36).slice(2) + Date.now().toString(36);
@@ -3610,6 +3630,9 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"Independent tracker straits.live logs Day 250 of closure since the Feb 28 declaration; Thursday's Brent settle is confirmed at $98.29 (Reuters), up $3.67 (+3.88%) as renewed tanker-attack headlines and lingering midterm uncertainty spark a rebound off Wednesday's crash, with WTI up $2.40 (+2.72%) to $90.52, though Brent is still down roughly 12% on the week — so the default cargo price rises from $95 to $98", src:"straits.live/Reuters · Nov 6", color:"blue"},
+  {text:"Iran's IRGC says two oil tankers and a tugboat caught fire after hitting mines on the same unauthorized southern route, and separately claims three more tankers attacked the same day — five vessel claims in one day, still short of the Oct 23 seven-tanker single-night peak, so the existing SEVERE-tier mine/drone/missile spawn rates already cover it and hold unchanged, not independently confirmed", src:"IRGC Navy/wire reports · Nov 5", color:"amber"},
+  {text:"CENTCOM is reported to have drafted new Iran strike options for Trump now that the midterms are over, and Trump keeps signaling he may resume the air campaign — a strike-planning report, not a realized attack, so no spawn/difficulty mechanic change follows yet; Oman says it's still negotiating a joint strait-control framework with Iran, while Tehran's Rezaei repeats the strait stays shut until all seven of Iran's conditions are met", src:"CENTCOM/Oman officials/wire reports · Nov 5-6", color:"blue"},
   {text:"Independent tracker straits.live logs Day 249 of closure since the Feb 28 declaration; Wednesday's Brent settle is confirmed at $94.62 (Reuters), down 8.7% — the steepest single-session drop since the war began, topping Monday's 7.6% — with WTI off 8.3% to $88.12 and Brent below $100 for the first time in about a month, so the default cargo price falls from $104 to $95", src:"straits.live/Reuters · Nov 5", color:"blue"},
   {text:"Democrats sweep the Nov 3 US midterms, winning control of both the House and Senate in what networks call their largest House majority in nearly two decades; VP Vance and other officials tie the scale of the GOP defeat directly to the Iran war's unpopularity with voters, and Trump says he'll accept the results", src:"CNBC/NBC News/Variety · Nov 3-4", color:"blue"},
   {text:"Oil traders put on a \"peace trade\" after the election results, betting a chastened White House moves faster to end the war, but analysts warn it's pricing in hope rather than a signed deal: Iran's preconditions remain unmet, no reopening has been announced, and the physical crude market stays tight even as paper futures crater — the same demanded-precondition standoff already modeled, so straitClosed holds true", src:"market analysts/wire reports · Nov 4-5", color:"amber"},
