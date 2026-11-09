@@ -2132,6 +2132,20 @@ const LB_MAX=10;
 // available in wire reports, so the default cargo price holds at $98
 // through the weekend. straits.live logs Day 251 (Nov 7) and Day 252
 // (Nov 8) of closure.
+// Nov 9 2026: Friday's Brent settle is now confirmed at $98.32 (CNBC),
+// up just 3 cents on the day, with WTI up 31 cents to $90.83 -- both
+// benchmarks still down double digits on the week (Brent -16%, WTI
+// -13%) despite the Thu/Fri bounce off Wednesday's post-midterm crash --
+// an immaterial daily move, so the default cargo price holds at $98.
+// Trump signals he's open to an Iran deal while Tehran reviews a fresh
+// Qatari-mediated de-escalation proposal, and explosions are again heard
+// around the strait; separately the IRGC claims it destroyed navigation
+// aids on the southern approach and that no unauthorized vessel crossed
+// overnight, extending its rolling enforcement-claim pattern. None of
+// this is a signed reopening deal or a realized escalation beyond the
+// existing SEVERE-tier mine/drone/missile model, so straitClosed and all
+// spawn/difficulty mechanics hold unchanged. straits.live logs Day 253
+// of closure.
 let straitClosed=true,oilPricePerBarrel=98;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
@@ -3639,6 +3653,8 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"Independent tracker straits.live logs Day 253 of closure since the Feb 28 declaration; Friday's Brent settle is now confirmed at $98.32 (CNBC), up just 3 cents on the day with WTI up 31 cents to $90.83 — both benchmarks still down double digits on the week (Brent -16%, WTI -13%) despite the Thu/Fri bounce — an immaterial daily move, so the default cargo price holds at $98", src:"straits.live/CNBC · Nov 9", color:"blue"},
+  {text:"Trump signals he's open to reaching a deal with Iran as Tehran reviews a fresh Qatari-mediated de-escalation proposal and explosions are again heard around the strait; separately Iran's IRGC claims it destroyed navigation aids on the southern approach and that no unauthorized vessel crossed overnight — a review-stage proposal and a rolling enforcement claim, not a signed reopening, so straitClosed holds true and no spawn/difficulty mechanic changes", src:"Iran International/Arab News/wire reports · Nov 8-9", color:"amber"},
   {text:"Independent tracker straits.live logs Day 252 of closure since the Feb 28 declaration; no fresh weekend Brent settle is available, so the default cargo price holds at $98 pending Monday's open — Iran's Rezaei and Parliament Speaker Ghalibaf continue to tie reopening to Washington meeting all seven of Tehran's conditions, the same demanded-precondition standoff already modeled", src:"straits.live · Nov 8", color:"blue"},
   {text:"Independent tracker straits.live logs Day 251 of closure since the Feb 28 declaration; Friday's Brent settle isn't confirmed in available wire reports, so the default cargo price holds at $98 pending a confirmed close — CENTCOM's reported post-midterm strike-option drafting and the IRGC's rolling mine/tanker claims continue, with no realized attack or signed deal beyond what's already modeled", src:"straits.live · Nov 7", color:"blue"},
   {text:"Independent tracker straits.live logs Day 250 of closure since the Feb 28 declaration; Thursday's Brent settle is confirmed at $98.29 (Reuters), up $3.67 (+3.88%) as renewed tanker-attack headlines and lingering midterm uncertainty spark a rebound off Wednesday's crash, with WTI up $2.40 (+2.72%) to $90.52, though Brent is still down roughly 12% on the week — so the default cargo price rises from $95 to $98", src:"straits.live/Reuters · Nov 6", color:"blue"},
