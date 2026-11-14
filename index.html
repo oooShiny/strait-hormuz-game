@@ -2180,7 +2180,29 @@ const LB_MAX=10;
 // aisOn/aisToggleCooldown mechanic), so no new mechanic follows and
 // straitClosed stays true. straits.live logs Day 255 (Nov 11), 256
 // (Nov 12), and 257 (Nov 13) of closure.
-let straitClosed=true,oilPricePerBarrel=92;
+// Nov 14 2026: Wednesday's Brent settle is now confirmed at $92.70
+// (Trading Economics), recovering off an intraday 10-week low near $90
+// after touching $94.60 earlier in the session -- an immaterial move
+// from the $92 already logged. Thursday's settle is confirmed up 3.3%
+// to $95.82 (WTI +2.6% to $88.74) as Yemen's Houthis claim a fresh wave
+// of strikes on Saudi energy facilities, compounding ongoing Hormuz
+// disruption -- the same Red-Sea-front supply-pressure pattern already
+// reflected in-game since the Jul 2026 Bab el-Mandeb blockade, not a
+// new Hormuz threat category, so no mechanic changes. No Friday settle
+// is confirmed in available wire reports, so the default cargo price
+// rises from $92 to $96. Catching up two previously unlogged Nov 10
+// incidents, both within the existing SEVERE-tier model: UKMTO Warning
+// 201-26 reports a tanker struck by an unidentified projectile in the
+// engine room 19nm northeast of Lima, Oman (crew safe, no environmental
+// impact), and ADNOC Logistics & Services separately says one of its
+// vessels was damaged in an attack inside UAE territorial waters.
+// UKMTO's weekly overview (published Nov 14) counts at least seven
+// tanker attacks in and around the strait in the week to Nov 11 and
+// keeps the threat level rated SEVERE -- a cumulative confirmation of
+// the pace already reflected in this game's spawn rates, not an
+// escalation, so straitClosed stays true and no spawn/difficulty
+// mechanic changes. straits.live logs Day 258 of closure.
+let straitClosed=true,oilPricePerBarrel=96;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
 const SESSION_TOKEN = Math.random().toString(36).slice(2) + Date.now().toString(36);
@@ -3687,6 +3709,10 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"Independent tracker straits.live logs Day 258 of closure since the Feb 28 declaration; Wednesday's Brent settle is now confirmed at $92.70 (Trading Economics), recovering off an intraday 10-week low after touching $94.60, with Thursday's settle confirmed up 3.3% to $95.82 (WTI +2.6% to $88.74) on Houthi strikes on Saudi energy facilities compounding Hormuz disruption — no Friday settle is confirmed in available wire reports, so the default cargo price rises from $92 to $96", src:"straits.live/Trading Economics · Nov 14", color:"blue"},
+  {text:"UKMTO's weekly overview (published Nov 14) counts at least seven tanker attacks in and around the Strait of Hormuz in the week to Nov 11 and keeps the threat level rated SEVERE — a cumulative confirmation of the pace already reflected in this game's spawn rates, not an escalation", src:"UKMTO · Nov 14", color:"amber"},
+  {text:"Yemen's Houthis claim a fresh wave of strikes on Saudi energy facilities Nov 12, adding Red Sea-front supply pressure on top of the Hormuz closure and helping drive Thursday's 3.3% Brent jump — the same Red Sea-pressure pattern already reflected in-game since the Jul 2026 Bab el-Mandeb blockade, not a new Hormuz threat category", src:"wire reports · Nov 12", color:"amber"},
+  {text:"Catching up two previously unlogged Nov 10 incidents, both within the existing SEVERE-tier model: UKMTO reports a tanker struck by an unidentified projectile in the engine room 19 nautical miles northeast of Lima, Oman (crew reported safe, no environmental impact), and ADNOC Logistics & Services separately says one of its vessels was damaged in an attack inside UAE territorial waters — the same disputed projectile-strike pattern already modeled, so straitClosed stays true and no spawn/difficulty mechanic changes", src:"UKMTO/gCaptain · Nov 10", color:"red"},
   {text:"Independent tracker straits.live logs Day 257 of closure since the Feb 28 declaration; no Wednesday/Thursday Brent settle is confirmed in available wire reports as of Nov 13, so the default cargo price holds at $92 — Iran's seven-condition standoff over reopening and Washington's reluctance to resume strikes continue unchanged, the same demanded-precondition dynamic already modeled", src:"straits.live · Nov 13", color:"blue"},
   {text:"Independent tracker straits.live logs Day 256 of closure since the Feb 28 declaration; Tuesday's close is reported at $91.78 Brent / $85.89 WTI (both down roughly 1%) as the post-midterm selloff eases, so the default cargo price slips from $93 to $92 — UKMTO separately reclassifies an earlier incident as a confirmed attack, a tanker hit by an unidentified projectile with crew reported safe and well, the same confirmed-but-unclaimed projectile-strike pattern already modeled", src:"straits.live/UKMTO · Nov 12", color:"blue"},
   {text:"Iran's navy and army separately claim two more tankers caught fire after striking naval mines in a 'restricted area' east of the strait, saying the vessels ignored warnings and switched off their AIS/radar before entering the prohibited zone — the same AIS-off blockade-runner mine-strike pattern already modeled since the Jul 15 Belma precedent and mirrored by this game's own AIS-toggle mechanic, so no new mechanic follows", src:"Iranian state media/wire reports · Nov 11-12", color:"amber"},
