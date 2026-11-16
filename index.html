@@ -2212,6 +2212,25 @@ const LB_MAX=10;
 // demanded-precondition standoff already modeled, so straitClosed
 // stays true and no spawn/difficulty mechanic changes. straits.live
 // logs Day 259 of closure.
+// Nov 16 2026: Friday's (Nov 13) Brent settle is now confirmed at
+// $95.84, up 2 cents -- an immaterial move from the $96 already
+// logged -- a second straight weekly decline (-2.52% from the $98.32
+// settle Nov 6) as the IEA flags a growing global oil surplus and
+// Reuters ties part of the pullback to the US naval blockade on
+// Iranian oil easing fears of renewed direct conflict; WTI settled
+// $88.56 (-0.20%). So the default cargo price holds at $96; no
+// confirmed Monday settle yet. UKMTO reports an outbound tanker was
+// struck by an unknown projectile in the strait Sunday (Nov 15),
+// sparking an engine-room fire with all crew reported safe and the
+// vessel continuing under its own power -- the same drone/mine/
+// missile threat already modeled, not a new weapon category. Iran's
+// IRGC Navy extends its rolling mine-strike tally with three more
+// claims in three days (a gas tanker Nov 13, three oil tankers afire
+// Nov 14, a tanker east of the strait Nov 15), still not
+// independently confirmed and within the existing SEVERE-tier mine
+// model already reflected in spawn rates, so straitClosed stays true
+// and no spawn/difficulty mechanic changes. straits.live logs Day 260
+// of closure.
 let straitClosed=true,oilPricePerBarrel=96;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
@@ -3719,6 +3738,9 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"Independent tracker straits.live logs Day 260 of closure since the Feb 28 declaration; Friday's (Nov 13) Brent settle is now confirmed at $95.84, up just 2 cents, a second straight weekly decline (-2.52% from Nov 6's $98.32 settle) as the IEA flags a growing global oil surplus and Reuters ties part of the pullback to the US naval blockade on Iranian oil easing fears of renewed direct conflict — WTI settled $88.56 (-0.20%) — so the default cargo price holds at $96; no confirmed Monday settle yet", src:"straits.live/Reuters · Nov 16", color:"blue"},
+  {text:"UKMTO reports an outbound tanker was struck by an unknown projectile in the strait Sunday, sparking an engine-room fire — all crew are reported safe and accounted for, with the vessel continuing under its own power — the same drone/mine/missile threat already modeled, not a new weapon category, so straitClosed stays true and no spawn/difficulty mechanic changes", src:"UKMTO/wire reports · Nov 15", color:"red"},
+  {text:"Iran's IRGC Navy extends its rolling mine-strike tally with three more claims in three days — a gas tanker hitting a mine Nov 13, three oil tankers catching fire after hitting mines Nov 14, and a tanker striking a mine east of the strait Nov 15, most said to be on an 'unauthorized' route — still not independently confirmed and within the existing SEVERE-tier mine/drone/missile model already reflected in spawn rates, so no new mechanic follows", src:"IRGC Navy/Reuters/Oilprice · Nov 13-15", color:"amber"},
   {text:"Independent tracker straits.live logs Day 259 of closure since the Feb 28 declaration; no Friday (Nov 13) Brent settle is confirmed in available wire reports and no weekend futures session occurs, so the default cargo price holds at $96 — no new tanker incidents are confirmed since the Nov 10 catch-up logged Nov 14, and Washington's review of Doha's relay of Iran's seven-condition proposal continues to leave the blockade in place, the same demanded-precondition standoff already modeled", src:"straits.live · Nov 15", color:"blue"},
   {text:"Independent tracker straits.live logs Day 258 of closure since the Feb 28 declaration; Wednesday's Brent settle is now confirmed at $92.70 (Trading Economics), recovering off an intraday 10-week low after touching $94.60, with Thursday's settle confirmed up 3.3% to $95.82 (WTI +2.6% to $88.74) on Houthi strikes on Saudi energy facilities compounding Hormuz disruption — no Friday settle is confirmed in available wire reports, so the default cargo price rises from $92 to $96", src:"straits.live/Trading Economics · Nov 14", color:"blue"},
   {text:"UKMTO's weekly overview (published Nov 14) counts at least seven tanker attacks in and around the Strait of Hormuz in the week to Nov 11 and keeps the threat level rated SEVERE — a cumulative confirmation of the pace already reflected in this game's spawn rates, not an escalation", src:"UKMTO · Nov 14", color:"amber"},
