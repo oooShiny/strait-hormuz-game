@@ -2231,6 +2231,21 @@ const LB_MAX=10;
 // model already reflected in spawn rates, so straitClosed stays true
 // and no spawn/difficulty mechanic changes. straits.live logs Day 260
 // of closure.
+// Nov 17 2026: Monday's (Nov 16) Brent settle draws conflicting
+// reports -- Reuters/CNBC put early trade around $95.37-95.89 as
+// unverified Iranian mine-strike claims offset IEA-surplus pressure,
+// while other data aggregators show a sharply lower, uncorroborated
+// ~$91.8 print -- so without one confirmed settle, the default cargo
+// price holds at $96. Iran's state media and IRGC Navy extend the
+// rolling mine-claim tally into the weekend, reporting two more oil
+// tankers struck mines and caught fire Sunday-Monday on top of the
+// Nov 13-15 claims already logged -- still not independently
+// confirmed and within the existing SEVERE-tier mine/drone/missile
+// model already reflected in spawn rates, so no new mechanic follows.
+// No US-Iran deal, strait reopening, or fresh CENTCOM strike is
+// reported since the Nov 9 Qatar-mediated proposal review, so
+// straitClosed stays true and no spawn/difficulty mechanic changes.
+// straits.live logs Day 261 of closure.
 let straitClosed=true,oilPricePerBarrel=96;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
@@ -3738,6 +3753,8 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"Independent tracker straits.live logs Day 261 of closure since the Feb 28 declaration; Monday's (Nov 16) Brent settle draws conflicting reports — Reuters/CNBC put early trade around $95.37-95.89 as unverified Iranian mine-strike claims offset IEA-surplus pressure, while other data aggregators show a sharply lower, uncorroborated ~$91.8 print — so without one confirmed settle, the default cargo price holds at $96", src:"straits.live/Reuters/CNBC · Nov 17", color:"blue"},
+  {text:"Iran's state media and IRGC Navy extend the rolling mine-claim tally into the weekend, reporting two more oil tankers struck mines and caught fire Sunday-Monday on top of the Nov 13-15 claims already logged — still not independently confirmed and within the existing SEVERE-tier mine/drone/missile model already reflected in spawn rates, so no new mechanic follows", src:"IRGC Navy/wire reports · Nov 15-16", color:"amber"},
   {text:"Independent tracker straits.live logs Day 260 of closure since the Feb 28 declaration; Friday's (Nov 13) Brent settle is now confirmed at $95.84, up just 2 cents, a second straight weekly decline (-2.52% from Nov 6's $98.32 settle) as the IEA flags a growing global oil surplus and Reuters ties part of the pullback to the US naval blockade on Iranian oil easing fears of renewed direct conflict — WTI settled $88.56 (-0.20%) — so the default cargo price holds at $96; no confirmed Monday settle yet", src:"straits.live/Reuters · Nov 16", color:"blue"},
   {text:"UKMTO reports an outbound tanker was struck by an unknown projectile in the strait Sunday, sparking an engine-room fire — all crew are reported safe and accounted for, with the vessel continuing under its own power — the same drone/mine/missile threat already modeled, not a new weapon category, so straitClosed stays true and no spawn/difficulty mechanic changes", src:"UKMTO/wire reports · Nov 15", color:"red"},
   {text:"Iran's IRGC Navy extends its rolling mine-strike tally with three more claims in three days — a gas tanker hitting a mine Nov 13, three oil tankers catching fire after hitting mines Nov 14, and a tanker striking a mine east of the strait Nov 15, most said to be on an 'unauthorized' route — still not independently confirmed and within the existing SEVERE-tier mine/drone/missile model already reflected in spawn rates, so no new mechanic follows", src:"IRGC Navy/Reuters/Oilprice · Nov 13-15", color:"amber"},
