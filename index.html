@@ -2260,6 +2260,21 @@ const LB_MAX=10;
 // is reported since the Nov 9 Qatar-mediated proposal review, so
 // straitClosed stays true and no spawn/difficulty mechanic changes.
 // straits.live logs Day 262 of closure.
+// Nov 19 2026: No single confirmed Wednesday (Nov 18) Brent settle is
+// available across wire sources -- reports range from a derived ~$91.95
+// to an intraday ~$92.61, with Thursday Asia trade near $92.12 -- so the
+// default cargo price holds at $96. Iran's IRGC Navy claims, via
+// Tasnim/WANA/Middle East Eye, that two more vessels -- a supertanker
+// and a liquefied gas carrier -- struck mines and caught fire on an
+// "unauthorized" route east of the strait with navigation systems
+// switched off -- still unconfirmed and within the existing SEVERE-tier
+// mine model already reflected in spawn rates, so no spawn/difficulty
+// mechanic changes. An Al Jazeera analysis (Nov 18) warns the US-Iran
+// "status quo" risks tipping into open war but reports no new strike,
+// deal, or reopening -- Iran's security chief reiterated Nov 10 the
+// strait stays shut until Washington meets its conditions, so
+// straitClosed stays true and no spawn/difficulty mechanic changes.
+// straits.live logs Day 263 of closure.
 let straitClosed=true,oilPricePerBarrel=96;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
@@ -3767,6 +3782,8 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"Independent tracker straits.live logs Day 263 of closure since the Feb 28 declaration; no single confirmed Wednesday (Nov 18) Brent settle is available across wire sources — figures range from a derived ~$91.95 to an intraday ~$92.61, with Thursday Asia trade near $92.12 — so the default cargo price holds at $96", src:"straits.live/Reuters · Nov 19", color:"blue"},
+  {text:"Iran's IRGC Navy claims, via Tasnim/WANA/Middle East Eye, that two more vessels — a supertanker and a liquefied gas carrier — struck mines and caught fire on an \"unauthorized\" route east of the strait with navigation systems switched off — still not independently confirmed and within the existing SEVERE-tier mine model already reflected in spawn rates, so no new mechanic follows; separately, an Al Jazeera analysis warns the US-Iran \"status quo\" risks tipping into open war, with no new strike, deal, or reopening reported", src:"Tasnim/WANA/Al Jazeera · Nov 18-19", color:"amber"},
   {text:"Independent tracker straits.live logs Day 262 of closure since the Feb 28 declaration; no single confirmed Tuesday (Nov 17) Brent settle is available across wire sources, so the default cargo price holds at $96", src:"straits.live · Nov 18", color:"blue"},
   {text:"Iran's IRGC Navy claims, via Tasnim, that another oil tanker struck a mine and caught fire in a restricted zone east of the strait Tuesday with its navigation systems switched off — still not independently confirmed and within the existing SEVERE-tier mine model already reflected in spawn rates, so no new mechanic follows; separately, Reuters reports a drone overflight set off sirens at Iraqi Kurdistan's Khor Mor gas field Monday, with no group claiming responsibility and no damage reported", src:"Tasnim/Reuters/Al Jazeera · Nov 17", color:"amber"},
   {text:"Independent tracker straits.live logs Day 261 of closure since the Feb 28 declaration; Monday's (Nov 16) Brent settle draws conflicting reports — Reuters/CNBC put early trade around $95.37-95.89 as unverified Iranian mine-strike claims offset IEA-surplus pressure, while other data aggregators show a sharply lower, uncorroborated ~$91.8 print — so without one confirmed settle, the default cargo price holds at $96", src:"straits.live/Reuters/CNBC · Nov 17", color:"blue"},
