@@ -2275,7 +2275,18 @@ const LB_MAX=10;
 // strait stays shut until Washington meets its conditions, so
 // straitClosed stays true and no spawn/difficulty mechanic changes.
 // straits.live logs Day 263 of closure.
-let straitClosed=true,oilPricePerBarrel=96;
+// Nov 20 2026: Thursday's (Nov 19) Brent settle is now confirmed
+// across multiple wire sources (Reuters, Bloomberg, Newsquawk) at
+// $91.98, up 3 cents on the day, as Hormuz-linked supply risk offset
+// a US crude-stock build and IEA/Goldman surplus forecasts -- Brent
+// is on track for a third straight weekly decline. The default cargo
+// price drops from $96 to the confirmed $91. No new tanker incident
+// or UKMTO advisory is reported beyond the Nov 17-19 mine claims
+// already logged, and no US-Iran deal, strait reopening, or fresh
+// CENTCOM strike is reported, so straitClosed stays true and
+// spawn/difficulty mechanics are unchanged. straits.live logs Day
+// 264 of closure.
+let straitClosed=true,oilPricePerBarrel=91;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
 const SESSION_TOKEN = Math.random().toString(36).slice(2) + Date.now().toString(36);
@@ -3782,6 +3793,7 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"Independent tracker straits.live logs Day 264 of closure since the Feb 28 declaration; Thursday's (Nov 19) Brent settle is now confirmed across wire sources at $91.98, up 3 cents on the day, as Hormuz-linked supply risk offset a US crude-stock build and surplus forecasts for 2027 — Brent is on track for a third straight weekly decline — so the default cargo price drops from $96 to the confirmed $91; no new tanker incident or UKMTO advisory is reported beyond the Nov 17-19 mine claims already logged, and no US-Iran deal, strait reopening, or fresh CENTCOM strike has followed", src:"Reuters/Bloomberg/Newsquawk · Nov 19-20", color:"blue"},
   {text:"Independent tracker straits.live logs Day 263 of closure since the Feb 28 declaration; no single confirmed Wednesday (Nov 18) Brent settle is available across wire sources — figures range from a derived ~$91.95 to an intraday ~$92.61, with Thursday Asia trade near $92.12 — so the default cargo price holds at $96", src:"straits.live/Reuters · Nov 19", color:"blue"},
   {text:"Iran's IRGC Navy claims, via Tasnim/WANA/Middle East Eye, that two more vessels — a supertanker and a liquefied gas carrier — struck mines and caught fire on an \"unauthorized\" route east of the strait with navigation systems switched off — still not independently confirmed and within the existing SEVERE-tier mine model already reflected in spawn rates, so no new mechanic follows; separately, an Al Jazeera analysis warns the US-Iran \"status quo\" risks tipping into open war, with no new strike, deal, or reopening reported", src:"Tasnim/WANA/Al Jazeera · Nov 18-19", color:"amber"},
   {text:"Independent tracker straits.live logs Day 262 of closure since the Feb 28 declaration; no single confirmed Tuesday (Nov 17) Brent settle is available across wire sources, so the default cargo price holds at $96", src:"straits.live · Nov 18", color:"blue"},
