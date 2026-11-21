@@ -2286,6 +2286,33 @@ const LB_MAX=10;
 // CENTCOM strike is reported, so straitClosed stays true and
 // spawn/difficulty mechanics are unchanged. straits.live logs Day
 // 264 of closure.
+// Nov 21 2026: no single confirmed Friday (Nov 20) Brent settle is found
+// across wire sources, so the default cargo price holds at the Nov 19
+// confirmed $91. UN News reports the Security Council was briefed that a
+// "fragile Gulf calm" is being tested as threats to Hormuz shipping mount,
+// with UKMTO data cited confirming transits remain roughly 65% below
+// pre-conflict levels -- a harder number consistent with, not past, the
+// severe-closure state already modeled (cf. the Nov 1 IMF PortWatch
+// 2-transits/85-baseline figure), so no spawn/difficulty mechanic follows
+// from that alone. Iran's IRGC Navy keeps extending its rolling mine-claim
+// tally -- a supertanker and gas carrier together carrying over 4 million
+// barrels, and separately three tankers in one day -- still unconfirmed
+// and within the existing SEVERE-tier mine model. Catching up two real
+// mechanic-relevant items missed this week: (1) around Nov 16 Iran's IRGC
+// Navy declared the strait's southern shipping corridor itself fully
+// mined and closed, not just the "unauthorized" routes north/east of it
+// that every prior claim has cited -- the same mine category, so no new
+// weapon tier, but see dhowTimer below. (2) US fighter jets struck an
+// IRGC missile launch site on Qeshm Island on Nov 17 -- the second
+// reported Qeshm strike this month -- after Iran's drone attack on a US
+// base in Bahrain; Iran answered with a same-night drone assault on
+// Kuwait. Qeshm's central battery was modeled suppressed (knocked out)
+// since the Jul 17 2026 Masan village/Bandar Khamir strikes; that the US
+// is now hitting a missile site there again means Iran has rebuilt
+// shore-based missile capability on the island, so that assumption no
+// longer holds -- see batteries below. No US-Iran deal or strait
+// reopening is reported, so straitClosed stays true. straits.live logs
+// Day 265 of closure.
 let straitClosed=true,oilPricePerBarrel=91;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
@@ -2626,8 +2653,16 @@ let batteries=[];
 // out (suppressed) for the rest of the war.
 // Jul 17 2026: a second wave hits Qeshm Island's Masan village and Bandar Khamir,
 // both near the strait's narrowest point — the central battery is suppressed too.
+// Nov 21 2026: US fighter jets strike an IRGC missile launch site on Qeshm
+// Island on Nov 17 — the second reported strike there this month — after
+// Iran fired on/threatened US assets and then answered with a drone
+// assault on Kuwait. Striking a missile site on Qeshm again only makes
+// sense if Iran rebuilt shore-based missile capability there since the
+// Jul 17 strike that suppressed this battery, so the central battery goes
+// live again (suppressed bx===10 -> active); Greater Tunb (bx===-70)
+// stays suppressed since nothing contradicts that one.
 [-160,-70,10,90,170].forEach(bx=>{
-  const suppressed=bx===-70||bx===10;
+  const suppressed=bx===-70;
   const cz=chanZ(bx),hw=chanHW(bx);
   const bg=new THREE.Group();
   bg.add(new THREE.Mesh(new THREE.BoxGeometry(5,2,4),new THREE.MeshLambertMaterial({color:suppressed?0x2e2620:0x5a4a30})));
@@ -3319,7 +3354,13 @@ function update(dt){
     // dhow cap/cadence tighten (3->4 dhows, 13-21s->11-18s) to put more
     // simultaneous mine threats on the board, same style as the Jul 7-8
     // fast-boat intensification below.
-    dhowTimer-=dt;if(dhowTimer<0&&dhows.length<4){spawnDhow();dhowTimer=11+Math.random()*7;}
+    // Nov 21 2026: Iran's IRGC Navy declares the strait's southern
+    // shipping corridor itself fully mined and closed -- every prior mine
+    // claim this war cited only "unauthorized" routes north/east of it, so
+    // a declared minefield across the designated corridor is a genuine
+    // scope step-up, not another single-ship claim -- dhow cap/cadence
+    // tighten again (4->5 dhows, 11-18s->10-16s).
+    dhowTimer-=dt;if(dhowTimer<0&&dhows.length<5){spawnDhow();dhowTimer=10+Math.random()*6;}
     missileTimer-=dt;
     if(missileTimer<0){
       const near=batteries.filter(b=>Math.abs(b.x-tPos.x)<130&&b.cooldown<=0&&!b.suppressed);
@@ -3793,6 +3834,9 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"Independent tracker straits.live logs Day 265 of closure since the Feb 28 declaration; no single confirmed Friday (Nov 20) Brent settle is found across wire sources, so the default cargo price holds at the Nov 19 confirmed $91; the UN Security Council is briefed that a \"fragile Gulf calm\" is being tested as threats to Hormuz shipping mount, with UKMTO data cited confirming strait transits remain roughly 65% below pre-conflict levels", src:"UN News/UKMTO · Nov 21", color:"blue"},
+  {text:"US fighter jets strike an IRGC missile launch site on Qeshm Island on Nov 17 — the second reported strike there this month — after Iran's drone attack on a US base in Bahrain; Iran answers the same night with a drone assault on Kuwait. The strike implies Iran rebuilt shore-based missile capability on Qeshm since the Jul 17 2026 attack that knocked this battery out, so the central battery goes live again in-game", src:"Breitbart/Fox News/Time · Nov 17-18", color:"red"},
+  {text:"Around Nov 16, Iran's IRGC Navy declares the strait's southern shipping corridor itself — not just the \"unauthorized\" routes cited in every prior claim — fully mined and closed, warning that reliance on US promises to secure or clear the strait offers no real protection; separately it claims a supertanker and gas carrier carrying over 4 million barrels combined, and three more tankers in a single day, struck mines — all still unconfirmed and within the existing SEVERE-tier mine model, but the corridor-wide claim is a genuine scope escalation, so mine-laying dhow spawn rates tighten further", src:"IRGC Navy/Tasnim/Al-Quds · Nov 16-20", color:"amber"},
   {text:"Independent tracker straits.live logs Day 264 of closure since the Feb 28 declaration; Thursday's (Nov 19) Brent settle is now confirmed across wire sources at $91.98, up 3 cents on the day, as Hormuz-linked supply risk offset a US crude-stock build and surplus forecasts for 2027 — Brent is on track for a third straight weekly decline — so the default cargo price drops from $96 to the confirmed $91; no new tanker incident or UKMTO advisory is reported beyond the Nov 17-19 mine claims already logged, and no US-Iran deal, strait reopening, or fresh CENTCOM strike has followed", src:"Reuters/Bloomberg/Newsquawk · Nov 19-20", color:"blue"},
   {text:"Independent tracker straits.live logs Day 263 of closure since the Feb 28 declaration; no single confirmed Wednesday (Nov 18) Brent settle is available across wire sources — figures range from a derived ~$91.95 to an intraday ~$92.61, with Thursday Asia trade near $92.12 — so the default cargo price holds at $96", src:"straits.live/Reuters · Nov 19", color:"blue"},
   {text:"Iran's IRGC Navy claims, via Tasnim/WANA/Middle East Eye, that two more vessels — a supertanker and a liquefied gas carrier — struck mines and caught fire on an \"unauthorized\" route east of the strait with navigation systems switched off — still not independently confirmed and within the existing SEVERE-tier mine model already reflected in spawn rates, so no new mechanic follows; separately, an Al Jazeera analysis warns the US-Iran \"status quo\" risks tipping into open war, with no new strike, deal, or reopening reported", src:"Tasnim/WANA/Al Jazeera · Nov 18-19", color:"amber"},
