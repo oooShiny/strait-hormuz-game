@@ -2353,7 +2353,25 @@ const LB_MAX=10;
 // US-Iran deal or a strait reopening, so straitClosed stays true and all
 // spawn/difficulty mechanics are unchanged. straits.live logs Day 267 of
 // closure.
-let straitClosed=true,oilPricePerBarrel=91;
+// Nov 24 2026: Monday's (Nov 23) Brent settle is now confirmed across wire
+// sources, down 2.59% to $89.49 as rising supply-surplus concerns outweighed
+// Hormuz risk, so the default cargo price drops from $91 to the confirmed
+// $89. Iran's IRGC claims three tankers hit mines in the strait on Nov 23
+// despite a US Navy escort -- accounts conflict (the army/navy separately
+// cite two, an earlier IRGC claim cited four) and no maritime authority has
+// confirmed it, while the UK-affiliated Joint Maritime Information Center
+// separately tallies seven tankers struck in the strait since Nov 16; all
+// of it sits within the existing SEVERE-tier mine model already priced into
+// spawn rates, so no new mechanic follows. The US Treasury widens sanctions
+// on two dozen-plus exchange houses, front companies, and personnel tied to
+// Iran's shadow-banking network and tanker-fleet financing (including firms
+// accused of facilitating payments for the National Iranian Tanker
+// Company), flagging roughly $15B in flows -- sanctions context, not a
+// strait mechanic. Iran's FM Araghchi separately calls a land blockade of
+// Iran "virtually impossible" and rules out US talks until Iran's seven
+// conditions are met -- diplomacy stalled, not a deal, so straitClosed
+// stays true. straits.live logs Day 268 of closure.
+let straitClosed=true,oilPricePerBarrel=89;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
 const SESSION_TOKEN = Math.random().toString(36).slice(2) + Date.now().toString(36);
@@ -3874,6 +3892,8 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"Independent tracker straits.live logs Day 268 of closure since the Feb 28 declaration; Monday's (Nov 23) Brent settle is now confirmed across wire sources, down 2.59% to $89.49 as rising supply-surplus concerns outweighed Hormuz risk, so the default cargo price drops from $91 to the confirmed $89; the UK-affiliated Joint Maritime Information Center separately tallies seven tankers struck in the strait since Nov 16", src:"straits.live/CNBC/JMIC · Nov 23-24", color:"blue"},
+  {text:"Iran's IRGC claims three tankers hit mines in the strait on Nov 23 despite a US Navy escort — accounts conflict, with the army/navy separately citing two and an earlier IRGC claim citing four, and no maritime authority has confirmed it; still within the existing SEVERE-tier mine model already priced into spawn rates, so no new mechanic follows. Separately, the US Treasury widens sanctions on two dozen-plus exchange houses, front companies, and personnel tied to Iran's shadow-banking network and tanker-fleet financing, flagging roughly $15B in flows, while Iran's FM Araghchi calls a land blockade of Iran \"virtually impossible\" and rules out US talks until Iran's seven conditions are met — sanctions and diplomacy context, not a strait mechanic, so straitClosed stays true", src:"IRGC/US Treasury/Iran FM · Nov 23-24", color:"amber"},
   {text:"Independent tracker straits.live logs Day 267 of closure since the Feb 28 declaration; no single confirmed Friday (Nov 20) Brent settle is corroborated beyond Thursday's figure — conflicting wire reports either repeat the Nov 19 number or disagree on direction — so the default cargo price holds at the Nov 19 confirmed $91; an ABC News analysis of maritime data finds reported attacks in and around the strait in October-November running higher than any month since the war began, while IMF PortWatch continues to show transits near historic lows", src:"straits.live/ABC News/IMF PortWatch · Nov 22-23", color:"blue"},
   {text:"Iran's Foreign Ministry repeats that safe navigation through the strait could resume quickly — one report says within 48 hours — if the US accepts its conditions, while Iraq says it has reached an understanding with the US on continuing its own oil exports through Hormuz; neither is a US-Iran deal or a strait reopening, so straitClosed stays true and all spawn/difficulty mechanics are unchanged", src:"Iran FM/Iraq Oil Ministry · Nov 22-23", color:"amber"},
   {text:"Independent tracker straits.live logs Day 266 of closure since the Feb 28 declaration; no single confirmed Friday (Nov 20) Brent settle is corroborated across wire sources, so the default cargo price holds at the Nov 19 confirmed $91; UKMTO reports two tanker incidents near Oman's Khasab on Nov 21 — an outbound tanker hit on its stern by an unidentified projectile ~11nm north, and a second vessel hit in the engine room ~17nm east — while Iran's navy separately claims a tanker hit a mine in a restricted zone and the IRGC repeats its claim that two supertankers carrying 4M+ barrels struck mines; no casualties reported, and all of it sits within the existing SEVERE-tier mine/projectile model, so no new mechanic follows", src:"UKMTO/CNBC/gCaptain · Nov 21-22", color:"blue"},
