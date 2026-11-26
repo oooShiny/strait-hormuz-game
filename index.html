@@ -2384,7 +2384,24 @@ const LB_MAX=10;
 // bpd) are cited as capping the rally -- market context, not a strait
 // mechanic. No US-Iran deal or confirmed strait reopening is reported, so
 // straitClosed stays true. straits.live logs Day 269 of closure.
-let straitClosed=true,oilPricePerBarrel=91;
+// Nov 26 2026: Wednesday's (Nov 25) Brent settle is now confirmed across wire
+// sources at $94.61, up 3.5% on the day, after Yemen's Houthis claimed an
+// attack on Saudi Arabia's Ras Tanura refinery and Riyadh's financial
+// district -- the Saudi-led coalition says air defenses intercepted four
+// drones over Ras Tanura. That's a Red Sea/Saudi escalation outside the
+// strait itself; renewed attacks on shipping inside Hormuz are cited only as
+// secondary support for the rally, alongside OPEC+'s Nov 29 meeting on 2027
+// output. WTI settled $83.68 (+2%). So the default cargo price updates from
+// $91 to the confirmed $95. Iran's navy and IRGC separately extend the
+// rolling mine-claim tally -- a tanker fire east of the strait and a
+// separately-claimed LNG carrier mine strike Wednesday evening, both with
+// navigation systems allegedly switched off -- and the IRGC claims it shot
+// down two US drones over the strait; none of it is independently
+// confirmed, and all of it sits within the existing SEVERE-tier mine/drone
+// model already priced into spawn rates, so no new mechanic follows. No
+// US-Iran deal or confirmed strait reopening is reported, so straitClosed
+// stays true. straits.live logs Day 270 of closure.
+let straitClosed=true,oilPricePerBarrel=95;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
 const SESSION_TOKEN = Math.random().toString(36).slice(2) + Date.now().toString(36);
@@ -3905,6 +3922,8 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"Independent tracker straits.live logs Day 270 of closure since the Feb 28 declaration; Wednesday's (Nov 25) Brent settle is now confirmed across wire sources at $94.61, up 3.5% on the day, after Yemen's Houthis claimed an attack on Saudi Arabia's Ras Tanura refinery and Riyadh's financial district — the Saudi-led coalition says air defenses intercepted four drones over Ras Tanura; that's a Red Sea/Saudi escalation outside the strait itself, with renewed attacks on shipping inside Hormuz cited only as secondary support alongside OPEC+'s Nov 29 meeting on 2027 output — so the default cargo price updates from $91 to the confirmed $95; WTI settled $83.68 (+2%)", src:"straits.live/CNBC/Reuters/Rigzone · Nov 25-26", color:"blue"},
+  {text:"Iran's navy and IRGC extend the rolling mine-claim tally into Wednesday, saying a tanker caught fire after striking a mine in a restricted zone east of the strait and that an LNG carrier separately hit a mine and caught fire that evening, both with navigation systems allegedly switched off; the IRGC separately claims it shot down two US drones over the strait — none of it independently confirmed by any maritime authority, and all of it sits within the existing SEVERE-tier mine/drone model already priced into spawn rates, so no new mechanic follows and straitClosed stays true", src:"IRGC/Iran Navy/wire reports · Nov 25-26", color:"amber"},
   {text:"Independent tracker straits.live logs Day 269 of closure since the Feb 28 declaration; Tuesday's (Nov 24) Brent settle is now confirmed across wire sources at $91.40, up $2.03 (2.3%) and rebounding off an intraday low near $88 — its lowest since Aug 27 — so the default cargo price updates from $89 to the confirmed $91; Deutsche Bank/IEA supply-surplus estimates near 1.7M bpd are cited as capping the rally", src:"straits.live/Reuters/Deutsche Bank · Nov 24-25", color:"blue"},
   {text:"UKMTO reports a container ship, a product tanker, and a crude tanker were each hit by unidentified projectiles transiting the strait on Nov 23 — the same day the IRGC claimed three tankers struck mines, already logged in yesterday's update, so this corroborates rather than adds a new incident; still the same drone/mine/projectile threat already priced into the SEVERE-tier model, and no US-Iran deal or confirmed strait reopening is reported, so straitClosed stays true and spawn/difficulty mechanics are unchanged", src:"UKMTO · Nov 23-25", color:"amber"},
   {text:"Independent tracker straits.live logs Day 268 of closure since the Feb 28 declaration; Monday's (Nov 23) Brent settle is now confirmed across wire sources, down 2.59% to $89.49 as rising supply-surplus concerns outweighed Hormuz risk, so the default cargo price drops from $91 to the confirmed $89; the UK-affiliated Joint Maritime Information Center separately tallies seven tankers struck in the strait since Nov 16", src:"straits.live/CNBC/JMIC · Nov 23-24", color:"blue"},
