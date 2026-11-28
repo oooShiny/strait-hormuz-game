@@ -2418,7 +2418,29 @@ const LB_MAX=10;
 // new mechanic follows. No US-Iran deal or confirmed strait reopening is
 // reported, so straitClosed stays true. straits.live logs Day 271 of
 // closure.
-let straitClosed=true,oilPricePerBarrel=97;
+// Nov 28 2026: Friday's (Nov 27) Brent settle is now confirmed across wire
+// sources at $95.44, down $1.13 (1.2%), snapping the three-day rally as
+// markets head into Sunday's OPEC+ meeting on 2027 quotas -- still Brent's
+// first weekly gain in November (roughly +3%) despite Friday's pullback. So
+// the default cargo price updates from $97 to the confirmed $95. CENTCOM
+// confirms US forces disabled the Palau-flagged bulk carrier Pacific Archer
+// in the Gulf of Oman after it departed Iran's Bandar Abbas and attempted
+// to run the naval blockade -- crew unharmed after multiple warnings, the
+// sixth vessel disabled since blockade enforcement resumed and the first
+// since Iranian officials publicly vowed last week to break it. That's the
+// same already-modeled Navy-blockade-disables-runners mechanic (see the
+// Belma precedent above), so no new mechanic follows. Iran's IRGC Navy
+// separately claims two more tankers -- one off Oman's Khasab, one on the
+// "unauthorized" eastern route -- exploded and caught fire after striking
+// mines, both allegedly running with navigation systems off, and declares
+// the strait "closed until further notice"; Iran's Foreign Ministry
+// contradicts the military within hours, telling Tasnim shipping is
+// "operating normally." Neither claim is independently confirmed by UKMTO
+// or CENTCOM, and all of it sits within the existing SEVERE-tier mine model
+// and conditional-closure posture already priced in, so no new mechanic
+// follows and straitClosed stays true. straits.live logs Day 272 of
+// closure.
+let straitClosed=true,oilPricePerBarrel=95;
     
 const WORKER_URL = "https://hormuz-leaderboard.arbrown83.workers.dev";
 const SESSION_TOKEN = Math.random().toString(36).slice(2) + Date.now().toString(36);
@@ -3939,6 +3961,9 @@ boot();
 
 // ── NEWS FEED ─────────────────────────────────────────────────────────────────
 const HEADLINES = [
+  {text:"Independent tracker straits.live logs Day 272 of closure since the Feb 28 declaration; Friday's (Nov 27) Brent settle is now confirmed across wire sources at $95.44, down $1.13 (1.2%) and snapping the three-day rally, but still Brent's first weekly gain in November (roughly +3%) as markets head into Sunday's OPEC+ meeting on 2027 quotas — so the default cargo price updates from $97 to the confirmed $95; WTI settled $83.08 (-0.7%)", src:"straits.live/Reuters · Nov 27-28", color:"blue"},
+  {text:"CENTCOM confirms US forces disabled the Palau-flagged bulk carrier Pacific Archer in the Gulf of Oman after it departed Iran's Bandar Abbas and attempted to run the naval blockade — crew unharmed after multiple warnings, the sixth vessel disabled since blockade enforcement resumed and the first since Iranian officials publicly vowed last week to break it; the same already-modeled Navy-blockade-disables-runners mechanic as the Belma precedent, so no new mechanic follows and straitClosed stays true", src:"CENTCOM/Maritime Executive · Nov 26-28", color:"red"},
+  {text:"Iran's IRGC Navy claims two more tankers — one off Oman's Khasab, one on the \"unauthorized\" eastern route — exploded and caught fire after striking mines, both allegedly running with navigation systems off, and declares the strait \"closed until further notice\"; Iran's Foreign Ministry contradicts the military within hours, telling Tasnim shipping is \"operating normally\" — neither claim is independently confirmed by UKMTO or CENTCOM, and all of it sits within the existing SEVERE-tier mine model and conditional-closure posture already priced in, so no new mechanic follows", src:"IRGC/Tasnim/Gulf News · Nov 27-28", color:"amber"},
   {text:"Independent tracker straits.live logs Day 271 of closure since the Feb 28 declaration; Thursday's (Nov 26) Brent settle is now confirmed across wire sources at $96.57, up $1.96 (2.07%) in a third straight daily gain heading into Sunday's OPEC+ meeting on 2027 quotas, with US markets closed for Thanksgiving thinning the session — so the default cargo price updates from $95 to the confirmed $97; the UK-affiliated Joint Maritime Information Center's Nov 26 advisory tallies 17 tankers struck in the strait since Nov 1", src:"straits.live/Reuters/JMIC · Nov 26-27", color:"blue"},
   {text:"Iran's IRGC claims two tankers, including a supertanker carrying 2M+ barrels, exploded and caught fire after hitting naval mines north of Oman's Khasab, while UKMTO separately reports the Hong Kong-flagged chemical/products tanker Kun Peng was struck by an unidentified projectile ~18nm east of Khasab while transiting outbound — the resulting fire was extinguished with no casualties; none of it is independently confirmed beyond UKMTO's own report, and all of it sits within the existing SEVERE-tier mine/projectile model already priced into spawn rates, so no new mechanic follows and straitClosed stays true", src:"IRGC/UKMTO · Nov 26-27", color:"amber"},
   {text:"Independent tracker straits.live logs Day 270 of closure since the Feb 28 declaration; Wednesday's (Nov 25) Brent settle is now confirmed across wire sources at $94.61, up 3.5% on the day, after Yemen's Houthis claimed an attack on Saudi Arabia's Ras Tanura refinery and Riyadh's financial district — the Saudi-led coalition says air defenses intercepted four drones over Ras Tanura; that's a Red Sea/Saudi escalation outside the strait itself, with renewed attacks on shipping inside Hormuz cited only as secondary support alongside OPEC+'s Nov 29 meeting on 2027 output — so the default cargo price updates from $91 to the confirmed $95; WTI settled $83.68 (+2%)", src:"straits.live/CNBC/Reuters/Rigzone · Nov 25-26", color:"blue"},
